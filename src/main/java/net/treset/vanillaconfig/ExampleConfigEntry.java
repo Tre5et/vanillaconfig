@@ -8,7 +8,6 @@ import net.treset.vanillaconfig.config.managers.SaveLoadManager;
 import net.treset.vanillaconfig.config.version.ConfigVersion;
 import net.treset.vanillaconfig.screen.ConfigScreen;
 import net.treset.vanillaconfig.tools.TextTools;
-import org.lwjgl.glfw.GLFW;
 
 public class ExampleConfigEntry implements ClientModInitializer {
 
@@ -26,9 +25,9 @@ public class ExampleConfigEntry implements ClientModInitializer {
         DoubleConfig double1 = new DoubleConfig(123.4567, -50, 1000000000, "double1");
 
         BooleanConfig bool2 = new BooleanConfig(true, "bool2");
-        PageConfig page2 = new PageConfig("page2");
+        PageConfig page2 = new PageConfig("VC");
 
-        KeybindConfig openConfig = new KeybindConfig(new int[] { GLFW.glfwGetKeyScancode(GLFW.GLFW_KEY_H) }, 1, 3, "open config");
+        KeybindConfig openConfig = new KeybindConfig(new int[] { 35 }, 1, 3, "open config");
 
         page2.addOption(bool2);
 

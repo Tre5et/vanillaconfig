@@ -1,8 +1,4 @@
 {
   "vanillaconfig.boolean.true": "ON",
   "vanillaconfig.boolean.false": "OFF",
-  "page1": "The First Page",
-  "item1": "The First Item",
-  "line2": "A generic second line",
-  "open config": "Open Config Screen"
 }
