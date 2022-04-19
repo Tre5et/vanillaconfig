@@ -11,7 +11,7 @@ Only install this mod if another mod tells you to do so.
 
 ## If you are a developer, read the docs
 
-Go to the docs [here](https://github.com/Tre5et/vanillaconfig/blob/1.18/docs/docs.md).
+Go to the docs [here](https://github.com/Tre5et/vanillaconfig/blob/1.18/docs/docs.md) (this isn't finished yet).
 
 ## License
 
