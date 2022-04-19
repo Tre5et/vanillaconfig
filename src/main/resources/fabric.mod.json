@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "id": "vanillaconfig",
+  "version": "${version}",
+
+  "name": "Vanilla Config",
+  "description": "Vanilla-Style Config API for Fabric Client Mods.",
+  "authors": [
+    "TreSet"
+  ],
+  "contact": {
+    "homepage": "https://github.com/Tre5et/vanillaconfig/releases",
+    "sources": "https://github.com/Tre5et/vanillaconfig"
+  },
+
+  "license": "GPL-3.0",
+  "icon": "assets/vanillaconfig/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "net.treset.vanillaconfig.VanillaConfigMod"
+    ]
+  },
+  "mixins": [
+    "vanillaconfig.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.12.0",
+    "fabric": "*",
+    "minecraft": "1.18.x",
+    "java": ">=17"
+  },
+  "suggests": {
+    "modmenu": "*"
+  },
+
+  "custom": {
+    "modmenu": {
+      "badges": ["library"]
+    }
+  }
+}
