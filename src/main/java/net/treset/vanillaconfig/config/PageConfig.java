@@ -142,7 +142,7 @@ public class PageConfig extends BaseConfig {
     }
     public File getFile(boolean migrate) { return this.getFile(migrate, null); }
 
-    public boolean hasVersion() { return !this.getVersion().isDefinite(); }
+    public boolean hasVersion() { return this.getVersion().isDefinite(); }
     public ConfigVersion getVersion() { return this.version; }
     public boolean setVersion(ConfigVersion version) { this.version = version; return true; }
 
@@ -193,7 +193,8 @@ public class PageConfig extends BaseConfig {
     private boolean loadConfig(File config, File migrateConfig) {
         if(migrateConfig != null) {
             if(this.loadOptions(migrateConfig, false)) {
-                return FileTools.removeFile(migrateConfig);
+                if(!FileTools.removeFile(migrateConfig)) return false;
+                return this.save();
             }
         }
         if(config == null) return false;

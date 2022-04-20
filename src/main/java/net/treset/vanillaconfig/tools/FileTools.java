@@ -101,11 +101,11 @@ public class FileTools {
     }
     public static ConfigVersion readVersion(String name) {
         File config = getConfigFile("vanillaconfig.json");
-        if(!fileExists(config)) return new ConfigVersion("0.0.0");
+        if(!fileExists(config)) return new ConfigVersion("x.x.x");
         JsonObject obj = readJsonFile(config);
-        if(obj == null) return new ConfigVersion("0.0.0");
+        if(obj == null) return new ConfigVersion("x.x.x");
         JsonPrimitive primitive = obj.getAsJsonPrimitive(name);
-        if(primitive == null || !primitive.isString()) return new ConfigVersion("0.0.0");
+        if(primitive == null || !primitive.isString()) return new ConfigVersion("x.x.x");
         return new ConfigVersion(primitive.getAsString());
     }
 

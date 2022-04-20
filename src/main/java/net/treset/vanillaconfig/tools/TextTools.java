@@ -107,6 +107,8 @@ public class TextTools {
         if(allowNonText && (str == null || str.equals("") || str.equals("\t") || kpKeys.contains(key)))
             str = translateOrDefault(InputUtil.fromKeyCode(key, -1).toString());
 
+        if(str != null) str = str.toUpperCase();
+
         return str;
     }
     public static String scancodesAsDisplayKeys(int[] sc) {
@@ -114,6 +116,7 @@ public class TextTools {
         for (int i = 0; i < sc.length; i++) {
             String key = TextTools.getKeyFromScancode(sc[i], true);
             if(key != null) {
+                key = key.toUpperCase();
                 str.append(key);
                 if(i != sc.length - 1) str.append(" + ");
             }

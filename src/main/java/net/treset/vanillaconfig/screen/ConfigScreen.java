@@ -24,6 +24,7 @@ import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class ConfigScreen extends Screen {
 
@@ -67,7 +68,8 @@ public class ConfigScreen extends Screen {
         addOptions(config.getOptions());
 
         this.active = true;
-        this.onOpen.run();
+        this.onOpenDep.run();
+        this.onOpen.accept(this.getConfig().getKey());
     }
 
     public boolean isActive() { return this.active; }
@@ -403,17 +405,29 @@ public class ConfigScreen extends Screen {
         for (GuiBaseWidget e : widgets) {
             e.onClose();
         }
-        this.onClose.run();
+        this.onCloseDep.run();
+        this.onClose.accept(this.getConfig().getKey());
         this.active = false;
         this.client.setScreen(parent);
     }
 
-    Runnable onOpen = () -> {};
+    Runnable onOpenDep = () -> {};
+    @Deprecated
     public void onOpen(Runnable method) {
+        this.onOpenDep = method;
+    }
+    Consumer<String> onOpen = (name) -> {};
+    public void onOpen(Consumer<String> method) {
         this.onOpen = method;
     }
-    Runnable onClose = () -> {};
+
+    Runnable onCloseDep = () -> {};
+    @Deprecated
     public void onClose(Runnable method) {
+        this.onCloseDep = method;
+    }
+    Consumer<String> onClose = (name) -> {};
+    public void onClose(Consumer<String> method) {
         this.onClose = method;
     }
 }
