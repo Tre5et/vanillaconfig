@@ -9,7 +9,7 @@
 	 - before the config is loaded, run `yourOption.migrateFrom(String oldPath)`
 	 - `oldPath` is the absolute path within the JSON of the option to be migrated from.
 	 - Example:
-	 To migrate the in [Creating a Config](https://github.com/Tre5et/vanillaconfig/blob/v1.0.1/docs/CONFIG.md) created file to this file:
+	 To migrate the in [Creating a Config](https://github.com/Tre5et/vanillaconfig/blob/1.18/docs/CONFIG.md) created file to this file:
 		```json
 		{
 			"your.boolean": true,
@@ -48,7 +48,7 @@
  - Before loading the config, run `yourPageConfig.migrateFileFrom(String oldPath)`
  - `oldPath` is the path of the file in the config directory to be migrated from, including the `.json` extension(!). If the file name stays the same, the file name and extension may be omitted from the end.
  - Example:
- To migrate a directory structure like this, created in  [Creating a Config](https://github.com/Tre5et/vanillaconfig/blob/v1.0.1/docs/CONFIG.md) :
+ To migrate a directory structure like this, created in  [Creating a Config](https://github.com/Tre5et/vanillaconfig/blob/1.18/docs/CONFIG.md) :
 	```
 	config
 	  L yourFolder
