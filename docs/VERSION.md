@@ -56,7 +56,7 @@
  - Based on the loaded version, different migration patterns can be applied to suit migrating from this particular version.
 
 ### Example:
-To only apply the migration in [Option Migration](https://github.com/Tre5et/vanillaconfig/blob/v1.0.1/docs/MIGRATE.md) (In file migration) if the config's version is between (or equal to) versions `1.1.0` and `1.3.5` (which is the last `1.3.x` version), you could modify the code like so:
+To only apply the migration in [Option Migration](https://github.com/Tre5et/vanillaconfig/blob/1.18/docs/MIGRATE.md) (In file migration) if the config's version is between (or equal to) versions `1.1.0` and `1.3.5` (which is the last `1.3.x` version), you could modify the code like so:
 ```java
 [...]
 public static void init() {
