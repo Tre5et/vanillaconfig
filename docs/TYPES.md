@@ -17,7 +17,7 @@
 	 - `boolean isNonexistentAllowed()` returns `true` if loading should succeed, even though no option with this name was found. The option will take its default value in that case. The default is `true`.
 	 - `boolean allowNonexistent(boolean allow)` sets the value, allowing the option to be nonexistent when loading.
 	 - `boolean resetValue()` resets the value to the default value.
-	 - More methods are explained in [Option Migration](https://github.com/Tre5et/vanillaconfig/blob/v1.0.1/docs/MIGRATE.md), [Config Screen](https://github.com/Tre5et/vanillaconfig/blob/v1.0.1/docs/SCREEN.md) and [Callbacks](https://github.com/Tre5et/vanillaconfig/blob/v1.0.1/docs/CALLBACKS.md).
+	 - More methods are explained in [Option Migration](https://github.com/Tre5et/vanillaconfig/blob/1.18/docs/MIGRATE.md), [Config Screen](https://github.com/Tre5et/vanillaconfig/blob/1.18/docs/SCREEN.md) and [Callbacks](https://github.com/Tre5et/vanillaconfig/blob/1.18/docs/CALLBACKS.md).
 
 ### PageConfig
  - Special constructor parameters:
@@ -123,4 +123,4 @@
 	- `setContext(KeybindContext context)` sets the activation context of the keybind.
 	- `void resolve()` fires the event as if the keybind was pressed.
 - Worth mentioning here: Keybind Callback:
-	- `boolean onPressed(Consumer<String> method)` sets the method to be run when the key is pressed. More details in [Callbacks](https://github.com/Tre5et/vanillaconfig/blob/v1.0.1/docs/CALLBACKS.md).
+	- `boolean onPressed(Consumer<String> method)` sets the method to be run when the key is pressed. More details in [Callbacks](https://github.com/Tre5et/vanillaconfig/blob/1.18/docs/CALLBACKS.md).
