@@ -1,11 +1,11 @@
-﻿# Documentation
-### [Setup](https://github.com/Tre5et/vanillaconfig/blob/v1.0.1/docs/SETUP.md)
-### [Creating a Config](https://github.com/Tre5et/vanillaconfig/blob/v1.0.1/docs/CONFIG.md)
-### [Config Types](https://github.com/Tre5et/vanillaconfig/blob/v1.0.1/docs/TYPES.md)
-### [Option Migration](https://github.com/Tre5et/vanillaconfig/blob/v1.0.1/docs/MIGRATE.md)
-### [Version Management](https://github.com/Tre5et/vanillaconfig/blob/v1.0.1/docs/VERSION.md)
-### [Callbacks](https://github.com/Tre5et/vanillaconfig/blob/v1.0.1/docs/CALLBACKS.md)
-### [Config Screen](https://github.com/Tre5et/vanillaconfig/blob/v1.0.1/docs/SCREEN.md)
+﻿# Documentation (updated v1.0.1)
+### [Setup](https://github.com/Tre5et/vanillaconfig/blob/1.18/docs/SETUP.md)
+### [Creating a Config](https://github.com/Tre5et/vanillaconfig/blob/1.18/docs/CONFIG.md)
+### [Config Types](https://github.com/Tre5et/vanillaconfig/blob/1.18/docs/TYPES.md)
+### [Option Migration](https://github.com/Tre5et/vanillaconfig/blob/1.18/docs/MIGRATE.md)
+### [Version Management](https://github.com/Tre5et/vanillaconfig/blob/1.18/docs/VERSION.md)
+### [Callbacks](https://github.com/Tre5et/vanillaconfig/blob/1.18/docs/CALLBACKS.md)
+### [Config Screen](https://github.com/Tre5et/vanillaconfig/blob/1.18/docs/SCREEN.md)
 
 
 ### Legend:
