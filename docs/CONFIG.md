@@ -9,7 +9,7 @@
  - The name can either be a literal name or a translation key, the translation for which is specified in the standard Minecraft language files under `resources/assets/[modid]/lang`. 
 
 ### Adding config options
- - First, create your desired config options by  initializing a variable of one of the [config types](https://github.com/Tre5et/vanillaconfig/blob/v1.0.1/docs/TYPES.md) and assigning it with the appropriate constructor.
+ - First, create your desired config options by  initializing a variable of one of the [Config Types](https://github.com/Tre5et/vanillaconfig/blob/1.18/docs/TYPES.md) and assigning it with the appropriate constructor.
  - Adding these options to your `PageConfig` can be done in three ways:
 	 - Directly in the Constructor: 
 		 - Create a new array of type `BaseConfig` and add all your desired options to it.
@@ -38,7 +38,7 @@
 	 - Per world: To load or save a config, run `yourPageConfig.loadPerWorld()` or `yourPageConfig.savePerWorld()`. Both functions can take a `String worldId`.
  - To load and save a config in another location, run before loading `yourPageConfig.setPath(String path)`.
 	 - `path` is the path that the config should be saved / loaded in within the config directory. It should not end with the file name.
- - To migrate configs from different files, take a look at [Option Migration](https://github.com/Tre5et/vanillaconfig/blob/v1.0.1/docs/MIGRATE.md).
+ - To migrate configs from different files, take a look at [Option Migration](https://github.com/Tre5et/vanillaconfig/blob/1.18/docs/MIGRATE.md).
 
 ### Example
 ```java
