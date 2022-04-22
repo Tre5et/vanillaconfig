@@ -10,5 +10,5 @@
 	 `modImplementation "net.treset:vanillaconfig:${project.vanillaconfig_version}"`
  - Load the Gradle changes in your IDE (in IntelliJ IDEA, click the elephant symbol in the top right of the file window).
  
-#### You can now move on to [Creating a Config](https://github.com/Tre5et/vanillaconfig/blob/v1.0.1/docs/CONFIG.md).
+#### You can now move on to [Creating a Config](https://github.com/Tre5et/vanillaconfig/blob/1.18/docs/CONFIG.md).
 
