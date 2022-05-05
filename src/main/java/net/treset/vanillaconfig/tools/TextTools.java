@@ -36,8 +36,9 @@ public class TextTools {
         return i;
     }
     public static String asDisplayIntString(String i) {
-        if(i.startsWith("0") && i.length() > 1) i = i.substring(1);
-        else if(i.startsWith("-0") && i.length() > 2) i = "-" + i.substring(2);
+        if(i.startsWith("0") && i.length() > 1 && !i.startsWith("0.")) i = i.substring(1);
+        else if(i.startsWith("-0") && i.length() > 2 && !i.startsWith("-0.")) i = "-" + i.substring(2);
+        if(i.contains(".")) i = roundString(i, 0);
         return i;
     }
     public static int stringToInt(String i) {
@@ -46,6 +47,17 @@ public class TextTools {
         } catch(NumberFormatException e) {
             return 0;
         }
+    }
+
+    public static String roundString(String s, int decPlaces) {
+        if(!s.contains(".")) return s;
+        boolean startsMinus = s.startsWith("-");
+        double d = stringToDouble(s);
+        int i = (int)Math.rint(d * Math.pow(10, decPlaces));
+        d = i / Math.pow(10, decPlaces);
+        s = doubleToString(d);
+        if(startsMinus && !s.startsWith("-")) s = "-" + s;
+        return s;
     }
 
     public static String doubleToString(double d) {
@@ -126,5 +138,21 @@ public class TextTools {
     public static String appendKeyToDisplayKeys(String key, String displayKeys) {
         if(displayKeys.length() == 0) return key;
         return displayKeys + " + " + key;
+    }
+
+    public static String[][] stringArrayArrayFromStringArray(String[] array) {
+        String[][] newArr = new String[array.length][1];
+        for(int i = 0; i < array.length; i++) {
+            newArr[i][0] = array[i];
+        }
+        return newArr;
+    }
+
+    public static int getKeyCodeFromKey(String key) {
+        for (int i = 0; i < 97; i++) {
+            if (key.equalsIgnoreCase(GLFW.glfwGetKeyName(-1, i)))
+                return i;
+        }
+        return -1;
     }
 }

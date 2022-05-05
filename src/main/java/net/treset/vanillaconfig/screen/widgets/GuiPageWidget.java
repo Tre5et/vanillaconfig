@@ -10,8 +10,8 @@ import net.treset.vanillaconfig.screen.widgets.base.GuiButtonWidget;
 public class GuiPageWidget extends GuiButtonWidget {
     PageConfig config;
 
-    public GuiPageWidget(int y, PageConfig config, ConfigScreen screen) {
-        super(y, 300, config, screen);
+    public GuiPageWidget(PageConfig config, ConfigScreen screen) {
+        super(250, 150, config, screen);
 
         this.config = config;
 

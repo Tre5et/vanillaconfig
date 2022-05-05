@@ -3,12 +3,12 @@ package net.treset.vanillaconfig.config;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-import net.treset.vanillaconfig.config.base.BaseConfig;
+import net.treset.vanillaconfig.config.base.SlideableConfig;
 import net.treset.vanillaconfig.config.config_type.ConfigType;
 
 import java.util.function.BiConsumer;
 
-public class DoubleConfig extends BaseConfig {
+public class DoubleConfig extends SlideableConfig {
     double value = 0;
     double minValue = 0;
     double maxValue = 0;
@@ -29,6 +29,19 @@ public class DoubleConfig extends BaseConfig {
 
     public DoubleConfig(double defaultValue, double minValue, double maxValue, String name) {
         this(defaultValue, minValue, maxValue, name, "");
+    }
+
+    @Override
+    public double getDoubleValue() {
+        return this.getDouble();
+    }
+    @Override
+    public double getMaxDoubleValue() {
+        return this.getMaxDouble();
+    }
+    @Override
+    public double getMinDoubleValue() {
+        return this.getMinDouble();
     }
 
     public double getDouble() { return this.value; }

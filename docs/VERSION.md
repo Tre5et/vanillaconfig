@@ -16,35 +16,35 @@
  - `boolean isValid()` returns `false` if the supplied config version was misformatted.
  - `boolean isDefinite()` returns `true` if the version doesn't contain a blank version number.
  - Comparing versions:
-	 - The versions these methods are run on must be definite, else all of them will return `false`. 
-	 - `boolean matches(ConfigVersion version)` returns `true` if the `ConfigVersion` is the same as  or part of `version`.
-		 - Examples: 
-			```java
-			 new ConfigVersion("1.2.3").matches(new ConfigVesion("1.2.3") = true
-	 		 new ConfigVersion("1.2.3").matches(new ConfigVesion("1.x.3") = true
-	 		 new ConfigVersion("1.2.3").matches(new ConfigVesion("1.2.4") = false
-			 new ConfigVersion("1.2.3").matches(new ConfigVesion("2.x.x") = false
-			```
-    - `boolean biggerThan(ConfigVersion version)` returns `true` if the `ConfigVersion` is bigger but not the same as or part of `version`.
-	    - Examples:
-		    ```java
-		    new ConfigVersion("1.2.3").biggerThan(new ConfigVesion("1.2.2") = true
-		    new ConfigVersion("1.2.3").biggerThan(new ConfigVesion("0.x.1") = true
-		    new ConfigVersion("1.2.3").biggerThan(new ConfigVesion("1.2.3") = false
-		    new ConfigVersion("1.2.3").biggerThan(new ConfigVesion("1.2.x") = false
-		    new ConfigVersion("1.2.3").biggerThan(new ConfigVesion("1.3.x") = false
-		    ```
+     - The versions these methods are run on must be definite, else all of them will return `false`. 
+     - `boolean matches(ConfigVersion version)` returns `true` if the `ConfigVersion` is the same as  or part of `version`.
+       - Examples: 
+          ```java
+           new ConfigVersion("1.2.3").matches(new ConfigVesion("1.2.3") = true
+           new ConfigVersion("1.2.3").matches(new ConfigVesion("1.x.3") = true
+           new ConfigVersion("1.2.3").matches(new ConfigVesion("1.2.4") = false
+           new ConfigVersion("1.2.3").matches(new ConfigVesion("2.x.x") = false
+          ```
+     - `boolean biggerThan(ConfigVersion version)` returns `true` if the `ConfigVersion` is bigger but not the same as or part of `version`.
+         - Examples:
+             ```java
+             new ConfigVersion("1.2.3").biggerThan(new ConfigVesion("1.2.2") = true
+             new ConfigVersion("1.2.3").biggerThan(new ConfigVesion("0.x.1") = true
+             new ConfigVersion("1.2.3").biggerThan(new ConfigVesion("1.2.3") = false
+             new ConfigVersion("1.2.3").biggerThan(new ConfigVesion("1.2.x") = false
+             new ConfigVersion("1.2.3").biggerThan(new ConfigVesion("1.3.x") = false
+             ```
      - `boolean smallerThan(ConfigVersion version)` returns `true` if the `ConfigVersion` is smaller but not the same as or part of `version`.
-	    - Examples:
-		   ```java
-		    new ConfigVersion("1.2.3").smallerThan(new ConfigVesion("1.2.4") = true
-		    new ConfigVersion("1.2.3").smallerThan(new ConfigVesion("2.x.4") = true
-		    new ConfigVersion("1.2.3").smallerThan(new ConfigVesion("1.2.3") = false
-		    new ConfigVersion("1.2.3").smallerThan(new ConfigVesion("1.2.x") = false
-		    new ConfigVersion("1.2.3").smallerThan(new ConfigVesion("1.1.x") = false
-		    ```
+        - Examples:
+           ```java
+            new ConfigVersion("1.2.3").smallerThan(new ConfigVesion("1.2.4") = true
+            new ConfigVersion("1.2.3").smallerThan(new ConfigVesion("2.x.4") = true
+            new ConfigVersion("1.2.3").smallerThan(new ConfigVesion("1.2.3") = false
+            new ConfigVersion("1.2.3").smallerThan(new ConfigVesion("1.2.x") = false
+            new ConfigVersion("1.2.3").smallerThan(new ConfigVesion("1.1.x") = false
+            ```
      - `boolean biggerOrEqualTo(ConfigVersion version)` returns `true` if `ConfigVersion` is bigger than or the same as or part of `version`.
-    - `boolean smallerOrEqualTo(ConfigVersion version)` returns `true` if `ConfigVersion` is smaller than or the same as or part of `version`.
+     - `boolean smallerOrEqualTo(ConfigVersion version)` returns `true` if `ConfigVersion` is smaller than or the same as or part of `version`.
 
 ### Setting the version for saving (in `PageConfig`):
  - `boolean setVersion(ConfigVersion version)` sets the version of the config. This will be saved the next time it is saved.
@@ -81,6 +81,6 @@ public static void init() {
 
 	yourPage.setVersion(new ConfigVersion("1.4.0");
 
-	[ yourPage.load(); ...]
+	[ SaveLoadManager.globalSaveConfig(yourPage); ...]
 }
 ```

@@ -26,18 +26,20 @@
 
 ### Saving and Loading
  - You can save configs globally or per world:
-	 - Globally saved configs are saved as `[name].json`.
-	 - Per world saved configs are saved as `[name]/[worldId].json`.
+     - Globally saved configs are saved as `[name].json`.
+     - Per world saved configs are saved as `[name]/[worldId].json`.
  - Saving and loading can be done automatically and manually:
  - Automatic saving / loading:
-	 - Globally: After creating your config run `SaveLoadManager.globalSaveConfig(yourPageConfig)`.
-	 - Per World: After creating your config run `SaveLoadManager.worldSaveConfig(yourPageConfig)`.
-	 - Configs will now automatically be loaded and saved as required.
+     - Globally: After creating your config run `SaveLoadManager.globalSaveConfig(yourPageConfig)`.
+     - Per World: After creating your config run `SaveLoadManager.worldSaveConfig(yourPageConfig)`.
+     - Configs will now automatically be loaded and saved as required.
  - Manual saving / loading:
-	 - Globally: To load or save a config, run `yourPageConfig.load()` or `yourPageConfig.save()`.
-	 - Per world: To load or save a config, run `yourPageConfig.loadPerWorld()` or `yourPageConfig.savePerWorld()`. Both functions can take a `String worldId`.
- - To load and save a config in another location, run before loading `yourPageConfig.setPath(String path)`.
-	 - `path` is the path that the config should be saved / loaded in within the config directory. It should not end with the file name.
+     - Globally: To load or save a config, run `yourPageConfig.load()` or `yourPageConfig.save()`.
+     - Per world: To load or save a config, run `yourPageConfig.loadPerWorld()` or `yourPageConfig.savePerWorld()`. Both functions can take a `String worldId`.
+ - To load and save a config in another location, run before loading the first time `yourPageConfig.setPath(String path)`.
+     - `path` is the path that the config should be saved / loaded in within the config directory. It should not end with the file name.
+ - To load and save with a different file name than the `name` of the `ConfigPage`, run before loading for the first time `yourConfigPage.setSaveName(String name)`.
+     - `name` is the file name of the config file. This should NOT include the `.json` extension.
  - To migrate configs from different files, take a look at [Option Migration](https://github.com/Tre5et/vanillaconfig/blob/1.18/docs/MIGRATE.md).
 
 ### Example
@@ -69,14 +71,14 @@ public static void init() {
 
 	yourPage.addOption(yourOtherPage);
 	yourOtherPage.removeOption("your.boolean");
-
+    
+	yourPage.setSaveName("yourFile")
 	yourPage.setPath("yourFolder");
-
-	yourPage.load();
-	yourPage.save();
+    
+	SaveLoadManager.globalSaveConfig(yourPage);
 }
 ```
-Creates the file `config / yourFolder / your.config.json`:
+Creates, loads and saves the file `config / yourFolder / yourFile.json`:
 ```json
 {
 	"your.boolean": true,

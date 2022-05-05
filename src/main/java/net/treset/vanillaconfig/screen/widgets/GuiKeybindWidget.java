@@ -18,12 +18,12 @@ import java.util.List;
 public class GuiKeybindWidget extends GuiTypableWidget {
     KeybindConfig config;
 
-    public GuiKeybindWidget(int y, KeybindConfig config, ConfigScreen screen) {
-        super(y, 300, config, screen);
+    public GuiKeybindWidget(KeybindConfig config, ConfigScreen screen) {
+        super(310, 150, config, screen);
 
         this.config = config;
 
-        this.setAllowedChars(AllowedChars.ALL.getChars());
+        this.setAllowedChars(AllowedChars.ALL);
 
         this.updateMessage();
     }

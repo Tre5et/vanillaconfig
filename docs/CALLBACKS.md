@@ -28,16 +28,16 @@
  - Apply this method to all callbacks that you want to have.
  - Example:
 	```java
-	BooleanConfig yourBoolean;
-	BooleanConfig yourOtherBoolean;
+	static BooleanConfig yourBoolean;
+	static BooleanConfig yourOtherBoolean;
 
-	void init() {
+	static void init() {
 		[...]
 		yourBoolean.onChange(ThisClass::onBooleanConfigChanged);
 		yourOtherBoolean.onChange(ThisClass::onBooleanConfigChanged);
 	}
 
-	void onBooleanConfigChanged(boolean prevBoolean, String name) {
+	static void onBooleanConfigChanged(boolean prevBoolean, String name) {
 		switch(name) {
 			case yourBoolean.getKey() -> doSomething(yourBoolean.getBoolean());
 			case yourOtherBoolean.getKey()⠀-> doSomethingElse(yourOtherBoolean.getBoolean());

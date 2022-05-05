@@ -1,4 +1,4 @@
-﻿# Documentation (updated v1.0.1)
+﻿# Documentation (updated v1.1.0)
 ### [Setup](https://github.com/Tre5et/vanillaconfig/blob/1.18/docs/SETUP.md)
 ### [Creating a Config](https://github.com/Tre5et/vanillaconfig/blob/1.18/docs/CONFIG.md)
 ### [Config Types](https://github.com/Tre5et/vanillaconfig/blob/1.18/docs/TYPES.md)
@@ -7,6 +7,7 @@
 ### [Callbacks](https://github.com/Tre5et/vanillaconfig/blob/1.18/docs/CALLBACKS.md)
 ### [Config Screen](https://github.com/Tre5et/vanillaconfig/blob/1.18/docs/SCREEN.md)
 
+### Note: Undocumented functions might change without notice. Use at your own risk.
 
 ### Legend:
 

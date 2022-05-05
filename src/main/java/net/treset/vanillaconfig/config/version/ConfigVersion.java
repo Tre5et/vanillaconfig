@@ -1,7 +1,9 @@
 package net.treset.vanillaconfig.config.version;
 
+import javax.annotation.Nullable;
+
 public class ConfigVersion {
-    Integer a, b, c = 0;
+    Integer a, b, c = null;
     boolean valid = false;
 
     public ConfigVersion(Integer a, Integer b, Integer c) {
@@ -73,14 +75,19 @@ public class ConfigVersion {
         return str;
     }
 
+    @Nullable
     public static Integer[] getFromString(String version) {
         Integer[] ints = new Integer[3];
         String[] versions = version.split("\\.");
         if(versions.length != 3) return null;
         for (int i = 0; i < 3; i++) {
             if(versions[i].equals("x")) continue;
-            Integer num = Integer.parseInt(versions[i]);
-            if(num == null) return null;
+            Integer num;
+            try {
+                num = Integer.parseInt(versions[i]);
+            } catch (NumberFormatException e) {
+                return null;
+            }
             ints[i] = num;
         }
         return ints;

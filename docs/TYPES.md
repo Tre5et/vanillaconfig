@@ -107,20 +107,20 @@
 
 ### KeybindConfig
 - Special constructor parameters:
-	- `int[] defaultKeys` default scancodes of keys required to be pressed to activate the keybind.
-	- `int minAmount` the minimum accepted amount of keys.
-	- `int maxAmount` the maximum accepted amount of keys.
-- 	Methods:
-	- `int[] getKeys()` returns an array of all key scancodes required to be pressed to activate the keybind.
-	- `boolean setKeys(int[] keys)` sets the required key scancodes.
-	- `int[] getDefaultKeys()` returns the default array of key scancodes.
-	- `Keybind getKeybind()` returns the internally used keybind.
-	- `int getMinAmount()` returns the minimum accepted amount of keys.
-	- `boolean setMinAmount(int minAmount)` sets the minimum accepted amount of keys.
-	- `int getMaxAmount()` returns the maximum accepted amount of keys.
-	- `boolean setMaxAmount(int maxAmount)` sets the maximum accepted amount of keys.
-	- `KeybindContext getContext()` returns the activation context of the keybind. This is either `IN_GAME` (default), where the keybind will only activate if the player is in a world, like vanilla keybinds, or `ANYWHERE`, where the keybind will activate no matter if the player is in menus or in a world (use this with great care!).
-	- `setContext(KeybindContext context)` sets the activation context of the keybind.
-	- `void resolve()` fires the event as if the keybind was pressed.
+    - `int[] defaultKeys` default scancodes of keys required to be pressed to activate the keybind.
+    - `int minAmount` the minimum accepted amount of keys.
+    - `int maxAmount` the maximum accepted amount of keys.
+- Methods:
+    - `int[] getKeys()` returns an array of all key scancodes required to be pressed to activate the keybind.
+    - `boolean setKeys(int[] keys)` sets the required key scancodes.
+    - `int[] getDefaultKeys()` returns the default array of key scancodes.
+    - `Keybind getKeybind()` returns the internally used keybind.
+    - `int getMinAmount()` returns the minimum accepted amount of keys.
+    - `boolean setMinAmount(int minAmount)` sets the minimum accepted amount of keys.
+    - `int getMaxAmount()` returns the maximum accepted amount of keys.
+    - `boolean setMaxAmount(int maxAmount)` sets the maximum accepted amount of keys.
+    - `KeybindContext getContext()` returns the activation context of the keybind. This is either `IN_GAME` (default), where the keybind will only activate if the player is in a world, like vanilla keybinds, or `ANYWHERE`, where the keybind will activate no matter if the player is in menus or in a world (use this with great care!). 
+    - `setContext(KeybindContext context)` sets the activation context of the keybind.
+    - `void resolve()` fires the event as if the keybind was pressed.
 - Worth mentioning here: Keybind Callback:
-	- `boolean onPressed(Consumer<String> method)` sets the method to be run when the key is pressed. More details in [Callbacks](https://github.com/Tre5et/vanillaconfig/blob/1.18/docs/CALLBACKS.md).
+    - `boolean onPressed(Consumer<String> method)` sets the method to be run when the key is pressed. More details in [Callbacks](https://github.com/Tre5et/vanillaconfig/blob/1.18/docs/CALLBACKS.md).

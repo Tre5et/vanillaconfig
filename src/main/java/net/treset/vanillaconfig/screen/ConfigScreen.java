@@ -34,15 +34,24 @@ public class ConfigScreen extends Screen {
     List<GuiBaseWidget> widgets;
 
     boolean active = false;
+    boolean textureBackground = true;
 
     double scrollOffset = 0;
 
+    int displayedIndexes = 0;
+
     private boolean scrolling = false;
 
-    private int top = 32;
-    private int bottom = this.height - 32;
-    private int left = 0;
-    private int right = this.width;
+    private final int marginY = 32;
+    private final int top = this.marginY;
+    private int bottom = this.height - this.marginY;
+
+    private final int marginX = 0;
+    private final int left = this.marginX;
+    private int right = this.width - this.marginX;
+
+    private final int scrollbarCenterX = 156;
+    private int scrollbarX = this.width / 2 + this.scrollbarCenterX;
 
     private String[] renderTooltip = new String[]{};
 
@@ -53,19 +62,20 @@ public class ConfigScreen extends Screen {
         this.config = config;
 
         this.parent = parent;
-
-        bottom = this.height - 32;
-        right = this.width;
     }
 
+    @Override
     protected void init() {
         if(MinecraftClient.getInstance() == null) return;
 
-        bottom = this.height - 32;
-        right = this.width;
-
         this.widgets = new ArrayList<>();
         addOptions(config.getOptions());
+
+        this.bottom = this.height - this.marginY;
+        this.right = this.width - this.marginX;
+        this.scrollbarX = this.width / 2 + this.scrollbarCenterX;
+
+        this.setScroll(0);
 
         this.active = true;
         this.onOpenDep.run();
@@ -74,18 +84,21 @@ public class ConfigScreen extends Screen {
 
     public boolean isActive() { return this.active; }
 
+    public boolean isBackgroundTextured() { return this.textureBackground; }
+    public boolean setBackgroundTextured(boolean textured) { this.textureBackground = textured; return true; }
+
     public boolean isMouseOverOptions(int mouseX, int mouseY) { return mouseX >= this.left && mouseX <= this.right && mouseY >= this.top && mouseY <= this.bottom; }
 
     public void addOptions(BaseConfig[] options) {
         for (BaseConfig e : options) {
 
-            if(e.getType() == ConfigType.BOOLEAN) this.widgets.add(new GuiBooleanWidget(0, (BooleanConfig)e, this));
-            else if(e.getType() == ConfigType.LIST) this.widgets.add(new GuiListWidget(0, (ListConfig)e, this));
-            else if(e.getType() == ConfigType.PAGE) this.widgets.add(new GuiPageWidget(0, (PageConfig)e, this));
-            else if(e.getType() == ConfigType.INTEGER) this.widgets.add(new GuiIntegerWidget(0, (IntegerConfig)e, this));
-            else if(e.getType() == ConfigType.STRING) this.widgets.add(new GuiStringWidget(0, (StringConfig)e, this));
-            else if(e.getType() == ConfigType.DOUBLE) this.widgets.add(new GuiDoubleWidget(0, (DoubleConfig)e, this));
-            else if(e.getType() == ConfigType.KEYBIND) this.widgets.add(new GuiKeybindWidget(0, (KeybindConfig)e, this));
+            if(e.getType() == ConfigType.BOOLEAN) this.widgets.add(new GuiBooleanWidget((BooleanConfig)e, this));
+            else if(e.getType() == ConfigType.LIST) this.widgets.add(new GuiListWidget((ListConfig)e, this));
+            else if(e.getType() == ConfigType.PAGE) this.widgets.add(new GuiPageWidget((PageConfig)e, this));
+            else if(e.getType() == ConfigType.INTEGER) this.widgets.add(new GuiIntegerWidget((IntegerConfig)e, this));
+            else if(e.getType() == ConfigType.STRING) this.widgets.add(new GuiStringWidget((StringConfig)e, this));
+            else if(e.getType() == ConfigType.DOUBLE) this.widgets.add(new GuiDoubleWidget((DoubleConfig)e, this));
+            else if(e.getType() == ConfigType.KEYBIND) this.widgets.add(new GuiKeybindWidget((KeybindConfig)e, this));
         }
     }
 
@@ -93,31 +106,19 @@ public class ConfigScreen extends Screen {
     public GuiBaseWidget[] getWidgets() { return this.widgets.toArray(new GuiBaseWidget[]{}); }
 
     private int getOptionsHeight() {
-        int height = 3;
-        for (GuiBaseWidget e : widgets) {
-            if(e.isRendered()) height += e.getHeight() + 3;
-        }
-        return height - 3;
-    }
-    private int getHeightOfOption(int index) {
-        if(index >= this.getWidgets().length || index < 0) return -1;
-        int height = 3;
-        for(int i = 0; i < index; i++) {
-            GuiBaseWidget e = this.getWidgets()[i];
-            if(e.isRendered()) height += e.getHeight() + 3;
-        }
-        return height;
-    }
-    private int getHeightOfOption(GuiBaseWidget widget) {
-        if(this.widgets.contains(widget)) return this.getHeightOfOption(this.widgets.indexOf(widget));
-        return -1;
+        return (int)Math.ceil((double)this.displayedIndexes / 2) * (int)this.getAverageWidgetHeight() + 5;
     }
     public double getScrollOffset() { return this.scrollOffset; }
-    public double getScrollHeight() { return Math.max(0, this.getOptionsHeight() - (this.getDisplayAreaHeight() - 4)); }
+    public double getScrollHeight() { return Math.max(0, this.getOptionsHeight() - (this.getDisplayAreaHeight())); }
 
-    public double getAverageWidgetHeight() { return ((double)this.getOptionsHeight() - 3) / (double)this.getWidgets().length - 3; }
+    public double getAverageWidgetHeight() { return 25; }
 
     public int getDisplayAreaHeight() { return this.bottom - this.top; }
+
+    public int getTop() { return this.top; }
+    public int getBottom() { return this.bottom; }
+    public int getLeft() { return this.left; }
+    public int getRight() { return this.right; }
 
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         this.renderBackground(matrices);
@@ -126,9 +127,9 @@ public class ConfigScreen extends Screen {
         BufferBuilder b = t.getBuffer();
         RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
 
-        this.renderBackground(t, b);
+        if(this.isBackgroundTextured()) this.renderBackground(t, b);
         this.renderOptions(matrices, mouseX, mouseY);
-        this.renderOverlay(matrices, t, b);
+        if(this.isBackgroundTextured()) this.renderOverlay(matrices, t, b);
         this.renderScrollbar(t, b);
         this.renderDoneButton(matrices, mouseX, mouseY);
         this.renderTooltip(matrices, mouseX, mouseY);
@@ -157,14 +158,14 @@ public class ConfigScreen extends Screen {
         RenderSystem.setShader(GameRenderer::getPositionColorShader);
 
         int scrollBarHeight = (int)((float)(this.getDisplayAreaHeight() * this.getDisplayAreaHeight()) / (float)this.getOptionsHeight());
-        scrollBarHeight = MathHelper.clamp(scrollBarHeight, 32, this.getDisplayAreaHeight() - 8);
+        scrollBarHeight = MathHelper.clamp(scrollBarHeight, this.top, this.getDisplayAreaHeight() - 8);
 
         int scrollBarY = (int)this.getScrollOffset() * (this.getDisplayAreaHeight() - scrollBarHeight) / (int)this.getScrollHeight() + this.top;
         if (scrollBarY < this.top) {
             scrollBarY = this.top;
         }
 
-        int scrollAreaL = this.width / 2 + 150;
+        int scrollAreaL = this.scrollbarX;
         int scrollAreaR = scrollAreaL + 6;
 
         b.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
@@ -189,9 +190,14 @@ public class ConfigScreen extends Screen {
 
     private void renderOptions(MatrixStack matrices, int mouseX, int mouseY) {
         if(!this.isMouseOverOptions(mouseX, mouseY)) mouseX = mouseY = -1;
-        for (GuiBaseWidget e : widgets) {
-            e.render(matrices, this.getHeightOfOption(e) + this.top, mouseX, mouseY, (int)this.getScrollOffset());
+        int displayedOptions = 0;
+        for (int i = 0; i < this.getWidgets().length; i++) {
+            if(this.getWidgets()[i].isRendered()) {
+                this.getWidgets()[i].render(matrices, displayedOptions, mouseX, mouseY, (int) this.getScrollOffset());
+                displayedOptions += this.getWidgets()[i].getBaseConfig().isFullWidth()? ((displayedOptions % 2 == 0)? 2 : 3) : 1;
+            }
         }
+        this.displayedIndexes = displayedOptions;
     }
 
     private void renderOverlay(MatrixStack matrices, Tessellator t, BufferBuilder b) {
@@ -290,17 +296,15 @@ public class ConfigScreen extends Screen {
         this.setScroll(this.getScrollOffset() + amount);
     }
     private void setScroll(double scroll) {
-        this.scrollOffset = scroll;
-
-        if(this.scrollOffset < 0) this.scrollOffset = 0;
-        else if(this.scrollOffset > this.getOptionsHeight() + this.top - MinecraftClient.getInstance().getWindow().getScaledHeight() + 35) this.scrollOffset = this.getOptionsHeight() + this.top - MinecraftClient.getInstance().getWindow().getScaledHeight() + 35;
+        this.scrollOffset = Math.max(0, Math.min(this.getOptionsHeight() - this.getDisplayAreaHeight(), scroll));
     }
 
     boolean ioInterruptRequest = false;
+
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         this.ioInterruptRequest = false;
-        if(button == 0 && this.getScrollHeight() != 0 && mouseX >= this.width / 2 + 150 && mouseX <= this.width / 2 + 156) this.scrolling = true;
+        if(button == 0 && this.getScrollHeight() != 0 && mouseX >= this.scrollbarX && mouseX <= this.scrollbarX + 6) this.scrolling = true;
         else if(button == 0 && this.isHoveredOverDone((int)mouseX, (int)mouseY)) {
             MinecraftClient.getInstance().getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
             this.close();

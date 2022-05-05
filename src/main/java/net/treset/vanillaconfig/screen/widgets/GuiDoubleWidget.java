@@ -2,32 +2,32 @@ package net.treset.vanillaconfig.screen.widgets;
 
 import net.treset.vanillaconfig.config.DoubleConfig;
 import net.treset.vanillaconfig.screen.ConfigScreen;
-import net.treset.vanillaconfig.screen.widgets.base.GuiTypableWidget;
+import net.treset.vanillaconfig.screen.widgets.base.GuiNumberWidget;
 import net.treset.vanillaconfig.tools.TextTools;
 import net.treset.vanillaconfig.tools.helpers.AllowedChars;
 
-public class GuiDoubleWidget extends GuiTypableWidget {
+public class GuiDoubleWidget extends GuiNumberWidget {
     DoubleConfig config;
 
-    public GuiDoubleWidget(int y, DoubleConfig config, ConfigScreen screen) {
-        super(y, 300, config, screen);
+    public GuiDoubleWidget(DoubleConfig config, ConfigScreen screen) {
+        super(310, 150, config, screen);
 
         this.config = config;
 
-        this.setAllowedChars(AllowedChars.DECIMAL_NUMBERS.getChars());
+        this.setAllowedChars(AllowedChars.DECIMAL_NUMBERS);
 
         this.initMessage();
     }
 
-    public String initMessage(DoubleConfig config) {
-        if(config == null) return "ERROR";
-        this.setTitle(config.getKey());
-        String startValue = TextTools.doubleToString(config.getDouble());
+    @Override
+    public String initMessage() {
+        if(this.config == null) return "ERROR";
+        this.setTitle(this.config.getKey());
+        String startValue = TextTools.doubleToString(this.config.getDouble());
         this.setValue(startValue);
         this.setDefaultValue(startValue);
         return this.getMessage();
     }
-    public String initMessage() { return this.initMessage(this.config); }
 
     @Override
     public void setDisplayValue(String value) {

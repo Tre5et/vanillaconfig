@@ -31,6 +31,7 @@ public class SaveLoadManager {
         for (PageConfig e : globalConfigs) {
             if(e.getKey().equals(config.getKey())) return false; //check that config name isn't overridden
         }
+
         return globalConfigs.add(config);
     }
     public static boolean removeGlobalSaveConfig(PageConfig config) {

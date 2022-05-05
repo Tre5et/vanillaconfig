@@ -100,18 +100,23 @@ public class PageConfig extends BaseConfig {
     }
 
     //save specific functions
+    String saveName = "";
     String path = "";
     String migratePath = "";
     ConfigVersion version = new ConfigVersion("x.x.x");
 
+    public boolean setSaveName(String name) { this.saveName = name; return true; }
+    public String getSaveName() { return saveName; }
+    public String getRealSaveName() { return (saveName.isEmpty())? this.getKey() : this.getSaveName(); }
+
     public boolean setPath(String path) { this.path = path; return true; }
     public String getPath() { return this.path; }
-    public String getFullPath() { return FileTools.assemblePathString(this.getKey(), this.getPath()); }
+    public String getFullPath() { return FileTools.assemblePathString(this.getRealSaveName(), this.getPath()); }
 
     public String getMigratePath() { return this.migratePath; }
-    public String getFullMigratePath() { return this.getMigrateDir() + "/" + this.getMigrateKey() + ".json"; }
-    public String getMigrateKey() {
-        if(!this.getMigratePath().endsWith(".json")) return this.getKey();
+    public String getFullMigratePath() { return this.getMigrateDir() + "/" + this.getMigrateSaveName() + ".json"; }
+    public String getMigrateSaveName() {
+        if(!this.getMigratePath().endsWith(".json")) return this.getRealSaveName();
         String[] steps = this.getMigratePath().split("/");
         return steps[steps.length - 1].substring(0, steps[steps.length - 1].length() - 5);
     }
@@ -134,11 +139,11 @@ public class PageConfig extends BaseConfig {
 
     public File getFile(boolean migrate, String worldId) {
         if(migrate) {
-            if(worldId == null) return FileTools.getConfigFile(this.getMigrateKey(), this.getMigrateDir());
-            return FileTools.getConfigFile(worldId, this.getMigrateDir() + ((this.getPath().endsWith("/"))? "" : "/") + this.getMigrateKey());
+            if(worldId == null) return FileTools.getConfigFile(this.getMigrateSaveName(), this.getMigrateDir());
+            return FileTools.getConfigFile(worldId, this.getMigrateDir() + ((this.getPath().endsWith("/"))? "" : "/") + this.getMigrateSaveName());
         }
-        if(worldId == null) return FileTools.getConfigFile(this.getKey(), this.getPath());
-        return FileTools.getConfigFile(worldId, this.getPath() + ((path.endsWith("/"))? "" : "/") + this.getKey());
+        if(worldId == null) return FileTools.getConfigFile(this.getRealSaveName(), this.getPath());
+        return FileTools.getConfigFile(worldId, this.getPath() + ((path.endsWith("/"))? "" : "/") + this.getRealSaveName());
     }
     public File getFile(boolean migrate) { return this.getFile(migrate, null); }
 
@@ -157,7 +162,7 @@ public class PageConfig extends BaseConfig {
             obj = option.addToJson(obj);
         }
 
-        FileTools.writeVersion(this.getKey(), version);
+        FileTools.writeVersion(this.getRealSaveName(), version);
 
         return FileTools.writeJsonToFile(obj, configFile);
     }
@@ -237,8 +242,14 @@ public class PageConfig extends BaseConfig {
         return true;
     }
     public boolean loadVersion() {
-        this.setVersion(FileTools.readVersion(this.getKey()));
-        return true;
+        this.setVersion(FileTools.readVersion(this.getRealSaveName()));
+        if(this.hasVersion()) return true;
+
+        if(this.shouldMigrate() && !this.getVersion().isDefinite()) {
+            ConfigVersion version = FileTools.readVersion(this.getMigrateSaveName());
+            this.setVersion(version);
+        }
+        return this.hasVersion();
     }
 
     BiConsumer<Boolean, String> onLoad = (success, name) -> {};

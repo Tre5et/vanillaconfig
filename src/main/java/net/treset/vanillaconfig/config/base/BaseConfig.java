@@ -17,6 +17,7 @@ public class BaseConfig {
     JsonObject baseObject = null;
     boolean editable = true;
     boolean displayed = true;
+    boolean fullWidth = true;
 
     public BaseConfig(ConfigType type, String name) {
         this.type = type;
@@ -38,12 +39,12 @@ public class BaseConfig {
 
     public ConfigType getType() { return this.type; }
 
-    public boolean migrateFrom(String oldName) {
-        this.migrateKey = oldName;
+    public boolean migrateFrom(String oldLocation) {
+        this.migrateKey = oldLocation;
         return true;
     }
-    public boolean shouldMigrate() { return !this.getMigrateKey().isEmpty(); }
-    public String getMigrateKey() { return this.migrateKey; }
+    public boolean shouldMigrate() { return !this.getMigrateSaveName().isEmpty(); }
+    public String getMigrateSaveName() { return this.migrateKey; }
 
     public boolean isNonexistentAllowed() { return this.allowNonexistent; }
     public boolean allowNonexistent(boolean allow) {
@@ -57,6 +58,9 @@ public class BaseConfig {
     public boolean isEditable() { return this.editable; }
     public boolean setEditable(boolean editable) { this.editable = editable; return true; }
 
+    public boolean isFullWidth() { return this.fullWidth; }
+    public boolean setFullWidth(boolean fullWidth) { this.fullWidth = fullWidth; return true; }
+
     public boolean resetValue() { return false; };
 
     @Nullable
@@ -64,8 +68,8 @@ public class BaseConfig {
     private boolean setBaseObject(JsonObject obj) { this.baseObject = obj; return true; }
 
     private JsonElement getMigrateObject(JsonObject obj) {
-        if(!this.getMigrateKey().contains("/")) return obj.get(this.getMigrateKey());
-        return FileTools.findJsonElementFromPath(this.getBaseObject(), this.getMigrateKey());
+        if(!this.getMigrateSaveName().contains("/")) return obj.get(this.getMigrateSaveName());
+        return FileTools.findJsonElementFromPath(this.getBaseObject(), this.getMigrateSaveName());
     }
 
     public JsonObject addToJson(JsonObject obj) {

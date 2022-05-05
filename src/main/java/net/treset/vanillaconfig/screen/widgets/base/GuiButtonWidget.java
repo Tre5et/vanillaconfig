@@ -21,23 +21,27 @@ public class GuiButtonWidget extends GuiBaseWidget {
     String value = "";
     String defaultValue = "";
 
+    int widthFull = 0;
+    int widthHalf = 0;
+
     int clicked = -1;
 
-    public GuiButtonWidget(int y, int width, BaseConfig config, String title, String value, ConfigScreen screen) {
+    public GuiButtonWidget(int widthFull, int widthHalf, BaseConfig config, String title, String value, ConfigScreen screen) {
         this.parentScreen = screen;
 
-        this.screenX = this.x = MinecraftClient.getInstance().getWindow().getScaledWidth() / 2 - width / 2;
-        this.screenY = this.y = y;
         this.title = title;
         this.value = value;
 
-        this.width = width;
+        this.widthFull = widthFull;
+        this.widthHalf = widthHalf;
+
+        this.width = widthFull;
         this.height = 20;
 
         this.setBaseConfig(config);
     }
-    public GuiButtonWidget(int y, int width, BaseConfig config, ConfigScreen screen) {
-        this(y, width, config, "", "", screen);
+    public GuiButtonWidget(int widthFull, int widthHalf, BaseConfig config, ConfigScreen screen) {
+        this(widthFull, widthHalf, config, "", "", screen);
     }
 
     public void setTitle(String key) { this.title = key;}
@@ -59,12 +63,25 @@ public class GuiButtonWidget extends GuiBaseWidget {
     public ConfigScreen getParentScreen() { return this.parentScreen; }
 
     @Override
-    public boolean render(MatrixStack matrices, int y, int mouseX, int mouseY, int scrollOffset) {
+    public boolean render(MatrixStack m, int index, int mouseX, int mouseY, int scrollOffset) {
         if (!this.isRendered()) return false;
 
-        this.y = y;
+        this.y = 5 + index * 25 + this.parentScreen.getTop();
+        if(this.getBaseConfig().isFullWidth()) {
+            this.width = this.widthFull;
+            this.y = 5 + (int)Math.ceil((double)index / 2) * 25 + this.parentScreen.getTop();
+            this.x = MinecraftClient.getInstance().getWindow().getScaledWidth() / 2 - width / 2;
+        } else {
+            this.width = this.widthHalf;
+            this.y = 5 + index / 2 * 25 + this.parentScreen.getTop();
+            if(index % 2 == 0) this.x = MinecraftClient.getInstance().getWindow().getScaledWidth() / 2 - this.width - 5;
+            else this.x = MinecraftClient.getInstance().getWindow().getScaledWidth() / 2 + 5;
+        }
+
         this.screenY = this.y - scrollOffset;
         this.screenX = this.x;
+
+        if(this.screenY > this.parentScreen.getTop() + this.parentScreen.getDisplayAreaHeight()) return true;
 
         this.onRender();
 
@@ -72,7 +89,7 @@ public class GuiButtonWidget extends GuiBaseWidget {
 
         MinecraftClient cli = MinecraftClient.getInstance();
         if (cli == null) return false;
-        TextRenderer textRenderer = cli.textRenderer;
+        TextRenderer t = cli.textRenderer;
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderTexture(0, WIDGETS_TEXTURE);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
@@ -80,25 +97,33 @@ public class GuiButtonWidget extends GuiBaseWidget {
         RenderSystem.defaultBlendFunc();
         RenderSystem.enableDepthTest();
 
-        //draw texture
+        DrawableHelper d = new DrawableHelper() {};
+
+        return
+                this.renderTexture(d, m, mouseX, mouseY) &&
+                this.renderText(m, t) &&
+                this.renderTooltip(mouseX, mouseY);
+    }
+
+    public boolean renderTexture(DrawableHelper d, MatrixStack m, int mouseX, int mouseY) {
         int textureOffset = this.getTextureOffset(mouseX, mouseY);
-        DrawableHelper drawHelper = new DrawableHelper() {};
-        drawHelper.drawTexture(matrices, this.screenX, this.screenY, 0, 46 + textureOffset, this.width / 2, this.getHeight()); // draw left half
-        drawHelper.drawTexture(matrices, this.screenX + this.width / 2, this.screenY, 200 - this.width / 2, 46 + textureOffset, this.width / 2, this.getHeight()); //draw right half
-
-        //render text
+        d.drawTexture(m, this.screenX, this.screenY, 0, 46 + textureOffset, this.width / 2, this.getHeight()); // draw left half
+        d.drawTexture(m, this.screenX + this.width / 2, this.screenY, 200 - this.width / 2, 46 + textureOffset, this.width / 2, this.getHeight()); //draw right half
+        return true;
+    }
+    public boolean renderText(MatrixStack m, TextRenderer t) {
         int textColor = this.getTextColor();
-        DrawableHelper.drawCenteredText(matrices, textRenderer, this.getMessage(), this.screenX + this.width / 2, this.screenY + (this.height - 8) / 2, textColor);
-
-        //render tooltip
+        DrawableHelper.drawCenteredText(m, t, this.getMessage(), this.screenX + this.width / 2, this.screenY + (this.height - 8) / 2, textColor);
+        return true;
+    }
+    public boolean renderTooltip(int mouseX, int mouseY) {
         if(this.isHoveredOver(mouseX, mouseY) && this.getBaseConfig().hasDesc()) {
-            this.getParentScreen().requestTooltip(this.getBaseConfig().getDesc());
+            return this.getParentScreen().requestTooltip(this.getBaseConfig().getDesc());
         }
-
         return true;
     }
 
-    private int getTextureOffset(int mouseX, int mouseY) {
+    public int getTextureOffset(int mouseX, int mouseY) {
         int offset;
         if(!this.getBaseConfig().isEditable()) offset = 0;
         else if(this.isHoveredOver(mouseX, mouseY)) offset = 40;
@@ -107,7 +132,7 @@ public class GuiButtonWidget extends GuiBaseWidget {
     }
 
     public int getTextColor() { return this.getBaseConfig().isEditable() ? Formatting.WHITE.getColorValue() : 10526880; }
-    private boolean isHoveredOver(int mouseX, int mouseY) {
+    public boolean isHoveredOver(int mouseX, int mouseY) {
         return this.screenX < mouseX && mouseX < this.screenX + this.width && this.screenY < mouseY && mouseY < this.screenY + this.height;
     }
 

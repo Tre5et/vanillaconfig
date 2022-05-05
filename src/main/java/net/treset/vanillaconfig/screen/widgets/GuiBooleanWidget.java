@@ -11,8 +11,8 @@ import net.treset.vanillaconfig.tools.TextTools;
 public class GuiBooleanWidget extends GuiButtonWidget {
     BooleanConfig config;
 
-    public GuiBooleanWidget(int y, BooleanConfig config, ConfigScreen screen) {
-        super(y, 300, config, screen);
+    public GuiBooleanWidget(BooleanConfig config, ConfigScreen screen) {
+        super(310, 150, config, screen);
 
         this.config = config;
 

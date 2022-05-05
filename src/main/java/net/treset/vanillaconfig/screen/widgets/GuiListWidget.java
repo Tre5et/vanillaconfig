@@ -1,7 +1,10 @@
 package net.treset.vanillaconfig.screen.widgets;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.sound.PositionedSoundInstance;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.sound.SoundEvents;
 import net.treset.vanillaconfig.config.ListConfig;
 import net.treset.vanillaconfig.screen.ConfigScreen;
@@ -10,8 +13,11 @@ import net.treset.vanillaconfig.screen.widgets.base.GuiButtonWidget;
 public class GuiListWidget extends GuiButtonWidget {
     ListConfig config;
 
-    public GuiListWidget(int y, ListConfig config, ConfigScreen screen) {
-        super(y, 300, config, screen);
+    boolean isMouseDown = false;
+    boolean mouseWentDownOver = false;
+
+    public GuiListWidget(ListConfig config, ConfigScreen screen) {
+        super(310, 250, config, screen);
 
         this.config = config;
     }
@@ -27,19 +33,85 @@ public class GuiListWidget extends GuiButtonWidget {
     }
 
     @Override
+    public int getTextureOffset(int mouseX, int mouseY) {
+        if(!this.config.isSlider()) return super.getTextureOffset(mouseX, mouseY);
+        return 0;
+    }
+
+    @Override
+    public boolean renderTexture(DrawableHelper d, MatrixStack m, int mouseX, int mouseY) {
+        boolean success = super.renderTexture(d, m, mouseX, mouseY);
+
+        if(this.config.isSlider()) {
+
+            if(this.isMouseDown && this.mouseWentDownOver) {
+                double mousePercentage = Math.max(0D, Math.min(1D,
+                        (mouseX - this.screenX - 4) / (double)(this.getWidth() - 8)
+                ));
+
+                int mouseValue = (int)Math.rint(
+                        mousePercentage
+                        * (this.config.getMaxDoubleValue() - this.config.getMinDoubleValue())
+                        + this.config.getMinDoubleValue());
+
+                this.config.setOptionIndex(mouseValue);
+
+
+            }
+
+            RenderSystem.setShaderTexture(0, WIDGETS_TEXTURE);
+            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+
+            double sliderPercentage = (this.config.getDoubleValue() - this.config.getMinDoubleValue())
+                    / (this.config.getMaxDoubleValue() - this.config.getMinDoubleValue());
+
+            int sliderPos = (int)Math.rint(sliderPercentage * (this.getWidth() - 8));
+
+            int offset = (this.isHoveredOver(mouseX, mouseY) ? 2 : 1) * 20;
+
+            d.drawTexture(m, this.screenX + sliderPos, this.screenY, 0, 46 + offset, 4, 20);
+            d.drawTexture(m, this.screenX + sliderPos + 4, this.screenY, 196, 46 + offset, 4, 20);
+        } else isMouseDown = false;
+
+        return success;
+    }
+
+    @Override
     public void onRender() {
         updateMessage();
     }
 
     @Override
     public void onClickL() {
-        MinecraftClient.getInstance().getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
-        config.increment(true);
+        if(!this.config.isSlider()) {
+            MinecraftClient.getInstance().getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+            config.increment(true);
+        }
+        this.mouseWentDownOver = true;
     }
 
     @Override
     public void onClickR() {
-        MinecraftClient.getInstance().getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
-        config.increment(false);
+        if(!this.config.isSlider()) {
+            MinecraftClient.getInstance().getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+            config.increment(false);
+        }
+    }
+
+    @Override
+    public void onMouseDown(int button) {
+        super.onMouseDown(button);
+        if(this.config.isSlider() && button == 0) isMouseDown = true;
+    }
+    @Override
+    public void onMouseUp(int button) {
+        super.onMouseUp(button);
+        if(this.config.isSlider() && button == 0 && isMouseDown) {
+            isMouseDown = false;
+            if(mouseWentDownOver) {
+                MinecraftClient.getInstance().getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+                mouseWentDownOver = false;
+            }
+        }
     }
 }

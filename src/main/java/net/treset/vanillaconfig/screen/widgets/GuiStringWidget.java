@@ -8,12 +8,12 @@ import net.treset.vanillaconfig.tools.helpers.AllowedChars;
 public class GuiStringWidget extends GuiTypableWidget {
     StringConfig config;
 
-    public GuiStringWidget(int y, StringConfig config, ConfigScreen screen) {
-        super(y, 300, config, screen);
+    public GuiStringWidget(StringConfig config, ConfigScreen screen) {
+        super(310, 150, config, screen);
 
         this.config = config;
 
-        this.setAllowedChars(AllowedChars.ALL.getChars());
+        this.setAllowedChars(AllowedChars.ALL);
 
         initMessage();
     }

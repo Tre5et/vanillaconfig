@@ -3,15 +3,16 @@ package net.treset.vanillaconfig.config;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-import net.treset.vanillaconfig.config.base.BaseConfig;
+import net.treset.vanillaconfig.config.base.SlideableConfig;
 import net.treset.vanillaconfig.config.config_type.ConfigType;
+import net.treset.vanillaconfig.tools.TextTools;
 import net.treset.vanillaconfig.tools.helpers.TriConsumer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ListConfig extends BaseConfig {
+public class ListConfig extends SlideableConfig {
     List<String> options = new ArrayList<>();
     int optionIndex = 0;
     int defOptionIndex = 0;
@@ -34,10 +35,10 @@ public class ListConfig extends BaseConfig {
             name, descriptions);
     }
     public ListConfig(String[] options, int defaultOptionIndex, String name, String[] descriptions) {
-        this(options, defaultOptionIndex, name, stringArrayArrayFromStringArray(descriptions));
+        this(options, defaultOptionIndex, name, TextTools.stringArrayArrayFromStringArray(descriptions));
     }
     public ListConfig(String[] options, String defaultOption, String name, String[] descriptions) {
-        this(options, defaultOption, name, stringArrayArrayFromStringArray(descriptions));
+        this(options, defaultOption, name, TextTools.stringArrayArrayFromStringArray(descriptions));
     }
     public ListConfig(String[] options, int defaultOptionIndex, String name, String description) {
         this(options, defaultOptionIndex, name, new String[]{description});
@@ -53,27 +54,33 @@ public class ListConfig extends BaseConfig {
         this(options, defaultOption, name, new String[0]);
     }
 
-    private static String[][] stringArrayArrayFromStringArray(String[] array) {
-        String[][] newArr = new String[array.length][1];
-        for(int i = 0; i < array.length; i++) {
-            newArr[i][0] = array[i];
-        }
-        return newArr;
+    @Override
+    public double getDoubleValue() {
+        return this.getOptionIndex();
+    }
+    @Override
+    public double getMaxDoubleValue() {
+        return this.getOptions().length - 1;
+    }
+    @Override
+    public double getMinDoubleValue() {
+        return 0D;
     }
 
     public int getOptionIndex() { return this.optionIndex; }
     public boolean setOptionIndex(int index) {
-        if(this.getOptionIndex() != index) {
+        if(this.getOptionIndex() != index && this.getOptions().length > index && index >= 0) {
             int prevIndex = this.getOptionIndex();
             this.optionIndex = index;
             this.updateDesc();
             this.onChange.accept(prevIndex, this.getOption(prevIndex), this.getKey());
+            return true;
         }
-        return true;
+        return false;
     }
 
     public String getOption(int index) {
-        if(index > this.getOptions().length || index < 0) return "";
+        if(index >= this.getOptions().length || index < 0) return "";
         return this.getOptions()[index];
     }
     public String getOption() { return this.getOption(this.getOptionIndex()); }
@@ -97,7 +104,7 @@ public class ListConfig extends BaseConfig {
     public boolean hasDesc() {
         return this.getDescs().length != 0;
     }
-    public boolean updateDesc() {
+    private boolean updateDesc() {
         if(!this.hasDesc()) this.setDesc("");
         else if(this.getDescs().length <= this.getOptionIndex()) {
             this.setDesc(this.getDescs()[0]);

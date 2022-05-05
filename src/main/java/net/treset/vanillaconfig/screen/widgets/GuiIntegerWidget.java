@@ -2,37 +2,35 @@ package net.treset.vanillaconfig.screen.widgets;
 
 import net.treset.vanillaconfig.config.IntegerConfig;
 import net.treset.vanillaconfig.screen.ConfigScreen;
-import net.treset.vanillaconfig.screen.widgets.base.GuiTypableWidget;
+import net.treset.vanillaconfig.screen.widgets.base.GuiNumberWidget;
 import net.treset.vanillaconfig.tools.TextTools;
 import net.treset.vanillaconfig.tools.helpers.AllowedChars;
 
-public class GuiIntegerWidget extends GuiTypableWidget {
+public class GuiIntegerWidget extends GuiNumberWidget {
     IntegerConfig config;
 
-    public GuiIntegerWidget(int y, IntegerConfig config, ConfigScreen screen) {
-        super(y, 300, config, screen);
+    public GuiIntegerWidget(IntegerConfig config, ConfigScreen screen) {
+        super(310, 150, config, screen);
 
         this.config = config;
 
-        this.setAllowedChars(AllowedChars.NUMBERS.getChars());
+        this.setAllowedChars(AllowedChars.NUMBERS);
 
         this.initMessage();
     }
 
-    public String initMessage(IntegerConfig config) {
-        if(config == null) return "ERROR";
-        this.setTitle(config.getKey());
-        this.setValue(TextTools.intToString(config.getInteger()));
-        this.setDefaultValue(TextTools.intToString(config.getInteger()));
-        return this.getMessage();
-    }
+    @Override
     public String initMessage() {
-        return initMessage(this.config);
+        if(config == null) return "ERROR";
+        this.setTitle(this.config.getKey());
+        this.setValue(TextTools.intToString(this.config.getInteger()));
+        this.setDefaultValue(TextTools.intToString(this.config.getInteger()));
+        return this.getMessage();
     }
 
     @Override
     public void setDisplayValue(String value) {
-        int intValue = TextTools.stringToInt(value);
+        int intValue = (int)Math.rint(TextTools.stringToDouble(TextTools.asIntString(value)));
         this.setValue(TextTools.asDisplayIntString(value), this.config.isIntValid(intValue));
     }
 

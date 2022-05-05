@@ -73,7 +73,7 @@
 		yourPage.setPath("yourNewFolder");
 		yourPage.migrateFileFrom("yourFolder/your.config.json");
 
-		[ yourPage.load(); ...]
+		[ SaveLoadManager.globalSaveConfig(yourPage); ...]
 	}
 	```
 

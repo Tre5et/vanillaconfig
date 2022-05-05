@@ -7,15 +7,26 @@
  - The screen can be opened by using `MinecraftClient.getInstance().setScreen(yourConfigScreen)`.
 
 ### Display options for config screens:
- - All config types have two parameters that can be set. These will affect their appearance on the config screen.
- - Displayed:
-	 - If this is `false`, the option will not be visible at all.
-	 - `boolean isDisplayed()` returns `true` if the option is visible.
-	 - `boolean setDisplayed(boolean displayed)` sets the visibility of the option.
-  - Editable:
-	 - If this is `false`, the option will be visible but grayed out and unable to be interacted with.
-	 - `boolean isEditable()` returns `true` if the option is editable.
-	 - `boolean setEditable(boolean editable)` sets the editability of the option.
+ - The config screen can render two types of background:
+   - Textured (like the vanilla Video Settings screen) or untextured (like the vanilla Music & Sounds screen):
+     - `boolean isBackgroundTextured()` returns `true` if the background is textured (default).
+     - `boolean setBackgroundTextured(boolean textured)` sets whether the background is textured (this should only be changed to `false` if the page doesn't scroll, else it won't look good).
+ - All config types have three parameters that can be set. These will affect their appearance on the config screen.
+   - Displayed:
+       - If this is `false`, the option will not be visible at all.
+       - `boolean isDisplayed()` returns `true` if the option is visible.
+       - `boolean setDisplayed(boolean displayed)` sets the visibility of the option.
+   - Editable:
+      - If this is `false`, the option will be visible but grayed out and unable to be interacted with.
+      - `boolean isEditable()` returns `true` if the option is editable.
+      - `boolean setEditable(boolean editable)` sets the editability of the option.
+   - Full Width:
+     - If this is `false`, the option will be displayed only on one half of the page, like many vanilla options. If it is `true` (default), the option will be centered and span a greater width.
+     - `boolean isFullWidth()` returns `true` if the option is centered.
+     - `boolean setFullWidth(boolean fullWidth)` sets the full width option.
+ - `IntegerConfig`, `DoubleConfig` and `ListConfig` have the option to be displayed as a slider or a text field:
+   - `boolean isSlider()` returns `true` if the option is a slider.
+   - `boolean setSlider(boolean slider)` sets whether the option is a slider.
 
 ### Example
 To create a screen from the config in [Creating a Config](https://github.com/Tre5et/vanillaconfig/blob/1.18/docs/CONFIG.md), and open it, when `yourKeybind` is pressed, you could modify the code like so:
@@ -30,7 +41,7 @@ public static void init() {
 	
 	yourKeybind.onPressed(ThisClass::onKeybindPressed);
 
-	[ yourPage.load(); ...]
+	[ SaveLoadManager.globalSaveConfig(yourPage); ...]
 }
 
 public static void onKeybindPressed(String name) {
