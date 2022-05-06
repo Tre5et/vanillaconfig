@@ -69,7 +69,7 @@ public class ListConfig extends SlideableConfig {
 
     public int getOptionIndex() { return this.optionIndex; }
     public boolean setOptionIndex(int index) {
-        if(this.getOptionIndex() != index && this.getOptions().length > index && index >= 0) {
+        if(this.getOptions().length > index && index >= 0) {
             int prevIndex = this.getOptionIndex();
             this.optionIndex = index;
             this.updateDesc();

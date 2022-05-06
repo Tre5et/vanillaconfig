@@ -3,6 +3,8 @@
 
 ### Loading versions (all of these methods are found in `PageConfig`):
  - `boolean loadVersion()` loads the config version into the `PageConfig`.
+   - This loads the version associated with the name (`getKey()`) of the `PageConfig`, not the save name.
+ - `boolean loadVersionOf(String name)` loads the config version associated with a different name into the config. This should be used when changing the name.
  - `boolean hasVersion()` returns `true` if the config has a valid version.
  - `ConfigVersion getVersion()` returns a `ConfigVersion` object with the loaded version.
 
@@ -52,7 +54,7 @@
 
 ### Intended usage:
  - Version comparison can be used for migration based on the last config version.
- - Load the version before loading the config. Be careful, if the name of the config changed since the last save, the config will load no version. If `PageConfig.hasVersion()` is `false`, you might want to check old names manually by using ` FileTools.readVersion(String oldName)`, which returns a `ConfigVersion`. To check whether this existed, use `ConfigVersion.isDefinite()`.
+ - Load the version before loading the config. Be careful, if the name of the config changed since the last save, the config will load no version. If `PageConfig.loadVersion()` returns `false`, you might want to check old names manually by using ` PageConfig.loadVersionOf(oldName)`, which returns `true` if it could be loaded.
  - Based on the loaded version, different migration patterns can be applied to suit migrating from this particular version.
 
 ### Example:

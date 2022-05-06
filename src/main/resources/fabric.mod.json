@@ -10,7 +10,8 @@
   ],
   "contact": {
     "homepage": "https://github.com/Tre5et/vanillaconfig/releases",
-    "sources": "https://github.com/Tre5et/vanillaconfig"
+    "sources": "https://github.com/Tre5et/vanillaconfig",
+    "issues": "https://github.com/Tre5et/vanillaconfig/issues"
   },
 
   "license": "GPL-3.0",

@@ -235,20 +235,19 @@ public class PageConfig extends BaseConfig {
 
         if(obj == null || !obj.isJsonObject()) return false;
 
+        boolean success = true;
         for (BaseConfig e : this.getOptions()) {
-            if(!e.loadFromJson(obj, obj)) return false;
+            if(!e.loadFromJson(obj, obj)) success = false;
         }
 
-        return true;
+        return success;
     }
     public boolean loadVersion() {
-        this.setVersion(FileTools.readVersion(this.getRealSaveName()));
-        if(this.hasVersion()) return true;
+        return this.loadVersionOf(this.getKey());
+    }
 
-        if(this.shouldMigrate() && !this.getVersion().isDefinite()) {
-            ConfigVersion version = FileTools.readVersion(this.getMigrateSaveName());
-            this.setVersion(version);
-        }
+    public boolean loadVersionOf(String name) {
+        this.setVersion(FileTools.readVersion(name));
         return this.hasVersion();
     }
 
