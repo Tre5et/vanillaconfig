@@ -162,7 +162,7 @@ public class PageConfig extends BaseConfig {
             obj = option.addToJson(obj);
         }
 
-        FileTools.writeVersion(this.getRealSaveName(), version);
+        FileTools.writeVersion(this.getKey(), version);
 
         return FileTools.writeJsonToFile(obj, configFile);
     }
