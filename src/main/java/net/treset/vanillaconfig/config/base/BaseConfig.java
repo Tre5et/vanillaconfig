@@ -43,8 +43,8 @@ public class BaseConfig {
         this.migrateKey = oldLocation;
         return true;
     }
-    public boolean shouldMigrate() { return !this.getMigrateSaveName().isEmpty(); }
-    public String getMigrateSaveName() { return this.migrateKey; }
+    public boolean shouldMigrate() { return !this.getMigrateKey().isEmpty(); }
+    public String getMigrateKey() { return this.migrateKey; }
 
     public boolean isNonexistentAllowed() { return this.allowNonexistent; }
     public boolean allowNonexistent(boolean allow) {
@@ -68,8 +68,8 @@ public class BaseConfig {
     private boolean setBaseObject(JsonObject obj) { this.baseObject = obj; return true; }
 
     private JsonElement getMigrateObject(JsonObject obj) {
-        if(!this.getMigrateSaveName().contains("/")) return obj.get(this.getMigrateSaveName());
-        return FileTools.findJsonElementFromPath(this.getBaseObject(), this.getMigrateSaveName());
+        if(!this.getMigrateKey().contains("/")) return obj.get(this.getMigrateKey());
+        return FileTools.findJsonElementFromPath(this.getBaseObject(), this.getMigrateKey());
     }
 
     public JsonObject addToJson(JsonObject obj) {
