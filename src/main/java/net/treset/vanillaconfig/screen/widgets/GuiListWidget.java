@@ -8,9 +8,9 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.sound.SoundEvents;
 import net.treset.vanillaconfig.config.ListConfig;
 import net.treset.vanillaconfig.screen.ConfigScreen;
-import net.treset.vanillaconfig.screen.widgets.base.GuiButtonWidget;
+import net.treset.vanillaconfig.screen.widgets.base.GuiClickableWidget;
 
-public class GuiListWidget extends GuiButtonWidget {
+public class GuiListWidget extends GuiClickableWidget {
     ListConfig config;
 
     boolean isMouseDown = false;

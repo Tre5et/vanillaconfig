@@ -5,9 +5,9 @@ import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.sound.SoundEvents;
 import net.treset.vanillaconfig.config.PageConfig;
 import net.treset.vanillaconfig.screen.ConfigScreen;
-import net.treset.vanillaconfig.screen.widgets.base.GuiButtonWidget;
+import net.treset.vanillaconfig.screen.widgets.base.GuiClickableWidget;
 
-public class GuiPageWidget extends GuiButtonWidget {
+public class GuiPageWidget extends GuiClickableWidget {
     PageConfig config;
 
     public GuiPageWidget(PageConfig config, ConfigScreen screen) {

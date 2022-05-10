@@ -25,10 +25,10 @@ public class GuiKeybindWidget extends GuiTypableWidget {
 
         this.setAllowedChars(AllowedChars.ALL);
 
-        this.updateMessage();
+        this.initMessage();
     }
 
-    public String updateMessage() {
+    public String initMessage() {
         if(config == null) return "ERROR";
         this.setTitle(config.getKey());
         this.setValue(TextTools.scancodesAsDisplayKeys(config.getKeys()));
@@ -39,6 +39,14 @@ public class GuiKeybindWidget extends GuiTypableWidget {
     }
 
     List<Integer> currentScancodes = new ArrayList<>();
+
+    @Override
+    public void updateMessage() {
+        if(this.isFocused()) return;
+
+        this.currentScancodes.clear();
+        Collections.addAll(this.currentScancodes, Arrays.stream(this.config.getKeys()).boxed().toArray(Integer[]::new));
+    }
 
     @Override
     public void onKeyDown(int key, int scancode) {

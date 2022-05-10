@@ -119,7 +119,7 @@ public class TextTools {
         if(allowNonText && (str == null || str.equals("") || str.equals("\t") || kpKeys.contains(key)))
             str = translateOrDefault(InputUtil.fromKeyCode(key, -1).toString());
 
-        if(str != null) str = str.toUpperCase();
+        if(str != null) str = str.substring(0, 1).toUpperCase() + (str.length() > 1 ? str.substring(1) : "");
 
         return str;
     }

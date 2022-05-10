@@ -30,6 +30,13 @@ public class GuiStringWidget extends GuiTypableWidget {
     }
 
     @Override
+    public void updateMessage() {
+        if(this.isFocused()) return;
+
+        this.setValue(this.config.getString(), true);
+    }
+
+    @Override
     public void setDisplayValue(String value) {
         this.setValue(value, this.config.isStringValid(value));
     }

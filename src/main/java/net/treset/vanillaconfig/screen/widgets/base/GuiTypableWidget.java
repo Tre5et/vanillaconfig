@@ -11,7 +11,7 @@ import org.lwjgl.glfw.GLFW;
 
 import java.util.Arrays;
 
-public class GuiTypableWidget extends GuiButtonWidget{
+public class GuiTypableWidget extends GuiClickableWidget {
     boolean focused = false;
 
     String keyPressed = "";
@@ -30,9 +30,7 @@ public class GuiTypableWidget extends GuiButtonWidget{
 
     public void setFocused(boolean focused) {
         if (focused) {
-            for (GuiBaseWidget e : parentScreen.getWidgets()) {
-                if (e instanceof GuiTypableWidget) ((GuiTypableWidget) e).setFocused(false);
-            }
+            getParentScreen().requestUnfocus(this.getBaseConfig().getKey());
         }
         this.focused = focused;
     }
@@ -40,6 +38,8 @@ public class GuiTypableWidget extends GuiButtonWidget{
     public boolean isFocused() { return this.focused; }
 
     public void setDisplayValue(String value) {}
+
+    public void updateMessage() {}
 
     @Override
     public void onKeyDown(int key, int scancode) {
@@ -99,6 +99,11 @@ public class GuiTypableWidget extends GuiButtonWidget{
     public String getMessage() {
         if(this.isFocused()) return "> " + this.getTitle() + ": " + this.getValue() + " <";
         return this.getTitle() + ": " + this.getValue();
+    }
+
+    @Override
+    public void onRender() {
+        this.updateMessage();
     }
 
     @Override

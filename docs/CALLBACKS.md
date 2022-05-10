@@ -6,21 +6,24 @@
  - The method always returns `void` and always parses a `String` with the name of the object that triggered the method as the last argument.  Methods can parse special arguments before the name.
 
 ### `onChange` Callbacks
- - Every config type, except `PageConfig`, has a `onChange` callback method.
- - These are triggered after the value changes, but not if the value is updated and stays the same.
- - These methods parse the previous value as a special argument. The new value can be read directly from the config option when the method is triggered.
- - `ListConfig` parses the previous Index as well as the previous value as special arguments.
+ - Every config type, except `PageConfig` and `ButtonConfig`, has a `onChange` callback method.
+   - These are triggered after the value changes, but not if the value is updated and stays the same.
+   - These methods parse the previous value as a special argument. The new value can be read directly from the config option when the method is triggered.
+   - `ListConfig` parses the previous Index as well as the previous value as special arguments.
 
 ### Other Callbacks
  - `PageConfig` has five callbacks:
-	 - `onClick` is triggered after the config page is clicked on, and before it is opened.  It parses no special arguments.
-	 - `onLoad` is triggered after the config has been loaded. It parses a `boolean` that indicates success as a special argument.
-	 - `onSave` is triggered after the config has been saved. It parses a `boolean` that indicates success as a special argument.
-	 - `onLoadPerWorld` is triggered after the config has been loaded per world. It parses a `boolean` that indicates success and a `String` with the world ID as special arguments.
-	 - `onSavePerWorld` is triggered after the config has been saved per world. It parses a `boolean` that indicates success and a `String` with the world ID as special arguments.
+     - `onClick` is triggered after the config page is clicked on, and before it is opened.  It parses no special arguments.
+     - `onLoad` is triggered after the config has been loaded. It parses a `boolean` that indicates success as a special argument.
+     - `onSave` is triggered after the config has been saved. It parses a `boolean` that indicates success as a special argument.
+     - `onLoadPerWorld` is triggered after the config has been loaded per world. It parses a `boolean` that indicates success and a `String` with the world ID as special arguments.
+     - `onSavePerWorld` is triggered after the config has been saved per world. It parses a `boolean` that indicates success and a `String` with the world ID as special arguments.
  - `ConfigScreen` has two callbacks:
-	 - `onOpen` is triggered after the config screen has been opened.
-	 - `onClose` is triggered before the config screen is closed.
+     - `onOpen` is triggered after the config screen has been opened.
+     - `onClose` is triggered before the config screen is closed.
+ - `ButtonConfig` has two callbacks:
+   - `onClickL` is triggered when the button is left-clicked. It parses no special arguments.
+   - `onClickR` is triggered when the button is right-clicked. It parses no special arguments.
 
 ### Intended usage
  - Create a method that takes the correct arguments for a specific type of callback.

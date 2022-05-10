@@ -5,10 +5,10 @@ import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.sound.SoundEvents;
 import net.treset.vanillaconfig.config.BooleanConfig;
 import net.treset.vanillaconfig.screen.ConfigScreen;
-import net.treset.vanillaconfig.screen.widgets.base.GuiButtonWidget;
+import net.treset.vanillaconfig.screen.widgets.base.GuiClickableWidget;
 import net.treset.vanillaconfig.tools.TextTools;
 
-public class GuiBooleanWidget extends GuiButtonWidget {
+public class GuiBooleanWidget extends GuiClickableWidget {
     BooleanConfig config;
 
     public GuiBooleanWidget(BooleanConfig config, ConfigScreen screen) {

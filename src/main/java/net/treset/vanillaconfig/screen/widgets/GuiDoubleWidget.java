@@ -19,7 +19,6 @@ public class GuiDoubleWidget extends GuiNumberWidget {
         this.initMessage();
     }
 
-    @Override
     public String initMessage() {
         if(this.config == null) return "ERROR";
         this.setTitle(this.config.getKey());
@@ -27,6 +26,13 @@ public class GuiDoubleWidget extends GuiNumberWidget {
         this.setValue(startValue);
         this.setDefaultValue(startValue);
         return this.getMessage();
+    }
+
+    @Override
+    public void updateMessage() {
+        if(this.isFocused()) return;
+
+        this.setValue(TextTools.doubleToString(this.config.getDouble()), true);
     }
 
     @Override

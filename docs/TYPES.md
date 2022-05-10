@@ -124,3 +124,13 @@
     - `void resolve()` fires the event as if the keybind was pressed.
 - Worth mentioning here: Keybind Callback:
     - `boolean onPressed(Consumer<String> method)` sets the method to be run when the key is pressed. More details in [Callbacks](https://github.com/Tre5et/vanillaconfig/blob/1.18/docs/CALLBACKS.md).
+
+### Special case: ButtonConfig
+ - This isn't saved as it is just a button, no value can be set.
+ - Special constructor parameters:
+   - NONE
+ - Methods:
+   - NONE
+   - `boolean isNonexistentAllowed()`, `boolean allowNonexistent(boolean allow)` and `boolean resetValue()` as well as the [Option Migration](https://github.com/Tre5et/vanillaconfig/blob/1.18/docs/MIGRATE.md) methods exist but do nothing. 
+ - Only functionality: Callbacks:
+   - `boolean onClickL(Consumer<String>)` and `boolean onClickL(Consumer<String>)` can be used. More details in [Callbacks](https://github.com/Tre5et/vanillaconfig/blob/1.18/docs/CALLBACKS.md).

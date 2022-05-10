@@ -20,6 +20,13 @@ public class GuiIntegerWidget extends GuiNumberWidget {
     }
 
     @Override
+    public void updateMessage() {
+        if(this.isFocused()) return;
+
+        this.setValue(TextTools.intToString(this.config.getInteger()), true);
+    }
+
+    @Override
     public String initMessage() {
         if(config == null) return "ERROR";
         this.setTitle(this.config.getKey());

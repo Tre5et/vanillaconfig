@@ -20,6 +20,7 @@ import net.treset.vanillaconfig.config.base.BaseConfig;
 import net.treset.vanillaconfig.config.config_type.ConfigType;
 import net.treset.vanillaconfig.screen.widgets.*;
 import net.treset.vanillaconfig.screen.widgets.base.GuiBaseWidget;
+import net.treset.vanillaconfig.screen.widgets.base.GuiTypableWidget;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
@@ -53,6 +54,8 @@ public class ConfigScreen extends Screen {
     private final int scrollbarCenterX = 156;
     private int scrollbarX = this.width / 2 + this.scrollbarCenterX;
 
+    private int scrollbarHeight = 0;
+
     private String[] renderTooltip = new String[]{};
 
     public ConfigScreen(PageConfig config, Screen parent) {
@@ -69,7 +72,7 @@ public class ConfigScreen extends Screen {
         if(MinecraftClient.getInstance() == null) return;
 
         this.widgets = new ArrayList<>();
-        addOptions(config.getOptions());
+        this.addOptions(config.getOptions());
 
         this.bottom = this.height - this.marginY;
         this.right = this.width - this.marginX;
@@ -93,6 +96,7 @@ public class ConfigScreen extends Screen {
         for (BaseConfig e : options) {
 
             if(e.getType() == ConfigType.BOOLEAN) this.widgets.add(new GuiBooleanWidget((BooleanConfig)e, this));
+            else if(e.getType() == ConfigType.BUTTON) this.widgets.add(new GuiButtonWidget((ButtonConfig)e, this));
             else if(e.getType() == ConfigType.LIST) this.widgets.add(new GuiListWidget((ListConfig)e, this));
             else if(e.getType() == ConfigType.PAGE) this.widgets.add(new GuiPageWidget((PageConfig)e, this));
             else if(e.getType() == ConfigType.INTEGER) this.widgets.add(new GuiIntegerWidget((IntegerConfig)e, this));
@@ -159,6 +163,8 @@ public class ConfigScreen extends Screen {
 
         int scrollBarHeight = (int)((float)(this.getDisplayAreaHeight() * this.getDisplayAreaHeight()) / (float)this.getOptionsHeight());
         scrollBarHeight = MathHelper.clamp(scrollBarHeight, this.top, this.getDisplayAreaHeight() - 8);
+
+        this.scrollbarHeight = scrollBarHeight;
 
         int scrollBarY = (int)this.getScrollOffset() * (this.getDisplayAreaHeight() - scrollBarHeight) / (int)this.getScrollHeight() + this.top;
         if (scrollBarY < this.top) {
@@ -291,7 +297,7 @@ public class ConfigScreen extends Screen {
         else if(key == GLFW.GLFW_KEY_PAGE_UP) scroll(-this.bottom + this.top + this.getAverageWidgetHeight());
     }
     private void scroll(double amount) {
-        if(this.getOptionsHeight() + this.top <= MinecraftClient.getInstance().getWindow().getScaledHeight() + 35) return;
+        if(this.getOptionsHeight() + this.top <= this.bottom) return;
 
         this.setScroll(this.getScrollOffset() + amount);
     }
@@ -300,6 +306,12 @@ public class ConfigScreen extends Screen {
     }
 
     boolean ioInterruptRequest = false;
+
+    public void requestUnfocus(String exception) {
+        for (GuiBaseWidget e : this.getWidgets()) {
+            if (e instanceof GuiTypableWidget && !e.getBaseConfig().getKey().equals(exception)) ((GuiTypableWidget) e).setFocused(false);
+        }
+    }
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
@@ -344,8 +356,7 @@ public class ConfigScreen extends Screen {
             if(mouseY < this.top) this.setScroll(0);
             else if(mouseY > this.bottom) this.setScroll(this.getScrollHeight());
             else {
-                int scrollBarHeight = MathHelper.clamp((int) ((float)(this.getDisplayAreaHeight()^2) / (float)this.getOptionsHeight()), 32, this.getDisplayAreaHeight() - 8);
-                double scrollPerScrollbarPixel = this.getScrollHeight() / (double)(this.getDisplayAreaHeight() - scrollBarHeight);
+                double scrollPerScrollbarPixel = this.getScrollHeight() / (double)(this.getDisplayAreaHeight() - this.scrollbarHeight);
                 this.setScroll(this.getScrollOffset() + deltaY * scrollPerScrollbarPixel);
             }
         }
