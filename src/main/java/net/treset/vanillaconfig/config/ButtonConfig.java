@@ -8,10 +8,17 @@ import net.treset.vanillaconfig.config.config_type.ConfigType;
 import java.util.function.Consumer;
 
 public class ButtonConfig extends BaseConfig {
-    public ButtonConfig(String name, String desc) {
+    public ButtonConfig(String name, String desc, boolean fullWidth, boolean editable, boolean displayed) {
         super(ConfigType.BUTTON, name);
 
         this.setDesc(desc);
+
+        this.setFullWidth(fullWidth);
+        this.setEditable(editable);
+        this.setDisplayed(displayed);
+    }
+    public ButtonConfig(String name, String desc) {
+        this(name, desc, true, true, true);
     }
     public ButtonConfig(String name) {
         this(name, "");

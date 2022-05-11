@@ -14,7 +14,7 @@ public class StringConfig extends BaseConfig {
     int maxLength = 0;
     String defValue = "";
 
-    public StringConfig(String defaultValue, int minLength, int maxLength, String name, String description) {
+    public StringConfig(String defaultValue, int minLength, int maxLength, String name, String description, boolean fullWidth, boolean editable, boolean displayed) {
         super(ConfigType.STRING, name);
 
         this.setDesc(description);
@@ -24,7 +24,15 @@ public class StringConfig extends BaseConfig {
 
         if(this.isStringValid(defaultValue)) this.defValue = defaultValue;
         else while(this.defValue.length() < this.getMinLength()) this.defValue += " ";
+
+        this.setFullWidth(fullWidth);
+        this.setEditable(editable);
+        this.setDisplayed(displayed);
+
         this.resetValue();
+    }
+    public StringConfig(String defaultValue, int minLength, int maxLength, String name, String description) {
+        this(defaultValue, minLength, maxLength, name, description, true, true, true);
     }
     public StringConfig(String defaultValue, int minLength, int maxLength, String name) {
         this(defaultValue, minLength, maxLength, name, "");

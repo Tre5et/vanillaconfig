@@ -19,20 +19,38 @@ public class ListConfig extends SlideableConfig {
 
     final List<String[]> descs = new ArrayList<>();
 
-    public ListConfig(String[] options, int defaultOptionIndex, String name, String[][] descriptions) {
+    public ListConfig(String[] options, int defaultOptionIndex, String name, String[][] descriptions, boolean fullWidth, boolean editable, boolean displayed, boolean slider) {
         super(ConfigType.LIST, name);
 
         this.setOptions(options);
 
         this.defOptionIndex = defaultOptionIndex;
-        this.resetValue();
 
         this.setDescs(descriptions);
+
+        this.setFullWidth(fullWidth);
+        this.setEditable(editable);
+        this.setDisplayed(displayed);
+        this.setSlider(slider);
+
+        this.resetValue();
     }
-    public ListConfig(String[] options, String defaultOption, String name, String[][] descriptions) {
+    public ListConfig(String[] options, String defaultOption, String name, String[][] descriptions, boolean fullWidth, boolean editable, boolean displayed, boolean slider) {
         this(options,
             (Arrays.asList(options).contains(defaultOption))? Arrays.asList(options).indexOf(defaultOption) : 0,
-            name, descriptions);
+            name, descriptions, fullWidth, editable, displayed, slider);
+    }
+    public ListConfig(String[] options, int defaultOptionIndex, String name, String[][] descriptions, boolean slider) {
+        this(options, defaultOptionIndex, name, descriptions, true, true, true, slider);
+    }
+    public ListConfig(String[] options, String defaultOption, String name, String[][] descriptions, boolean slider) {
+        this(options, defaultOption, name, descriptions, true, true, true, slider);
+    }
+    public ListConfig(String[] options, int defaultOptionIndex, String name, String[][] descriptions) {
+        this(options, defaultOptionIndex, name, descriptions, false);
+    }
+    public ListConfig(String[] options, String defaultOption, String name, String[][] descriptions) {
+        this(options, defaultOption, name, descriptions, false);
     }
     public ListConfig(String[] options, int defaultOptionIndex, String name, String[] descriptions) {
         this(options, defaultOptionIndex, name, TextTools.stringArrayArrayFromStringArray(descriptions));

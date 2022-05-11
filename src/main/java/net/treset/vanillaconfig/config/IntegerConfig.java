@@ -14,7 +14,7 @@ public class IntegerConfig extends SlideableConfig {
     int maxValue = 0;
     int defValue = 0;
 
-    public IntegerConfig(int defaultValue, int minValue, int maxValue, String name, String desc) {
+    public IntegerConfig(int defaultValue, int minValue, int maxValue, String name, String desc, boolean fullWidth, boolean editable, boolean displayed, boolean slider) {
         super(ConfigType.INTEGER, name);
 
         this.setDesc(desc);
@@ -24,9 +24,20 @@ public class IntegerConfig extends SlideableConfig {
 
         if(this.isIntValid(defaultValue)) this.defValue = defaultValue;
         else this.defValue = this.getMinInteger();
+
+        this.setFullWidth(fullWidth);
+        this.setEditable(editable);
+        this.setDisplayed(displayed);
+        this.setSlider(slider);
+
         this.resetValue();
     }
-
+    public IntegerConfig(int defaultValue, int minValue, int maxValue, String name, String desc, boolean slider) {
+        this(defaultValue, minValue, maxValue, name, desc, true, true, true, slider);
+    }
+    public IntegerConfig(int defaultValue, int minValue, int maxValue, String name, String desc) {
+        this(defaultValue, minValue, maxValue, name, desc, false);
+    }
     public IntegerConfig(int defaultValue, int minValue, int maxValue, String name) {
         this(defaultValue, minValue, maxValue, name,  "");
     }

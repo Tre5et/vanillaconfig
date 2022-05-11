@@ -14,14 +14,22 @@ public class BooleanConfig extends BaseConfig {
     boolean value = false;
     boolean defValue = false;
 
-    public BooleanConfig(boolean defaultValue, String name, String[] descTrue, String[] descFalse) {
+    public BooleanConfig(boolean defaultValue, String name, String[] descTrue, String[] descFalse, boolean fullWidth, boolean editable, boolean displayed) {
         super(ConfigType.BOOLEAN, name);
 
         this.descTrue = descTrue;
         this.descFalse = descFalse;
 
         this.defValue = defaultValue;
+
+        this.setFullWidth(fullWidth);
+        this.setEditable(editable);
+        this.setDisplayed(displayed);
+
         this.resetValue();
+    }
+    public BooleanConfig(boolean defaultValue, String name, String[] descTrue, String[] descFalse) {
+        this(defaultValue, name, descTrue, descFalse, true, true, true);
     }
     public BooleanConfig(boolean defaultValue, String name, String descTrue, String descFalse) {
         this(defaultValue, name, new String[]{descTrue}, new String[]{descFalse});

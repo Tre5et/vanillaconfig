@@ -2,22 +2,24 @@
 
 ### General things (this applies to all config types)
  - Constructor:
-	 - Config options can be initialized using:
-	 `new [ConfigType]([special parameters], String name, ?String[]/String description)`.
-	 - The `special parameters` are specified for each ConfigType.
-	 - The `name` can either be a literal name or a translation key. The option will be saved with the literal provided name and displayed with the translated name.
-	 - The `description` is optional. Each String in the Array represents a line. If the description only has one line, it can be specified as a String outside an array. The Strings can either be a literal name or a translation key. It will be displayed when hovering over the option.
+     - Config options can be initialized using:
+	 `new [ConfigType]([special parameters], String name, ?String[]/String description, ?(boolan fullWidth, boolean editable, boolean displayed))`.
+     - The `special parameters` are specified for each ConfigType.
+     - The `name` can either be a literal name or a translation key. The option will be saved with the literal provided name and displayed with the translated name.
+     - The `description` is optional. Each String in the Array represents a line. If the description only has one line, it can be specified as a String outside an array. The Strings can either be a literal name or a translation key. It will be displayed when hovering over the option.
+     - The parameters `fullWidth`, `editable` and `displayed` are optional and act like the setters in [Config Screen](https://github.com/Tre5et/vanillaconfig/blob/1.18/docs/SCREEN.md).
+     - `IntegerConfig`, `DoubleConfig` and `ListConfig` have another optional parameter `?boolean slider` which acts like `setSlider(boolean slider)` in [Config Screen](https://github.com/Tre5et/vanillaconfig/blob/1.18/docs/SCREEN.md).
  - Methods that start with `set`, `add`, `remove`, `reset` or `on` always return `true` if the operation succeeded and `false` if it failed.
  - Methods:
-	 - `String getKey()` returns the name untranslated, as specified in the constructor.
-	 - `String getName()` returns the translated name.
-	 - `boolean hasDesc()` returns `true` if the option has a description.
-	 - `String[] getDesc()` returns the untranslated description.
-	 - `boolean setDesc(String[]/String description)` sets the description.
-	 - `boolean isNonexistentAllowed()` returns `true` if loading should succeed, even though no option with this name was found. The option will take its default value in that case. The default is `true`.
-	 - `boolean allowNonexistent(boolean allow)` sets the value, allowing the option to be nonexistent when loading.
-	 - `boolean resetValue()` resets the value to the default value.
-	 - More methods are explained in [Option Migration](https://github.com/Tre5et/vanillaconfig/blob/1.18/docs/MIGRATE.md), [Config Screen](https://github.com/Tre5et/vanillaconfig/blob/1.18/docs/SCREEN.md) and [Callbacks](https://github.com/Tre5et/vanillaconfig/blob/1.18/docs/CALLBACKS.md).
+     - `String getKey()` returns the name untranslated, as specified in the constructor.
+     - `String getName()` returns the translated name.
+     - `boolean hasDesc()` returns `true` if the option has a description.
+     - `String[] getDesc()` returns the untranslated description.
+     - `boolean setDesc(String[]/String description)` sets the description.
+     - `boolean isNonexistentAllowed()` returns `true` if loading should succeed, even though no option with this name was found. The option will take its default value in that case. The default is `true`.
+     - `boolean allowNonexistent(boolean allow)` sets the value, allowing the option to be nonexistent when loading.
+     - `boolean resetValue()` resets the value to the default value.
+     - More methods are explained in [Option Migration](https://github.com/Tre5et/vanillaconfig/blob/1.18/docs/MIGRATE.md), [Config Screen](https://github.com/Tre5et/vanillaconfig/blob/1.18/docs/SCREEN.md) and [Callbacks](https://github.com/Tre5et/vanillaconfig/blob/1.18/docs/CALLBACKS.md).
 
 ### PageConfig
  - Special constructor parameters:

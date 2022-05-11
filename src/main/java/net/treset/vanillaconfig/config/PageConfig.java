@@ -19,12 +19,19 @@ import java.util.function.Consumer;
 public class PageConfig extends BaseConfig {
     final List<BaseConfig> options = new ArrayList<>();
 
-    public PageConfig(String name, BaseConfig[] options, String description) {
+    public PageConfig(String name, BaseConfig[] options, String description, boolean fullWidth, boolean editable, boolean displayed) {
         super(ConfigType.PAGE, name);
 
         this.setOptions(options);
 
         this.setDesc(description);
+
+        this.setFullWidth(fullWidth);
+        this.setEditable(editable);
+        this.setDisplayed(displayed);
+    }
+    public PageConfig(String name, BaseConfig[] options, String description) {
+        this(name, options, description, true, true, true);
     }
     public PageConfig(String name, BaseConfig[] options) { this(name, options, "");}
     public PageConfig(String name, String description) { this(name, new BaseConfig[]{}, description); }

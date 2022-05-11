@@ -21,7 +21,7 @@ public class KeybindConfig extends BaseConfig {
     int[] defKeys = keys;
     Keybind keybind;
 
-    public KeybindConfig(int[] defaultKeys, int minAmount, int maxAmount, String name, String desc) {
+    public KeybindConfig(int[] defaultKeys, int minAmount, int maxAmount, String name, String desc, boolean fullWidth, boolean editable, boolean displayed) {
         super(ConfigType.KEYBIND, name);
 
         this.setDesc(desc);
@@ -35,9 +35,17 @@ public class KeybindConfig extends BaseConfig {
             Arrays.fill(this.defKeys, 0);
         }
         this.keybind = new Keybind(this.getKey(), this.getDefaultKeys(), KeybindContext.IN_GAME);
+
+        this.setFullWidth(fullWidth);
+        this.setEditable(editable);
+        this.setDisplayed(displayed);
+
         this.resetValue();
 
         KeybindTools.addKeybind(this.keybind);
+    }
+    public KeybindConfig(int[] defaultKeys, int minAmount, int maxAmount, String name, String desc) {
+        this(defaultKeys, minAmount, maxAmount, name, desc, true, true, true);
     }
     public KeybindConfig(int[] defaultKeys, int minAmount, int maxAmount, String name) {
         this(defaultKeys, minAmount, maxAmount, name, "");

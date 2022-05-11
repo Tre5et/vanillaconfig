@@ -14,7 +14,7 @@ public class DoubleConfig extends SlideableConfig {
     double maxValue = 0;
     double defValue = 0;
 
-    public DoubleConfig(double defaultValue, double minValue, double maxValue, String name, String desc) {
+    public DoubleConfig(double defaultValue, double minValue, double maxValue, String name, String desc, boolean fullWidth, boolean editable, boolean displayed, boolean slider) {
         super(ConfigType.DOUBLE, name);
 
         this.setDesc(desc);
@@ -24,9 +24,20 @@ public class DoubleConfig extends SlideableConfig {
 
         if(this.isDoubleValid(defaultValue)) this.defValue = defaultValue;
         else this.defValue = minValue;
+
+        this.setFullWidth(fullWidth);
+        this.setEditable(editable);
+        this.setDisplayed(displayed);
+        this.setSlider(slider);
+
         this.resetValue();
     }
-
+    public DoubleConfig(double defaultValue, double minValue, double maxValue, String name, String desc, boolean slider) {
+        this(defaultValue, minValue, maxValue, name, desc, true, true, true, slider);
+    }
+    public DoubleConfig(double defaultValue, double minValue, double maxValue, String name, String desc) {
+        this(defaultValue, minValue, maxValue, name, desc, false);
+    }
     public DoubleConfig(double defaultValue, double minValue, double maxValue, String name) {
         this(defaultValue, minValue, maxValue, name, "");
     }
