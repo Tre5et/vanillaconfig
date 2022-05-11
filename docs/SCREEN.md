@@ -11,7 +11,7 @@
    - Textured (like the vanilla Video Settings screen) or untextured (like the vanilla Music & Sounds screen):
      - `boolean isBackgroundTextured()` returns `true` if the background is textured (default).
      - `boolean setBackgroundTextured(boolean textured)` sets whether the background is textured (this should only be changed to `false` if the page doesn't scroll, else it won't look good).
- - All config types have three parameters that can be set. These will affect their appearance on the config screen.
+ - All config types have four parameters that can be set. These will affect their appearance on the config screen.
    - Displayed:
        - If this is `false`, the option will not be visible at all.
        - `boolean isDisplayed()` returns `true` if the option is visible.
@@ -24,6 +24,9 @@
      - If this is `false`, the option will be displayed only on one half of the page, like many vanilla options. If it is `true` (default), the option will be centered and span a greater width.
      - `boolean isFullWidth()` returns `true` if the option is centered.
      - `boolean setFullWidth(boolean fullWidth)` sets the full width option.
+   - Custom Width:
+     - `int[] getWidth()` returns an array with index 0 being the width when the option spans both columns and index 1 being the width when it spans only one.
+     - `boolean setCustomWidth(int widthFull, int widthHalf)` sets the width when the option spans both columns (`widthFull`) and when it spans one column (`widthHalf`).
  - `IntegerConfig`, `DoubleConfig` and `ListConfig` have the option to be displayed as a slider or a text field:
    - `boolean isSlider()` returns `true` if the option is a slider.
    - `boolean setSlider(boolean slider)` sets whether the option is a slider.

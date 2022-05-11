@@ -19,13 +19,13 @@ public class GuiTypableWidget extends GuiClickableWidget {
     AllowedChars allowedChars = AllowedChars.NONE;
     boolean allowShift = false;
 
-    public GuiTypableWidget(int widthFull, int widthHalf, BaseConfig config, String title, String value, ConfigScreen screen) {
-        super(widthFull, widthHalf, config, title, value, screen);
+    public GuiTypableWidget(BaseConfig config, String title, String value, ConfigScreen screen) {
+        super(config, title, value, screen);
 
         this.defaultValue = value;
     }
-    public GuiTypableWidget(int widthFull, int widthHalf, BaseConfig config, ConfigScreen screen) {
-        this(widthFull, widthHalf, config, "", "", screen);
+    public GuiTypableWidget(BaseConfig config, ConfigScreen screen) {
+        this(config, "", "", screen);
     }
 
     public void setFocused(boolean focused) {

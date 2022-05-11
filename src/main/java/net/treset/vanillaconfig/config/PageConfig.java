@@ -29,6 +29,8 @@ public class PageConfig extends BaseConfig {
         this.setFullWidth(fullWidth);
         this.setEditable(editable);
         this.setDisplayed(displayed);
+
+        this.setCustomWidth(250, 150);
     }
     public PageConfig(String name, BaseConfig[] options, String description) {
         this(name, options, description, true, true, true);

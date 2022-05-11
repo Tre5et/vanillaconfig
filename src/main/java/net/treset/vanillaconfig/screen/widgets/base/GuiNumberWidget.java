@@ -16,13 +16,13 @@ public class GuiNumberWidget extends GuiTypableWidget {
     boolean isMouseDown = false;
     boolean mouseWentDownOver = false;
 
-    public GuiNumberWidget(int widthFull, int widthHalf, SlideableConfig config, String title, String value, ConfigScreen screen) {
-        super(widthFull, widthHalf, config, title, value, screen);
+    public GuiNumberWidget(SlideableConfig config, String title, String value, ConfigScreen screen) {
+        super(config, title, value, screen);
 
         this.slideConfig = config;
     }
-    public GuiNumberWidget(int widthFull, int widthHalf, SlideableConfig config, ConfigScreen screen) {
-        this(widthFull, widthHalf, config, "", "", screen);
+    public GuiNumberWidget(SlideableConfig config, ConfigScreen screen) {
+        this(config, "", "", screen);
     }
 
     public String initMessage() { return ""; }

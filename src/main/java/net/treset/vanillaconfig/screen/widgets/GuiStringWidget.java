@@ -9,7 +9,7 @@ public class GuiStringWidget extends GuiTypableWidget {
     StringConfig config;
 
     public GuiStringWidget(StringConfig config, ConfigScreen screen) {
-        super(310, 150, config, screen);
+        super(config, screen);
 
         this.config = config;
 

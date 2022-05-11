@@ -19,7 +19,7 @@ public class GuiKeybindWidget extends GuiTypableWidget {
     KeybindConfig config;
 
     public GuiKeybindWidget(KeybindConfig config, ConfigScreen screen) {
-        super(310, 150, config, screen);
+        super(config, screen);
 
         this.config = config;
 
@@ -71,7 +71,6 @@ public class GuiKeybindWidget extends GuiTypableWidget {
 
     @Override
     public void onTextReceived(String text) {
-        return;
     }
 
     @Override

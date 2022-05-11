@@ -17,31 +17,25 @@ public class GuiClickableWidget extends GuiBaseWidget {
 
     ConfigScreen parentScreen;
 
-    String title = "";
-    String value = "";
+    String title;
+    String value;
     String defaultValue = "";
-
-    int widthFull = 0;
-    int widthHalf = 0;
 
     int clicked = -1;
 
-    public GuiClickableWidget(int widthFull, int widthHalf, BaseConfig config, String title, String value, ConfigScreen screen) {
+    public GuiClickableWidget(BaseConfig config, String title, String value, ConfigScreen screen) {
         this.parentScreen = screen;
 
         this.title = title;
         this.value = value;
 
-        this.widthFull = widthFull;
-        this.widthHalf = widthHalf;
-
-        this.width = widthFull;
-        this.height = 20;
-
         this.setBaseConfig(config);
+
+        this.width = this.getBaseConfig().getWidth()[0];
+        this.height = 20;
     }
-    public GuiClickableWidget(int widthFull, int widthHalf, BaseConfig config, ConfigScreen screen) {
-        this(widthFull, widthHalf, config, "", "", screen);
+    public GuiClickableWidget(BaseConfig config, ConfigScreen screen) {
+        this(config, "", "", screen);
     }
 
     public void setTitle(String key) { this.title = key;}
@@ -68,11 +62,11 @@ public class GuiClickableWidget extends GuiBaseWidget {
 
         this.y = 5 + index * 25 + this.parentScreen.getTop();
         if(this.getBaseConfig().isFullWidth()) {
-            this.width = this.widthFull;
+            this.width = this.getBaseConfig().getWidth()[0];
             this.y = 5 + (int)Math.ceil((double)index / 2) * 25 + this.parentScreen.getTop();
             this.x = MinecraftClient.getInstance().getWindow().getScaledWidth() / 2 - width / 2;
         } else {
-            this.width = this.widthHalf;
+            this.width = this.getBaseConfig().getWidth()[1];
             this.y = 5 + index / 2 * 25 + this.parentScreen.getTop();
             if(index % 2 == 0) this.x = MinecraftClient.getInstance().getWindow().getScaledWidth() / 2 - this.width - 5;
             else this.x = MinecraftClient.getInstance().getWindow().getScaledWidth() / 2 + 5;

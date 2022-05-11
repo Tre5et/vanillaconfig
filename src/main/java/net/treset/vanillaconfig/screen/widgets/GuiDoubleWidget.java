@@ -10,7 +10,7 @@ public class GuiDoubleWidget extends GuiNumberWidget {
     DoubleConfig config;
 
     public GuiDoubleWidget(DoubleConfig config, ConfigScreen screen) {
-        super(310, 150, config, screen);
+        super(config, screen);
 
         this.config = config;
 

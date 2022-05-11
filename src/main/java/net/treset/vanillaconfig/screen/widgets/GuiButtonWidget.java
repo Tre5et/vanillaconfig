@@ -11,7 +11,7 @@ public class GuiButtonWidget extends GuiClickableWidget {
     ButtonConfig config;
 
     public GuiButtonWidget(ButtonConfig config, ConfigScreen screen) {
-        super(310, 150, config, screen);
+        super(config, screen);
 
         this.config = config;
 

@@ -12,7 +12,7 @@ public class GuiBooleanWidget extends GuiClickableWidget {
     BooleanConfig config;
 
     public GuiBooleanWidget(BooleanConfig config, ConfigScreen screen) {
-        super(310, 150, config, screen);
+        super(config, screen);
 
         this.config = config;
 

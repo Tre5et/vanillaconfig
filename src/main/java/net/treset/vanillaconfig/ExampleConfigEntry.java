@@ -23,13 +23,15 @@ public class ExampleConfigEntry implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        ButtonConfig button1 = new ButtonConfig("bbbbuuuuuu1111", "button", true, false, true);
+        ButtonConfig button1 = new ButtonConfig("bbbbuuuuuu1111", "button", false, true, true);
         button1.onClickL(ExampleConfigEntry::onButtonClickedL);
         button1.onClickR(ExampleConfigEntry::onButtonClickedR);
+        button1.setCustomWidth(400, 200);
 
         BooleanConfig boole1 = new BooleanConfig(false, "boole1", new String[]{"test", "line2"});
         IntegerConfig int1 = new IntegerConfig(42, 0, 5, "int1");
         integ1 = int1;
+        int1.setCustomWidth(200, 100);
         IntegerConfig int2 = new IntegerConfig(33, -300, 1324, "int2", "", true);
 
         DoubleConfig double1 = new DoubleConfig(123.4567, -50, 1000000000, "double1");
@@ -183,7 +185,7 @@ public class ExampleConfigEntry implements ClientModInitializer {
     }
 
     public static void onButtonClickedL(String key) {
-        integ1.setInteger(integ1.getInteger() + 1);
+        integ1.setFullWidth(!integ1.isFullWidth());
     }
     public static void onButtonClickedR(String key) {
         integ1.setInteger(integ1.getInteger() - 1);

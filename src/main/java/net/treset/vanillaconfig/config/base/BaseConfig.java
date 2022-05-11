@@ -9,15 +9,17 @@ import net.treset.vanillaconfig.tools.TextTools;
 import javax.annotation.Nullable;
 
 public class BaseConfig {
-    String name = "";
+    String name;
     String[] desc = new String[]{};
     boolean allowNonexistent = true;
     String migrateKey = "";
-    ConfigType type = null;
+    ConfigType type;
     JsonObject baseObject = null;
     boolean editable = true;
     boolean displayed = true;
     boolean fullWidth = true;
+    int widthFull = 310;
+    int widthHalf = 150;
 
     public BaseConfig(ConfigType type, String name) {
         this.type = type;
@@ -61,7 +63,15 @@ public class BaseConfig {
     public boolean isFullWidth() { return this.fullWidth; }
     public boolean setFullWidth(boolean fullWidth) { this.fullWidth = fullWidth; return true; }
 
-    public boolean resetValue() { return false; };
+    public int[] getWidth() { return new int[]{widthFull, widthHalf}; }
+    public boolean setCustomWidth(int widthFull, int widthHalf) {
+        if(widthFull <= 0 || widthHalf <= 0) return false;
+        this.widthFull = widthFull;
+        this.widthHalf = widthHalf;
+        return true;
+    }
+
+    public boolean resetValue() { return false; }
 
     @Nullable
     public JsonObject getBaseObject() { return this.baseObject; }

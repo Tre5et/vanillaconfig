@@ -17,7 +17,7 @@ public class GuiListWidget extends GuiClickableWidget {
     boolean mouseWentDownOver = false;
 
     public GuiListWidget(ListConfig config, ConfigScreen screen) {
-        super(310, 150, config, screen);
+        super(config, screen);
 
         this.config = config;
     }

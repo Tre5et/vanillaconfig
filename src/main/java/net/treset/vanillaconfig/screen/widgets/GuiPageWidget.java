@@ -11,7 +11,7 @@ public class GuiPageWidget extends GuiClickableWidget {
     PageConfig config;
 
     public GuiPageWidget(PageConfig config, ConfigScreen screen) {
-        super(250, 150, config, screen);
+        super(config, screen);
 
         this.config = config;
 
