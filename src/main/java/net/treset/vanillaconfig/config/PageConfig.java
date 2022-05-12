@@ -204,10 +204,12 @@ public class PageConfig extends BaseConfig {
         return this.savePerWorld(this.getVersion());
     }
 
-    private boolean loadConfig(File config, File migrateConfig) {
+    private boolean loadConfig(File config, File migrateConfig, boolean perWorld) {
         if(migrateConfig != null) {
             if(this.loadOptions(migrateConfig, false)) {
                 if(!FileTools.removeFile(migrateConfig)) return false;
+
+                if(perWorld) return this.savePerWorld();
                 return this.save();
             }
         }
@@ -215,7 +217,7 @@ public class PageConfig extends BaseConfig {
         return this.loadOptions(config, true);
     }
     public boolean load(File config, File migrateConfig) {
-        boolean success = this.loadConfig(config, migrateConfig);
+        boolean success = this.loadConfig(config, migrateConfig, false);
         this.onLoad.accept(success, this.getKey());
         return success;
     }
@@ -227,7 +229,7 @@ public class PageConfig extends BaseConfig {
     }
 
     public boolean loadPerWorld(String worldId) {
-        boolean success = this.loadConfig(this.getFile(false, worldId), this.getFile(true, worldId));
+        boolean success = this.loadConfig(this.getFile(false, worldId), this.getFile(true, worldId), true);
         this.onLoadPerWorld.accept(success, worldId, this.getKey());
         return success;
     }
