@@ -21,6 +21,7 @@ import net.treset.vanillaconfig.config.config_type.ConfigType;
 import net.treset.vanillaconfig.screen.widgets.*;
 import net.treset.vanillaconfig.screen.widgets.base.GuiBaseWidget;
 import net.treset.vanillaconfig.screen.widgets.base.GuiTypableWidget;
+import net.treset.vanillaconfig.tools.TextTools;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
@@ -203,7 +204,10 @@ public class ConfigScreen extends Screen {
                 displayedOptions += this.getWidgets()[i].getBaseConfig().isFullWidth()? ((displayedOptions % 2 == 0)? 2 : 3) : 1;
             }
         }
-        this.displayedIndexes = displayedOptions;
+        if(this.displayedIndexes != displayedOptions) {
+            this.displayedIndexes = displayedOptions;
+            setScroll(this.getScrollOffset());
+        }
     }
 
     private void renderOverlay(MatrixStack matrices, Tessellator t, BufferBuilder b) {
@@ -277,7 +281,8 @@ public class ConfigScreen extends Screen {
         if(this.renderTooltip != null && this.renderTooltip.length > 0 && !this.renderTooltip[0].isEmpty()) {
             List<Text> texts = new ArrayList<>();
             for (String s : this.renderTooltip) {
-                texts.add(new TranslatableText(s));
+                if(!TextTools.translateOrDefault(s).isEmpty())
+                    texts.add(new TranslatableText(s));
             }
             this.renderTooltip(matrices, texts, mouseX, mouseY);
             this.renderTooltip = null;
@@ -401,7 +406,7 @@ public class ConfigScreen extends Screen {
         this.ioInterruptRequest = false;
         if(this.isActive()) {
             for (GuiBaseWidget e : this.getWidgets()) {
-                e.onTextReceived(String.valueOf((char)chr));
+                e.onTextReceived(String.valueOf(chr));
             }
         }
         if(ioInterruptRequest) {
