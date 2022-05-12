@@ -49,33 +49,34 @@
  - `oldPath` is the path of the file in the config directory to be migrated from, including the `.json` extension(!). If the file name stays the same, the file name and extension may be omitted from the end.
  - Example:
  To migrate a directory structure like this, created in  [Creating a Config](https://github.com/Tre5et/vanillaconfig/blob/1.18/docs/CONFIG.md) :
-	```
-	config
-	  L yourFolder
-	    L your.config.json
-	```
-	 To a directory structure like this:
-	```
-	config
-	  L yourFolder
-	  L yourNewFolder
-	    L your.new.config.json
-	```
-	While moving the options from `your.config.json` to `your.new.config.json`, you could modify the code like so:
-	```java
-	[...]
-	public static void init() {
-		yourPage = new PageConfig("your.new.config");
+    ```
+    config
+      L yourFolder
+        L your.config.json
+    ```
+     To a directory structure like this:
+    ```
+    config
+      L yourFolder
+      L yourNewFolder
+        L your.new.config.json
+    ```
+    While moving the options from `your.config.json` to `your.new.config.json`, you could modify the code like so:
+    ```java
+    [...]
+    public static void init() {
+        yourPage = new PageConfig("your.new.config");
 		
-		[ yourBoolean = new BooleanConfig(true, "your.boolean", "your.boolean.description"); ...
-		... yourOtherPage.removeOption("your.boolean"); ]
+        [ yourBoolean = new BooleanConfig(true, "your.boolean", "your.boolean.description"); ...
+        ... yourOtherPage.removeOption("your.boolean"); ]
 
-		yourPage.setPath("yourNewFolder");
-		yourPage.migrateFileFrom("yourFolder/your.config.json");
+        yourPage.setPath("yourNewFolder");
+        yourPage.migrateFileFrom("yourFolder/your.config.json");
 
-		[ SaveLoadManager.globalSaveConfig(yourPage); ...]
-	}
-	```
+        [ SaveLoadManager.globalSaveConfig(yourPage); ...]
+    }
+    ```
+ - For migrating per world configs `oldPath` is the old folder name plus a `.json` extension. When loading the correct file in the folder will automatically be picked. This only works correctly if the previous file naming logic is the same as the one implemented in `ClientTools.getWorldId()`!
 
 #### To do this properly, check out [Version Management](https://github.com/Tre5et/vanillaconfig/blob/v1.0.1/docs/VERSION.md).
 

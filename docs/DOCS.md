@@ -1,4 +1,4 @@
-﻿# Documentation (updated v1.2.1-dev)
+﻿# Documentation (updated v1.2.1)
 ### [Setup](https://github.com/Tre5et/vanillaconfig/blob/1.18/docs/SETUP.md)
 ### [Creating a Config](https://github.com/Tre5et/vanillaconfig/blob/1.18/docs/CONFIG.md)
 ### [Config Types](https://github.com/Tre5et/vanillaconfig/blob/1.18/docs/TYPES.md)
