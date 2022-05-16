@@ -55,6 +55,12 @@ public class IntegerConfig extends SlideableConfig {
         return this.getMinInteger();
     }
 
+    @Override
+    public boolean setDoubleValue(double value) {
+        int intVal = (int)Math.rint(value);
+        return this.setInteger(intVal);
+    }
+
     public int getInteger() { return this.value; }
     public boolean setInteger(int value) {
         if(!this.isIntValid(value)) return false;

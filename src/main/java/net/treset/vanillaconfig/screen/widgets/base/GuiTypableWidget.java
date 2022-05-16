@@ -14,10 +14,7 @@ import java.util.Arrays;
 public class GuiTypableWidget extends GuiClickableWidget {
     boolean focused = false;
 
-    String keyPressed = "";
-
     AllowedChars allowedChars = AllowedChars.NONE;
-    boolean allowShift = false;
 
     public GuiTypableWidget(BaseConfig config, String title, String value, ConfigScreen screen) {
         super(config, title, value, screen);
