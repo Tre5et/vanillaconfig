@@ -9,9 +9,7 @@ import net.minecraft.client.render.*;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
@@ -60,7 +58,7 @@ public class ConfigScreen extends Screen {
     private String[] renderTooltip = new String[]{};
 
     public ConfigScreen(PageConfig config, Screen parent) {
-        super(new LiteralText(config.getName()));
+        super(Text.literal(config.getName()));
 
         this.shouldCloseOnEsc();
         this.config = config;
@@ -270,7 +268,7 @@ public class ConfigScreen extends Screen {
         int texY = (this.isHoveredOverDone(mouseX, mouseY)) ? 86 : 66;
         DrawableHelper drawHelper = new DrawableHelper() {};
         drawHelper.drawTexture(matrices, this.width / 2 - 100, this.bottom + 5, 0, texY, 200, 20);
-        DrawableHelper.drawCenteredText(matrices, textRenderer, new TranslatableText("gui.done"), this.width / 2, this.bottom + 11, Formatting.WHITE.getColorValue());
+        DrawableHelper.drawCenteredText(matrices, textRenderer, Text.translatable("gui.done"), this.width / 2, this.bottom + 11, Formatting.WHITE.getColorValue());
     }
 
     private boolean isHoveredOverDone(int mouseX, int mouseY) {
@@ -282,7 +280,7 @@ public class ConfigScreen extends Screen {
             List<Text> texts = new ArrayList<>();
             for (String s : this.renderTooltip) {
                 if(!TextTools.translateOrDefault(s).isEmpty())
-                    texts.add(new TranslatableText(s));
+                    texts.add(Text.translatable(s));
             }
             this.renderTooltip(matrices, texts, mouseX, mouseY);
             this.renderTooltip = null;
