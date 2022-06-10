@@ -54,6 +54,8 @@ public class DoubleConfig extends SlideableConfig {
     public double getMinDoubleValue() {
         return this.getMinDouble();
     }
+    @Override
+    public boolean setDoubleValue(double value) { return this.setDouble(value); }
 
     public double getDouble() { return this.value; }
     public boolean setDouble(double value) {

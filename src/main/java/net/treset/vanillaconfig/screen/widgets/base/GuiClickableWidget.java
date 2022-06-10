@@ -57,6 +57,19 @@ public class GuiClickableWidget extends GuiBaseWidget {
     public ConfigScreen getParentScreen() { return this.parentScreen; }
 
     @Override
+    public boolean select(boolean select) {
+        if(!this.getBaseConfig().isEditable()) return false;
+        this.selected = select;
+        return true;
+    }
+
+    @Override
+    public boolean activate() {
+        this.onClickL();
+        return true;
+    }
+
+    @Override
     public boolean render(MatrixStack m, int index, int mouseX, int mouseY, int scrollOffset) {
         if (!this.isRendered()) return false;
 
@@ -120,7 +133,7 @@ public class GuiClickableWidget extends GuiBaseWidget {
     public int getTextureOffset(int mouseX, int mouseY) {
         int offset;
         if(!this.getBaseConfig().isEditable()) offset = 0;
-        else if(this.isHoveredOver(mouseX, mouseY)) offset = 40;
+        else if(this.isHoveredOver(mouseX, mouseY) || this.selected) offset = 40;
         else offset = 20;
         return offset;
     }

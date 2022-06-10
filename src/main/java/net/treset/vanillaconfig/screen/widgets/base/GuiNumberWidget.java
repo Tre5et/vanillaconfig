@@ -9,6 +9,7 @@ import net.minecraft.sound.SoundEvents;
 import net.treset.vanillaconfig.config.base.SlideableConfig;
 import net.treset.vanillaconfig.screen.ConfigScreen;
 import net.treset.vanillaconfig.tools.TextTools;
+import org.lwjgl.glfw.GLFW;
 
 public class GuiNumberWidget extends GuiTypableWidget {
     SlideableConfig slideConfig;
@@ -36,6 +37,15 @@ public class GuiNumberWidget extends GuiTypableWidget {
     @Override
     public void onKeyDown(int key, int scancode) {
         if(!this.slideConfig.isSlider()) super.onKeyDown(key, scancode);
+
+        if(!this.selected) return;
+        if(key == GLFW.GLFW_KEY_RIGHT) {
+            this.slideConfig.setDoubleValue(this.slideConfig.getDoubleValue() + 1);
+            this.requestIoInterrupt();
+        } else if(key == GLFW.GLFW_KEY_LEFT) {
+            this.slideConfig.setDoubleValue(this.slideConfig.getDoubleValue() - 1);
+            this.requestIoInterrupt();
+        }
     }
     @Override
     public void onTextReceived(String text) {
@@ -101,7 +111,7 @@ public class GuiNumberWidget extends GuiTypableWidget {
 
             int sliderPos = (int)Math.rint(sliderPercentage * (this.getWidth() - 8));
 
-            int offset = (this.isHoveredOver(mouseX, mouseY) ? 2 : 1) * 20;
+            int offset = (this.isHoveredOver(mouseX, mouseY) || this.selected ? 2 : 1) * 20;
 
             d.drawTexture(m, this.screenX + sliderPos, this.screenY, 0, 46 + offset, 4, 20);
             d.drawTexture(m, this.screenX + sliderPos + 4, this.screenY, 196, 46 + offset, 4, 20);

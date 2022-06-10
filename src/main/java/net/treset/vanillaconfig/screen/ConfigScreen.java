@@ -57,6 +57,8 @@ public class ConfigScreen extends Screen {
 
     private String[] renderTooltip = new String[]{};
 
+    private int currentSelected = -1;
+
     public ConfigScreen(PageConfig config, Screen parent) {
         super(Text.literal(config.getName()));
 
@@ -375,6 +377,7 @@ public class ConfigScreen extends Screen {
     @Override
     public boolean keyPressed(int key, int scancode, int modifiers) {
         this.ioInterruptRequest = false;
+
         for (GuiBaseWidget e : this.getWidgets()) {
             e.onKeyDown(key, scancode);
         }
@@ -382,6 +385,23 @@ public class ConfigScreen extends Screen {
             ioInterruptRequest = false;
             return true;
         }
+
+        if(key == GLFW.GLFW_KEY_TAB) {
+            int increment = (GLFW.glfwGetKey(MinecraftClient.getInstance().getWindow().getHandle(), GLFW.GLFW_KEY_LEFT_SHIFT) == GLFW.GLFW_PRESS
+                    || GLFW.glfwGetKey(MinecraftClient.getInstance().getWindow().getHandle(), GLFW.GLFW_KEY_RIGHT_SHIFT) == GLFW.GLFW_PRESS) ?
+                    -1 : 1;
+            do {
+                if (this.currentSelected >= 0) this.getWidgets()[this.currentSelected].select(false);
+                this.currentSelected = (this.getWidgets().length + this.currentSelected + increment) % this.getWidgets().length;
+            } while (!this.getWidgets()[this.currentSelected].select(true));
+        }
+
+        if(key == GLFW.GLFW_KEY_ENTER) {
+            if(this.currentSelected >= 0) {
+                this.getWidgets()[this.currentSelected].activate();
+            }
+        }
+
         this.scrollKey(key);
         return super.keyPressed(key, scancode, modifiers);
     }

@@ -15,4 +15,6 @@ public class SlideableConfig extends BaseConfig{
     public double getDoubleValue() { return -1; }
     public double getMinDoubleValue() { return -1; }
     public double getMaxDoubleValue() { return -1; }
+
+    public boolean setDoubleValue(double value) { return false; }
 }

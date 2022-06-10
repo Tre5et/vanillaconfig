@@ -10,6 +10,8 @@ public class GuiBaseWidget {
     protected int screenX, screenY = 0;
     BaseConfig baseConfig;
 
+    protected boolean selected = false;
+
     public int getHeight() { return this.height; }
     public int getWidth() { return this.width; }
 
@@ -22,11 +24,18 @@ public class GuiBaseWidget {
 
     public boolean isRendered() { return this.getBaseConfig().isDisplayed(); }
 
-    public void onClose() {};
+    public void onClose() {}
 
     public boolean render(MatrixStack matrices, int index, int mouseX, int mouseY, int scrollOffset) { return false; }
     public boolean render(MatrixStack matrices, int mouseX, int mouseY, int scrollOffset) {
         return this.render(matrices, this.y, mouseX, mouseY, scrollOffset);
+    }
+
+    public boolean select(boolean select) {
+        return false;
+    }
+    public boolean activate() {
+        return false;
     }
 
     public void onMouseDown(int key) {}
