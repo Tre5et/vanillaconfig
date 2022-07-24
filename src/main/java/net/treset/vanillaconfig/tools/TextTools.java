@@ -128,7 +128,6 @@ public class TextTools {
         for (int i = 0; i < sc.length; i++) {
             String key = TextTools.getKeyFromScancode(sc[i], true);
             if(key != null) {
-                key = key.toUpperCase();
                 str.append(key);
                 if(i != sc.length - 1) str.append(" + ");
             }
