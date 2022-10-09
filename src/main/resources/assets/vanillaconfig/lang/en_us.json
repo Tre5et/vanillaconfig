@@ -1,10 +1,10 @@
 {
   "vanillaconfig.boolean.true": "ON",
   "vanillaconfig.boolean.false": "OFF",
-  "vanillaconfig.narration.boolean.select" : "%s: %s. Slider list. Press left or right arrow to change.",
+  "vanillaconfig.narration.boolean.select" : "%s: %s. Press Enter to change to %s: %s.",
   "vanillaconfig.narration.boolean.activate" : "%s: %s",
   "vanillaconfig.narration.list.select" : "%s: %s. Press Enter to switch to %s: %s.",
-  "vanillaconfig.narration.list.slider.select" : "%s: %s. Press left or right arrow to change.",
+  "vanillaconfig.narration.list.slider.select" : "%s: %s. Slider list. Press left or right arrow to change.",
   "vanillaconfig.narration.list.activate" : "%s: %s",
   "vanillaconfig.narration.list.slider.change" : "%s",
   "vanillaconfig.narration.button.select" : "%s: Button. Press Enter to activate.",

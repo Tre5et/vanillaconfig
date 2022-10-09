@@ -93,6 +93,7 @@ public class GuiListWidget extends GuiClickableWidget {
     @Override
     public void onRender() {
         updateMessage();
+        super.onRender();
     }
 
     @Override

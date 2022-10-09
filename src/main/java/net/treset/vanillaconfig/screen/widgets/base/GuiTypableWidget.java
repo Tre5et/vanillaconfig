@@ -127,6 +127,7 @@ public class GuiTypableWidget extends GuiClickableWidget {
     @Override
     public void onRender() {
         this.updateMessage();
+        super.onRender();
     }
 
     @Override

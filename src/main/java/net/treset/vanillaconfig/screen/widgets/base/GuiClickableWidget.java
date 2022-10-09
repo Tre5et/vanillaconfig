@@ -24,6 +24,8 @@ public class GuiClickableWidget extends GuiBaseWidget {
 
     int clicked = -1;
 
+    boolean prevMouseOver = false;
+
     public GuiClickableWidget(BaseConfig config, String title, String value, ConfigScreen screen) {
         this.parentScreen = screen;
 
@@ -103,6 +105,13 @@ public class GuiClickableWidget extends GuiBaseWidget {
 
         handleMouseClick(mouseX, mouseY);
 
+        boolean mouseOver = isHoveredOver(mouseX, mouseY);
+        if(this.prevMouseOver != mouseOver) {
+            if(mouseOver) this.onMouseEnter();
+            else this.onMouseLeave();
+            this.prevMouseOver = mouseOver;
+        }
+
         MinecraftClient cli = MinecraftClient.getInstance();
         if (cli == null) return false;
         TextRenderer t = cli.textRenderer;
@@ -176,6 +185,12 @@ public class GuiClickableWidget extends GuiBaseWidget {
     public void onClickL() {}
     public void onClickR() {}
     public void onClickM() {}
+    public void onMouseEnter() {
+        if(NarratorManager.INSTANCE.isActive()) {
+            NarratorManager.INSTANCE.narrate(getSelectNarration());
+        }
+    }
+    public void onMouseLeave() {}
 
     public void requestIoInterrupt() {
         this.getParentScreen().requestIoInterrupt();
