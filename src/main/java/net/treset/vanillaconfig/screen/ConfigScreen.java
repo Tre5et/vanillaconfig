@@ -57,7 +57,7 @@ public class ConfigScreen extends Screen {
 
     private String[] renderTooltip = new String[]{};
 
-    private int currentSelected = -1;
+    private int currentSelected = -2;
 
     public ConfigScreen(PageConfig config, Screen parent) {
         super(Text.literal(config.getName()));
@@ -267,7 +267,7 @@ public class ConfigScreen extends Screen {
     private void renderDoneButton(MatrixStack matrices, int mouseX, int mouseY) {
         final Identifier WIDGETS_TEXTURE = new Identifier("textures/gui/widgets.png");
         RenderSystem.setShaderTexture(0, WIDGETS_TEXTURE);
-        int texY = (this.isHoveredOverDone(mouseX, mouseY)) ? 86 : 66;
+        int texY = (this.isHoveredOverDone(mouseX, mouseY) || this.currentSelected == -1) ? 86 : 66;
         DrawableHelper drawHelper = new DrawableHelper() {};
         drawHelper.drawTexture(matrices, this.width / 2 - 100, this.bottom + 5, 0, texY, 200, 20);
         DrawableHelper.drawCenteredText(matrices, textRenderer, Text.translatable("gui.done"), this.width / 2, this.bottom + 11, Formatting.WHITE.getColorValue());
@@ -315,6 +315,33 @@ public class ConfigScreen extends Screen {
     public void requestUnfocus(String exception) {
         for (GuiBaseWidget e : this.getWidgets()) {
             if (e instanceof GuiTypableWidget && !e.getBaseConfig().getKey().equals(exception)) ((GuiTypableWidget) e).setFocused(false);
+        }
+    }
+
+    public void tabNavigate(int step) {
+        if (this.currentSelected >= 0) this.getWidgets()[this.currentSelected].select(false);
+        this.currentSelected = ((this.getWidgets().length + this.currentSelected + step + 2) % (this.getWidgets().length + 1)) - 1; //range -1..amountOfWidgets-1
+
+        //done button handles itself
+        if(this.currentSelected == -1) {
+            return;
+        }
+
+        //check that selected widget is editable and displayed
+        if( !this.getWidgets()[this.currentSelected].getBaseConfig().isEditable() || !this.getWidgets()[this.currentSelected].getBaseConfig().isDisplayed() ) {
+            if(step >= 0) tabNavigate(1);
+            if(step < 0) tabNavigate(-1);
+            return;
+        }
+
+        this.getWidgets()[this.currentSelected].select(true);
+
+        //make it scroll
+        if(this.getWidgets()[this.currentSelected].getY() >= this.getScrollOffset() + this.getBottom() - this.getWidgets()[this.currentSelected].getHeight() - 3 ) {
+            this.setScroll(this.getWidgets()[this.currentSelected].getY() - this.getTop() - 3);
+        }
+        else if(this.getWidgets()[this.currentSelected].getY() <= this.getScrollOffset() + this.getTop() + 3 ) {
+            this.setScroll(this.getWidgets()[this.currentSelected].getY() - this.getBottom() + this.getWidgets()[this.currentSelected].getHeight() + 3);
         }
     }
 
@@ -387,13 +414,10 @@ public class ConfigScreen extends Screen {
         }
 
         if(key == GLFW.GLFW_KEY_TAB) {
-            int increment = (GLFW.glfwGetKey(MinecraftClient.getInstance().getWindow().getHandle(), GLFW.GLFW_KEY_LEFT_SHIFT) == GLFW.GLFW_PRESS
+            int step = (GLFW.glfwGetKey(MinecraftClient.getInstance().getWindow().getHandle(), GLFW.GLFW_KEY_LEFT_SHIFT) == GLFW.GLFW_PRESS
                     || GLFW.glfwGetKey(MinecraftClient.getInstance().getWindow().getHandle(), GLFW.GLFW_KEY_RIGHT_SHIFT) == GLFW.GLFW_PRESS) ?
                     -1 : 1;
-            do {
-                if (this.currentSelected >= 0) this.getWidgets()[this.currentSelected].select(false);
-                this.currentSelected = (this.getWidgets().length + this.currentSelected + increment) % this.getWidgets().length;
-            } while (!this.getWidgets()[this.currentSelected].select(true));
+            tabNavigate(step);
         }
 
         if(key == GLFW.GLFW_KEY_ENTER) {

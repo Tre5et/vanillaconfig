@@ -15,6 +15,9 @@ public class GuiBaseWidget {
     public int getHeight() { return this.height; }
     public int getWidth() { return this.width; }
 
+    public int getX() { return this.x; }
+    public int getY() { return this.y; }
+
     public BaseConfig getBaseConfig() { return this.baseConfig; }
     public boolean setBaseConfig(BaseConfig config) {
         if(!(this.baseConfig == null)) return false;
