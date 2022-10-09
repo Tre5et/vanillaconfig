@@ -29,6 +29,9 @@ public class GuiTypableWidget extends GuiClickableWidget {
         if (focused) {
             getParentScreen().requestUnfocus(this.getBaseConfig().getKey());
         }
+        else if(this.isFocused()) {
+            this.save();
+        }
         this.focused = focused;
     }
 
