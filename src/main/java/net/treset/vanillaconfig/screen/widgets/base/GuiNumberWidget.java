@@ -4,6 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.sound.PositionedSoundInstance;
+import net.minecraft.client.util.NarratorManager;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.sound.SoundEvents;
 import net.treset.vanillaconfig.config.base.SlideableConfig;
@@ -28,6 +29,8 @@ public class GuiNumberWidget extends GuiTypableWidget {
 
     public String initMessage() { return ""; }
 
+    public String getChangeSliderNarration() { return ""; };
+
     @Override
     public int getTextureOffset(int mouseX, int mouseY) {
         if(!this.slideConfig.isSlider()) return super.getTextureOffset(mouseX, mouseY);
@@ -41,9 +44,15 @@ public class GuiNumberWidget extends GuiTypableWidget {
         if(!this.selected) return;
         if(key == GLFW.GLFW_KEY_RIGHT) {
             this.slideConfig.setDoubleValue(this.slideConfig.getDoubleValue() + 1);
+            if(NarratorManager.INSTANCE.isActive()) {
+                NarratorManager.INSTANCE.narrate(getChangeSliderNarration());
+            }
             this.requestIoInterrupt();
         } else if(key == GLFW.GLFW_KEY_LEFT) {
             this.slideConfig.setDoubleValue(this.slideConfig.getDoubleValue() - 1);
+            if(NarratorManager.INSTANCE.isActive()) {
+                NarratorManager.INSTANCE.narrate(getChangeSliderNarration());
+            }
             this.requestIoInterrupt();
         }
     }

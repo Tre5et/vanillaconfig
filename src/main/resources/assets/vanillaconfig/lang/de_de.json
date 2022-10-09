@@ -1,4 +1,6 @@
 {
   "vanillaconfig.boolean.true": "AN",
-  "vanillaconfig.boolean.false": "AUS"
+  "vanillaconfig.boolean.false": "AUS",
+  "vanillaconfig.narration.boolean.select" : "%s: %s. Drücke Enter um zu %s: %s zu ändern.",
+  "vanillaconfig.narration.boolean.activate" : "%s: %s"
 }

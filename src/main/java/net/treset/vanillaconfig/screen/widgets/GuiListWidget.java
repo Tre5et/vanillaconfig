@@ -4,11 +4,14 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.sound.PositionedSoundInstance;
+import net.minecraft.client.util.NarratorManager;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.sound.SoundEvents;
 import net.treset.vanillaconfig.config.ListConfig;
 import net.treset.vanillaconfig.screen.ConfigScreen;
 import net.treset.vanillaconfig.screen.widgets.base.GuiClickableWidget;
+import net.treset.vanillaconfig.tools.TextTools;
+import org.lwjgl.glfw.GLFW;
 
 public class GuiListWidget extends GuiClickableWidget {
     ListConfig config;
@@ -31,6 +34,17 @@ public class GuiListWidget extends GuiClickableWidget {
     public String updateMessage() {
         return updateMessage(this.config);
     }
+
+    @Override
+    public String getSelectNarration() {
+        if(this.config.isSlider())
+            return String.format(TextTools.translateOrDefault("vanillaconfig.narration.list.slider.select"), this.config.getName(), this.config.getOption());
+        return String.format(TextTools.translateOrDefault("vanillaconfig.narration.list.select"), this.config.getName(), this.config.getOption(), this.config.getName(), this.config.getOption((this.config.getOptionIndex() + 1) % this.config.getOptions().length));
+    }
+    @Override
+    public String getActivateNarration() { return String.format(TextTools.translateOrDefault("vanillaconfig.narration.list.activate"), this.config.getName(), this.config.getOption()); }
+    public String getChangeSliderNarration() { return String.format(TextTools.translateOrDefault("vanillaconfig.narration.list.slider.change"), this.config.getOption()); }
+
 
     @Override
     public int getTextureOffset(int mouseX, int mouseY) {
@@ -67,7 +81,7 @@ public class GuiListWidget extends GuiClickableWidget {
 
             int sliderPos = (int)Math.rint(sliderPercentage * (this.getWidth() - 8));
 
-            int offset = (this.isHoveredOver(mouseX, mouseY) ? 2 : 1) * 20;
+            int offset = (this.isHoveredOver(mouseX, mouseY) || this.selected ? 2 : 1) * 20;
 
             d.drawTexture(m, this.screenX + sliderPos, this.screenY, 0, 46 + offset, 4, 20);
             d.drawTexture(m, this.screenX + sliderPos + 4, this.screenY, 196, 46 + offset, 4, 20);
@@ -79,6 +93,26 @@ public class GuiListWidget extends GuiClickableWidget {
     @Override
     public void onRender() {
         updateMessage();
+    }
+
+    @Override
+    public void onKeyDown(int key, int scancode) {
+        if(!this.config.isSlider()) super.onKeyDown(key, scancode);
+
+        if(!this.selected) return;
+        if(key == GLFW.GLFW_KEY_RIGHT) {
+            this.config.setOptionIndex((this.config.getOptionIndex() + 1) % this.config.getOptions().length);
+            if(NarratorManager.INSTANCE.isActive()) {
+                NarratorManager.INSTANCE.narrate(getChangeSliderNarration());
+            }
+            this.requestIoInterrupt();
+        } else if(key == GLFW.GLFW_KEY_LEFT) {
+            this.config.setOptionIndex((this.config.getOptions().length + this.config.getOptionIndex() - 1) % this.config.getOptions().length);
+            if(NarratorManager.INSTANCE.isActive()) {
+                NarratorManager.INSTANCE.narrate(getChangeSliderNarration());
+            }
+            this.requestIoInterrupt();
+        }
     }
 
     @Override

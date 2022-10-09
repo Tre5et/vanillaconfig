@@ -2,6 +2,7 @@ package net.treset.vanillaconfig.screen.widgets;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.sound.PositionedSoundInstance;
+import net.minecraft.client.util.NarratorManager;
 import net.minecraft.sound.SoundEvents;
 import net.treset.vanillaconfig.config.KeybindConfig;
 import net.treset.vanillaconfig.screen.ConfigScreen;
@@ -41,6 +42,17 @@ public class GuiKeybindWidget extends GuiTypableWidget {
     List<Integer> currentScancodes = new ArrayList<>();
 
     @Override
+    public String getSelectNarration() { return String.format(TextTools.translateOrDefault("vanillaconfig.narration.keybind.select"), this.config.getName(), this.getValue()); }
+    @Override
+    public String getActivateNarration() { return String.format(TextTools.translateOrDefault("vanillaconfig.narration.keybind.activate"), this.config.getName(), this.getValue()); }
+    @Override
+    public String getChangeNarration() { return String.format(TextTools.translateOrDefault("vanillaconfig.narration.keybind.change"), this.getValue()); }
+    @Override
+    public String getSaveNarration() { return String.format(TextTools.translateOrDefault("vanillaconfig.narration.keybind.save"), this.config.getName(), this.getValue()); }
+    @Override
+    public String getResetNarration() { return String.format(TextTools.translateOrDefault("vanillaconfig.narration.keybind.reset"), this.config.getName(), this.getValue()); }
+
+    @Override
     public void updateMessage() {
         if(this.isFocused()) return;
 
@@ -58,14 +70,23 @@ public class GuiKeybindWidget extends GuiTypableWidget {
             MinecraftClient.getInstance().getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
             this.setFocused(false);
             this.save();
+            if(NarratorManager.INSTANCE.isActive()) {
+                NarratorManager.INSTANCE.narrate(getSaveNarration());
+            }
         } else if(key == GLFW.GLFW_KEY_ESCAPE) {
             MinecraftClient.getInstance().getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
             this.reset();
+            if(NarratorManager.INSTANCE.isActive()) {
+                NarratorManager.INSTANCE.narrate(getResetNarration());
+            }
         } else {
             currentScancodes.add(scancode);
             String newKey = TextTools.getKeyFromScancode(scancode, true);
             if(newKey == null) return;
             this.setDisplayValue(TextTools.appendKeyToDisplayKeys(newKey, this.getValue()));
+            if(NarratorManager.INSTANCE.isActive()) {
+                NarratorManager.INSTANCE.narrate(getChangeNarration());
+            }
         }
     }
 

@@ -5,6 +5,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.render.GameRenderer;
+import net.minecraft.client.util.NarratorManager;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
@@ -59,6 +60,11 @@ public class GuiClickableWidget extends GuiBaseWidget {
     @Override
     public boolean select(boolean select) {
         if(!this.getBaseConfig().isEditable()) return false;
+        if(select) {
+            if (NarratorManager.INSTANCE.isActive()) {
+                NarratorManager.INSTANCE.narrate(this.getSelectNarration());
+            }
+        }
         this.selected = select;
         return true;
     }
@@ -66,6 +72,9 @@ public class GuiClickableWidget extends GuiBaseWidget {
     @Override
     public boolean activate() {
         this.onClickL();
+        if(NarratorManager.INSTANCE.isActive()) {
+            NarratorManager.INSTANCE.narrate(this.getActivateNarration());
+        }
         return true;
     }
 
@@ -142,6 +151,9 @@ public class GuiClickableWidget extends GuiBaseWidget {
     public boolean isHoveredOver(int mouseX, int mouseY) {
         return this.screenX < mouseX && mouseX < this.screenX + this.width && this.screenY < mouseY && mouseY < this.screenY + this.height;
     }
+
+    public String getSelectNarration() { return ""; }
+    public String getActivateNarration() { return ""; }
 
     @Override
     public void onMouseDown(int button) {

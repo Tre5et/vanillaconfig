@@ -20,6 +20,26 @@ public class GuiIntegerWidget extends GuiNumberWidget {
     }
 
     @Override
+    public String getSelectNarration() {
+        if(this.config.isSlider())
+            return String.format(TextTools.translateOrDefault("vanillaconfig.narration.int.slider.select"), this.config.getName(), this.config.getInteger());
+        return String.format(TextTools.translateOrDefault("vanillaconfig.narration.int.select"), this.config.getName(), this.config.getInteger());
+    }
+    @Override
+    public String getActivateNarration() {
+        if(this.config.isSlider()) return "";
+        return String.format(TextTools.translateOrDefault("vanillaconfig.narration.int.activate"), this.config.getName(), this.config.getInteger());
+    }
+    @Override
+    public String getChangeNarration() { return String.format(TextTools.translateOrDefault("vanillaconfig.narration.int.change"), this.getValue()); }
+    @Override
+    public String getChangeSliderNarration() { return String.format(TextTools.translateOrDefault("vanillaconfig.narration.int.slider.change"), this.config.getInteger()); }
+    @Override
+    public String getSaveNarration() { return String.format(TextTools.translateOrDefault("vanillaconfig.narration.int.save"), this.config.getName(), this.config.getInteger()); }
+    @Override
+    public String getResetNarration() { return String.format(TextTools.translateOrDefault("vanillaconfig.narration.int.reset"), this.config.getName(), this.config.getInteger()); }
+
+    @Override
     public void updateMessage() {
         if(this.isFocused()) return;
 

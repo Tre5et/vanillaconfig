@@ -7,6 +7,7 @@ import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.render.*;
 import net.minecraft.client.sound.PositionedSoundInstance;
+import net.minecraft.client.util.NarratorManager;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
@@ -80,6 +81,8 @@ public class ConfigScreen extends Screen {
         this.scrollbarX = this.width / 2 + this.scrollbarCenterX;
 
         this.setScroll(0);
+
+        this.currentSelected = -2;
 
         this.active = true;
         this.onOpenDep.run();
@@ -324,6 +327,9 @@ public class ConfigScreen extends Screen {
 
         //done button handles itself
         if(this.currentSelected == -1) {
+            if(NarratorManager.INSTANCE.isActive()) {
+                NarratorManager.INSTANCE.narrate(TextTools.translateOrDefault("vanillaconfig.narration.button.done.select"));
+            }
             return;
         }
 
@@ -423,6 +429,10 @@ public class ConfigScreen extends Screen {
         if(key == GLFW.GLFW_KEY_ENTER) {
             if(this.currentSelected >= 0) {
                 this.getWidgets()[this.currentSelected].activate();
+            }
+            else if(this.currentSelected == -1) {
+                MinecraftClient.getInstance().getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+                this.close();
             }
         }
 

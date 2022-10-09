@@ -30,6 +30,16 @@ public class GuiBooleanWidget extends GuiClickableWidget {
     }
 
     @Override
+    public String getSelectNarration() {
+        return String.format(TextTools.translateOrDefault("vanillaconfig.narration.boolean.select"), this.config.getName(), TextTools.booleanToString(this.config.getBoolean()), this.config.getName(), TextTools.booleanToString(!this.config.getBoolean()));
+    }
+
+    @Override
+    public String getActivateNarration() {
+        return String.format(TextTools.translateOrDefault("vanillaconfig.narration.boolean.activate"), this.config.getName(), TextTools.booleanToString(this.config.getBoolean()));
+    }
+
+    @Override
     public void onRender() {
         updateMessage();
     }

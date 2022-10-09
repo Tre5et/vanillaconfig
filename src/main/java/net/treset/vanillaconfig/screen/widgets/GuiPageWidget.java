@@ -6,6 +6,7 @@ import net.minecraft.sound.SoundEvents;
 import net.treset.vanillaconfig.config.PageConfig;
 import net.treset.vanillaconfig.screen.ConfigScreen;
 import net.treset.vanillaconfig.screen.widgets.base.GuiClickableWidget;
+import net.treset.vanillaconfig.tools.TextTools;
 
 public class GuiPageWidget extends GuiClickableWidget {
     PageConfig config;
@@ -15,17 +16,20 @@ public class GuiPageWidget extends GuiClickableWidget {
 
         this.config = config;
 
-        intiMessage();
+        initMessage();
     }
 
-    public String intiMessage(PageConfig config) {
+    public String initMessage(PageConfig config) {
         if(config == null) return "ERROR";
         this.setTitle(config.getKey());
         return this.getMessage();
     }
-    public String intiMessage() {
-        return intiMessage(this.config);
+    public String initMessage() {
+        return initMessage(this.config);
     }
+
+    @Override
+    public String getSelectNarration() { return String.format(TextTools.translateOrDefault("vanillaconfig.narration.page.select"), this.config.getName()); }
 
     @Override
     public void onClickL() {
