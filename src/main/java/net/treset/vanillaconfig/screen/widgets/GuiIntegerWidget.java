@@ -16,28 +16,27 @@ public class GuiIntegerWidget extends GuiNumberWidget {
 
         this.setAllowedChars(AllowedChars.NUMBERS);
 
+        //this.config.setChangeNarration(() -> String.format(TextTools.translateOrDefault("vanillaconfig.narration.int.change"), this.getValue()));
+
         this.initMessage();
     }
 
     @Override
-    public String getSelectNarration() {
-        if(this.config.isSlider())
-            return String.format(TextTools.translateOrDefault("vanillaconfig.narration.int.slider.select"), this.config.getName(), this.config.getInteger());
-        return String.format(TextTools.translateOrDefault("vanillaconfig.narration.int.select"), this.config.getName(), this.config.getInteger());
+    public String getSelectNarration() { return this.config.getSelectNarration(); }
+    @Override
+    public String getActivateNarration() { return this.config.getActivateNarration(); }
+    @Override
+    public String getChangeNarration() {
+        if(!this.config.getChangeNarration().equals(""))
+            return this.config.getChangeNarration();
+        return String.format(TextTools.translateOrDefault("vanillaconfig.narration.int.change"), this.getValue());
     }
     @Override
-    public String getActivateNarration() {
-        if(this.config.isSlider()) return "";
-        return String.format(TextTools.translateOrDefault("vanillaconfig.narration.int.activate"), this.config.getName(), this.config.getInteger());
-    }
+    public String getChangeSliderNarration() { return this.config.getChangeSliderNarration(); }
     @Override
-    public String getChangeNarration() { return String.format(TextTools.translateOrDefault("vanillaconfig.narration.int.change"), this.getValue()); }
+    public String getSaveNarration() { return this.config.getSaveNarration(); }
     @Override
-    public String getChangeSliderNarration() { return String.format(TextTools.translateOrDefault("vanillaconfig.narration.int.slider.change"), this.config.getInteger()); }
-    @Override
-    public String getSaveNarration() { return String.format(TextTools.translateOrDefault("vanillaconfig.narration.int.save"), this.config.getName(), this.config.getInteger()); }
-    @Override
-    public String getResetNarration() { return String.format(TextTools.translateOrDefault("vanillaconfig.narration.int.reset"), this.config.getName(), this.config.getInteger()); }
+    public String getResetNarration() { return this.config.getResetNarration(); }
 
     @Override
     public void updateMessage() {

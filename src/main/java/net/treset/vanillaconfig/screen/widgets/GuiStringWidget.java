@@ -31,15 +31,19 @@ public class GuiStringWidget extends GuiTypableWidget {
     }
 
     @Override
-    public String getSelectNarration() { return String.format(TextTools.translateOrDefault("vanillaconfig.narration.string.select"), this.config.getName(), this.config.getString()); }
+    public String getSelectNarration() { return this.config.getSelectNarration(); }
     @Override
-    public String getActivateNarration() { return String.format(TextTools.translateOrDefault("vanillaconfig.narration.string.activate"), this.config.getName(), this.config.getString()); }
+    public String getActivateNarration() { return this.config.getActivateNarration(); }
     @Override
-    public String getChangeNarration() { return String.format(TextTools.translateOrDefault("vanillaconfig.narration.string.change"), this.getValue()); }
+    public String getChangeNarration() {
+        if(!this.config.getChangeNarration().equals(""))
+            return this.config.getChangeNarration();
+        return String.format(TextTools.translateOrDefault("vanillaconfig.narration.string.change"), this.getValue());
+    }
     @Override
-    public String getSaveNarration() { return String.format(TextTools.translateOrDefault("vanillaconfig.narration.string.save"), this.config.getName(), this.config.getString()); }
+    public String getSaveNarration() { return this.config.getSaveNarration(); }
     @Override
-    public String getResetNarration() { return String.format(TextTools.translateOrDefault("vanillaconfig.narration.string.reset"), this.config.getName(), this.config.getString()); }
+    public String getResetNarration() { return this.config.getResetNarration(); }
 
     @Override
     public void updateMessage() {

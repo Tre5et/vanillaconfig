@@ -5,8 +5,10 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import net.treset.vanillaconfig.config.base.SlideableConfig;
 import net.treset.vanillaconfig.config.config_type.ConfigType;
+import net.treset.vanillaconfig.tools.TextTools;
 
 import java.util.function.BiConsumer;
+import java.util.function.Supplier;
 
 public class IntegerConfig extends SlideableConfig {
     int value = 0;
@@ -29,6 +31,19 @@ public class IntegerConfig extends SlideableConfig {
         this.setEditable(editable);
         this.setDisplayed(displayed);
         this.setSlider(slider);
+
+        this.setSelectNarration(() -> {
+            if(this.isSlider())
+                return String.format(TextTools.translateOrDefault("vanillaconfig.narration.int.slider.select"), this.getName(), this.getInteger());
+            return String.format(TextTools.translateOrDefault("vanillaconfig.narration.int.select"), this.getName(), this.getInteger());
+        });
+        this.setActivateNarration(() -> {
+            if(this.isSlider()) return "";
+            return String.format(TextTools.translateOrDefault("vanillaconfig.narration.int.activate"), this.getName(), this.getInteger());
+        });
+        this.setChangeSliderNarration(() -> String.format(TextTools.translateOrDefault("vanillaconfig.narration.int.slider.change"), this.getInteger()));
+        this.setSaveNarration(() -> String.format(TextTools.translateOrDefault("vanillaconfig.narration.int.save"), this.getName(), this.getInteger()));
+        this.setResetNarration(() -> String.format(TextTools.translateOrDefault("vanillaconfig.narration.int.reset"), this.getName(), this.getInteger()));
 
         this.resetValue();
     }
@@ -101,6 +116,34 @@ public class IntegerConfig extends SlideableConfig {
     BiConsumer<Integer, String> onChange = (prevValue, name) -> {};
     public boolean onChange(BiConsumer<Integer, String> method) {
         this.onChange = method;
+        return true;
+    }
+
+    public String getChangeNarration() { return this.getChangeNarration.get(); }
+    Supplier<String> getChangeNarration = () -> "";
+    public boolean setChangeNarration(Supplier<String> method) {
+        this.getChangeNarration = method;
+        return true;
+    }
+
+    public String getChangeSliderNarration() { return this.getChangeSliderNarration.get(); }
+    Supplier<String> getChangeSliderNarration = () -> "";
+    public boolean setChangeSliderNarration(Supplier<String> method) {
+        this.getChangeSliderNarration = method;
+        return true;
+    }
+
+    public String getSaveNarration() { return this.getSaveNarration.get(); }
+    Supplier<String> getSaveNarration = () -> "";
+    public boolean setSaveNarration(Supplier<String> method) {
+        this.getSaveNarration = method;
+        return true;
+    }
+
+    public String getResetNarration() { return this.getResetNarration.get(); }
+    Supplier<String> getResetNarration = () -> "";
+    public boolean setResetNarration(Supplier<String> method) {
+        this.getResetNarration = method;
         return true;
     }
 }

@@ -41,6 +41,9 @@ public class GuiBaseWidget {
         return false;
     }
 
+    public String getSelectNarration() { return getBaseConfig().getSelectNarration(); }
+    public String getActivateNarration() { return getBaseConfig().getActivateNarration(); }
+
     public void onMouseDown(int key) {}
     public void onMouseUp(int button) {}
     public void onKeyDown(int key, int scancode) {}

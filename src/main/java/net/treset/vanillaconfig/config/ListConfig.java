@@ -11,6 +11,7 @@ import net.treset.vanillaconfig.tools.helpers.TriConsumer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Supplier;
 
 public class ListConfig extends SlideableConfig {
     List<String> options = new ArrayList<>();
@@ -32,6 +33,14 @@ public class ListConfig extends SlideableConfig {
         this.setEditable(editable);
         this.setDisplayed(displayed);
         this.setSlider(slider);
+
+        this.setSelectNarration(() -> {
+            if(this.isSlider())
+                return String.format(TextTools.translateOrDefault("vanillaconfig.narration.list.slider.select"), this.getName(), this.getOption());
+            return String.format(TextTools.translateOrDefault("vanillaconfig.narration.list.select"), this.getName(), this.getOption(), this.getName(), this.getOption((this.getOptionIndex() + 1) % this.getOptions().length));
+        });
+        this.setActivateNarration(() -> String.format(TextTools.translateOrDefault("vanillaconfig.narration.list.activate"), this.getName(), this.getOption()));
+        this.setChangeNarration(() -> String.format(TextTools.translateOrDefault("vanillaconfig.narration.list.slider.change"), this.getOption()));
 
         this.resetValue();
     }
@@ -168,6 +177,13 @@ public class ListConfig extends SlideableConfig {
     TriConsumer<Integer, String, String> onChange = (prevIndex, prevValue, name) -> {};
     public boolean onChange(TriConsumer<Integer, String, String> method) {
         this.onChange = method;
+        return true;
+    }
+
+    public String getChangeNarration() { return this.getChangeNarration.get(); }
+    Supplier<String> getChangeNarration = () -> "";
+    public boolean setChangeNarration(Supplier<String> method) {
+        this.getChangeNarration = method;
         return true;
     }
 }

@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import net.treset.vanillaconfig.config.base.BaseConfig;
 import net.treset.vanillaconfig.config.config_type.ConfigType;
+import net.treset.vanillaconfig.tools.TextTools;
 
 import java.util.function.BiConsumer;
 
@@ -25,6 +26,9 @@ public class BooleanConfig extends BaseConfig {
         this.setFullWidth(fullWidth);
         this.setEditable(editable);
         this.setDisplayed(displayed);
+
+        this.setSelectNarration(() -> String.format(TextTools.translateOrDefault("vanillaconfig.narration.boolean.select"), this.getName(), TextTools.booleanToString(this.getBoolean()), this.getName(), TextTools.booleanToString(!this.getBoolean())));
+        this.setActivateNarration(() -> String.format(TextTools.translateOrDefault("vanillaconfig.narration.boolean.activate"), this.getName(), TextTools.booleanToString(this.getBoolean())));
 
         this.resetValue();
     }

@@ -36,14 +36,10 @@ public class GuiListWidget extends GuiClickableWidget {
     }
 
     @Override
-    public String getSelectNarration() {
-        if(this.config.isSlider())
-            return String.format(TextTools.translateOrDefault("vanillaconfig.narration.list.slider.select"), this.config.getName(), this.config.getOption());
-        return String.format(TextTools.translateOrDefault("vanillaconfig.narration.list.select"), this.config.getName(), this.config.getOption(), this.config.getName(), this.config.getOption((this.config.getOptionIndex() + 1) % this.config.getOptions().length));
-    }
+    public String getSelectNarration() { return this.config.getSelectNarration(); }
     @Override
-    public String getActivateNarration() { return String.format(TextTools.translateOrDefault("vanillaconfig.narration.list.activate"), this.config.getName(), this.config.getOption()); }
-    public String getChangeSliderNarration() { return String.format(TextTools.translateOrDefault("vanillaconfig.narration.list.slider.change"), this.config.getOption()); }
+    public String getActivateNarration() { return this.config.getActivateNarration(); }
+    public String getChangeSliderNarration() { return this.config.getChangeNarration(); }
 
 
     @Override

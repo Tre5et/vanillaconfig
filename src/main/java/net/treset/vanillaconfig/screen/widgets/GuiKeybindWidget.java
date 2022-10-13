@@ -41,16 +41,37 @@ public class GuiKeybindWidget extends GuiTypableWidget {
 
     List<Integer> currentScancodes = new ArrayList<>();
 
+    //i really need to come up with a better way to use live values
     @Override
-    public String getSelectNarration() { return String.format(TextTools.translateOrDefault("vanillaconfig.narration.keybind.select"), this.config.getName(), this.getValue()); }
+    public String getSelectNarration() {
+        if(!this.config.getSelectNarration().equals(""))
+            return this.config.getSelectNarration();
+        return String.format(TextTools.translateOrDefault("vanillaconfig.narration.keybind.select"), this.config.getName(), this.getValue());
+    }
     @Override
-    public String getActivateNarration() { return String.format(TextTools.translateOrDefault("vanillaconfig.narration.keybind.activate"), this.config.getName(), this.getValue()); }
+    public String getActivateNarration() {
+        if(!this.config.getActivateNarration().equals(""))
+            return this.config.getActivateNarration();
+        return String.format(TextTools.translateOrDefault("vanillaconfig.narration.keybind.activate"), this.config.getName(), this.getValue());
+    }
     @Override
-    public String getChangeNarration() { return String.format(TextTools.translateOrDefault("vanillaconfig.narration.keybind.change"), this.getValue()); }
+    public String getChangeNarration() {
+        if(!this.config.getChangeNarration().equals(""))
+            return this.config.getChangeNarration();
+        return String.format(TextTools.translateOrDefault("vanillaconfig.narration.keybind.change"), this.getValue());
+    }
     @Override
-    public String getSaveNarration() { return String.format(TextTools.translateOrDefault("vanillaconfig.narration.keybind.save"), this.config.getName(), this.getValue()); }
+    public String getSaveNarration() {
+        if(!this.config.getSaveNarration().equals(""))
+            return this.config.getSaveNarration();
+        return String.format(TextTools.translateOrDefault("vanillaconfig.narration.keybind.save"), this.config.getName(), this.getValue());
+    }
     @Override
-    public String getResetNarration() { return String.format(TextTools.translateOrDefault("vanillaconfig.narration.keybind.reset"), this.config.getName(), this.getValue()); }
+    public String getResetNarration() {
+        if(!this.config.getResetNarration().equals(""))
+            return this.config.getResetNarration();
+        return String.format(TextTools.translateOrDefault("vanillaconfig.narration.keybind.reset"), this.config.getName(), this.getValue());
+    }
 
     @Override
     public void updateMessage() {

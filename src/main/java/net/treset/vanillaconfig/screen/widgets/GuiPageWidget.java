@@ -29,7 +29,7 @@ public class GuiPageWidget extends GuiClickableWidget {
     }
 
     @Override
-    public String getSelectNarration() { return String.format(TextTools.translateOrDefault("vanillaconfig.narration.page.select"), this.config.getName()); }
+    public String getSelectNarration() { return this.config.getSelectNarration(); }
 
     @Override
     public void onClickL() {

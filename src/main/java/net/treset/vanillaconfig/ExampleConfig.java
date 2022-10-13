@@ -30,6 +30,7 @@ public class ExampleConfig implements ClientModInitializer {
 
         BooleanConfig boole1 = new BooleanConfig(false, "boole1", new String[]{"test", "line2"});
         IntegerConfig int1 = new IntegerConfig(42, 0, 5, "int1");
+        int1.setChangeNarration(() -> "test");
         integ1 = int1;
         int1.setCustomWidth(200, 100);
         IntegerConfig int2 = new IntegerConfig(33, -300, 1324, "int2", "", true);

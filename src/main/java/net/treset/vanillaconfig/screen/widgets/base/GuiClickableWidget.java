@@ -161,9 +161,6 @@ public class GuiClickableWidget extends GuiBaseWidget {
         return this.screenX < mouseX && mouseX < this.screenX + this.width && this.screenY < mouseY && mouseY < this.screenY + this.height;
     }
 
-    public String getSelectNarration() { return ""; }
-    public String getActivateNarration() { return ""; }
-
     @Override
     public void onMouseDown(int button) {
         if(this.getBaseConfig().isEditable() && this.isRendered()) this.clicked = button;

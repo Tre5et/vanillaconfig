@@ -7,6 +7,7 @@ import net.treset.vanillaconfig.config.config_type.ConfigType;
 import net.treset.vanillaconfig.config.version.ConfigVersion;
 import net.treset.vanillaconfig.tools.ClientTools;
 import net.treset.vanillaconfig.tools.FileTools;
+import net.treset.vanillaconfig.tools.TextTools;
 import net.treset.vanillaconfig.tools.helpers.TriConsumer;
 
 import java.io.File;
@@ -29,6 +30,8 @@ public class PageConfig extends BaseConfig {
         this.setFullWidth(fullWidth);
         this.setEditable(editable);
         this.setDisplayed(displayed);
+
+        this.setSelectNarration(() -> String.format(TextTools.translateOrDefault("vanillaconfig.narration.page.select"), this.getName()));
 
         this.setCustomWidth(250, 150);
     }

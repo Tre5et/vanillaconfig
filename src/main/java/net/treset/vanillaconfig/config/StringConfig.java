@@ -5,8 +5,10 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import net.treset.vanillaconfig.config.base.BaseConfig;
 import net.treset.vanillaconfig.config.config_type.ConfigType;
+import net.treset.vanillaconfig.tools.TextTools;
 
 import java.util.function.BiConsumer;
+import java.util.function.Supplier;
 
 public class StringConfig extends BaseConfig {
     String value = "";
@@ -28,6 +30,11 @@ public class StringConfig extends BaseConfig {
         this.setFullWidth(fullWidth);
         this.setEditable(editable);
         this.setDisplayed(displayed);
+
+        this.setSelectNarration(() -> String.format(TextTools.translateOrDefault("vanillaconfig.narration.string.select"), this.getName(), this.getString()));
+        this.setActivateNarration(() -> String.format(TextTools.translateOrDefault("vanillaconfig.narration.string.activate"), this.getName(), this.getString()));
+        this.setSaveNarration(() -> String.format(TextTools.translateOrDefault("vanillaconfig.narration.string.save"), this.getName(), this.getString()));
+        this.setResetNarration(() -> String.format(TextTools.translateOrDefault("vanillaconfig.narration.string.reset"), this.getName(), this.getString()));
 
         this.resetValue();
     }
@@ -79,6 +86,27 @@ public class StringConfig extends BaseConfig {
     BiConsumer<String, String> onChange = (prevValue, name) -> {};
     public boolean onChange(BiConsumer<String, String> method) {
         this.onChange = method;
+        return true;
+    }
+
+    public String getChangeNarration() { return this.getChangeNarration.get(); }
+    Supplier<String> getChangeNarration = () -> "";
+    public boolean setChangeNarration(Supplier<String> method) {
+        this.getChangeNarration = method;
+        return true;
+    }
+
+    public String getSaveNarration() { return this.getSaveNarration.get(); }
+    Supplier<String> getSaveNarration = () -> "";
+    public boolean setSaveNarration(Supplier<String> method) {
+        this.getSaveNarration = method;
+        return true;
+    }
+
+    public String getResetNarration() { return this.getResetNarration.get(); }
+    Supplier<String> getResetNarration = () -> "";
+    public boolean setResetNarration(Supplier<String> method) {
+        this.getResetNarration = method;
         return true;
     }
 }

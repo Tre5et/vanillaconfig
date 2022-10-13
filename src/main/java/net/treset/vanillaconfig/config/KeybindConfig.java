@@ -13,6 +13,7 @@ import net.treset.vanillaconfig.tools.helpers.KeybindContext;
 import java.util.Arrays;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class KeybindConfig extends BaseConfig {
     int[] keys = new int[]{};
@@ -114,6 +115,27 @@ public class KeybindConfig extends BaseConfig {
     BiConsumer<int[], String> onChange = (prevKeys, name) -> {};
     public boolean onChange(BiConsumer<int[], String> method) {
         this.onChange = method;
+        return true;
+    }
+
+    public String getChangeNarration() { return this.getChangeNarration.get(); }
+    Supplier<String> getChangeNarration = () -> "";
+    public boolean setChangeNarration(Supplier<String> method) {
+        this.getChangeNarration = method;
+        return true;
+    }
+
+    public String getSaveNarration() { return this.getSaveNarration.get(); }
+    Supplier<String> getSaveNarration = () -> "";
+    public boolean setSaveNarration(Supplier<String> method) {
+        this.getSaveNarration = method;
+        return true;
+    }
+
+    public String getResetNarration() { return this.getResetNarration.get(); }
+    Supplier<String> getResetNarration = () -> "";
+    public boolean setResetNarration(Supplier<String> method) {
+        this.getResetNarration = method;
         return true;
     }
  }

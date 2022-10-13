@@ -6,6 +6,8 @@ import net.treset.vanillaconfig.screen.widgets.base.GuiNumberWidget;
 import net.treset.vanillaconfig.tools.TextTools;
 import net.treset.vanillaconfig.tools.helpers.AllowedChars;
 
+import java.util.Objects;
+
 public class GuiDoubleWidget extends GuiNumberWidget {
     DoubleConfig config;
 
@@ -20,24 +22,21 @@ public class GuiDoubleWidget extends GuiNumberWidget {
     }
 
     @Override
-    public String getSelectNarration() {
-        if(this.config.isSlider())
-            return String.format(TextTools.translateOrDefault("vanillaconfig.narration.int.slider.select"), this.config.getName(), this.config.getDouble());
-        return String.format(TextTools.translateOrDefault("vanillaconfig.narration.int.select"), this.config.getName(), this.config.getDouble());
+    public String getSelectNarration() { return this.config.getSelectNarration(); }
+    @Override
+    public String getActivateNarration() { return this.config.getActivateNarration(); }
+    @Override
+    public String getChangeNarration() {  //this is terrible but i need live data here and have no better idea :(
+        if(!this.config.getChangeNarration().equals(""))
+            return this.config.getChangeNarration();
+        return String.format(TextTools.translateOrDefault("vanillaconfig.narration.double.change"), this.getValue());
     }
     @Override
-    public String getActivateNarration() {
-        if(this.config.isSlider()) return "";
-        return String.format(TextTools.translateOrDefault("vanillaconfig.narration.int.activate"), this.config.getName(), this.config.getDouble());
-    }
+    public String getChangeSliderNarration() { return this.config.getChangeSliderNarration(); }
     @Override
-    public String getChangeNarration() { return String.format(TextTools.translateOrDefault("vanillaconfig.narration.int.change"), this.getValue()); }
+    public String getSaveNarration() { return this.config.getSaveNarration(); }
     @Override
-    public String getChangeSliderNarration() { return String.format(TextTools.translateOrDefault("vanillaconfig.narration.int.slider.change"), this.config.getDouble()); }
-    @Override
-    public String getSaveNarration() { return String.format(TextTools.translateOrDefault("vanillaconfig.narration.int.save"), this.config.getName(), this.config.getDouble()); }
-    @Override
-    public String getResetNarration() { return String.format(TextTools.translateOrDefault("vanillaconfig.narration.int.reset"), this.config.getName(), this.config.getDouble()); }
+    public String getResetNarration() { return this.config.getResetNarration(); }
 
     public String initMessage() {
         if(this.config == null) return "ERROR";

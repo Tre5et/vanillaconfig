@@ -7,6 +7,10 @@ import net.treset.vanillaconfig.tools.FileTools;
 import net.treset.vanillaconfig.tools.TextTools;
 
 import javax.annotation.Nullable;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class BaseConfig {
     String name;
@@ -95,5 +99,18 @@ public class BaseConfig {
         return this.loadJsonElement(obj.get(this.getKey()), this.isNonexistentAllowed());
     }
 
+    public String getSelectNarration() { return this.getSelectNarration.get(); }
+    private Supplier<String> getSelectNarration = () -> "";
+    public boolean setSelectNarration(Supplier<String> method) {
+        this.getSelectNarration = method;
+        return true;
+    }
+
+    public String getActivateNarration() { return this.getActivateNarration.get(); }
+    private Supplier<String> getActivateNarration = () -> "";
+    public boolean setActivateNarration(Supplier<String> method) {
+        this.getActivateNarration = method;
+        return true;
+    }
 
 }

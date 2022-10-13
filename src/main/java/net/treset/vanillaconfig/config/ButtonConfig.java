@@ -4,6 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.treset.vanillaconfig.config.base.BaseConfig;
 import net.treset.vanillaconfig.config.config_type.ConfigType;
+import net.treset.vanillaconfig.tools.TextTools;
 
 import java.util.function.Consumer;
 
@@ -16,6 +17,9 @@ public class ButtonConfig extends BaseConfig {
         this.setFullWidth(fullWidth);
         this.setEditable(editable);
         this.setDisplayed(displayed);
+
+        this.setSelectNarration(() -> String.format(TextTools.translateOrDefault("vanillaconfig.narration.button.select"), this.getName()));
+        this.setActivateNarration(() -> String.format(TextTools.translateOrDefault("vanillaconfig.narration.button.activate"), this.getName()));
     }
     public ButtonConfig(String name, String desc) {
         this(name, desc, true, true, true);

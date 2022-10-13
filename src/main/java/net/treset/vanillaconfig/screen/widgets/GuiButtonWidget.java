@@ -26,11 +26,6 @@ public class GuiButtonWidget extends GuiClickableWidget {
     }
 
     @Override
-    public String getSelectNarration() { return String.format(TextTools.translateOrDefault("vanillaconfig.narration.button.select"), this.config.getName()); }
-    @Override
-    public String getActivateNarration() { return String.format(TextTools.translateOrDefault("vanillaconfig.narration.button.activate"), this.config.getName()); }
-
-    @Override
     public void onClickL() {
         MinecraftClient.getInstance().getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
         this.config.invokeOnClickL();
