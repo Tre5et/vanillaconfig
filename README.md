@@ -12,7 +12,7 @@ You also need to install [Fabric API](https://www.curseforge.com/minecraft/mc-mo
 
 ## If you are a developer, read the docs
 
-Go to the docs [here](https://github.com/Tre5et/vanillaconfig/blob/1.18/docs/DOCS.md).
+Go to the docs [here](docs/DOCS.md).
 
 ## License
 

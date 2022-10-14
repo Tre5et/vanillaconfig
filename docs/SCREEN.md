@@ -32,7 +32,7 @@
    - `boolean setSlider(boolean slider)` sets whether the option is a slider.
 
 ### Example
-To create a screen from the config in [Creating a Config](https://github.com/Tre5et/vanillaconfig/blob/1.18/docs/CONFIG.md), and open it, when `yourKeybind` is pressed, you could modify the code like so:
+To create a screen from the config in [Creating a Config](CONFIG.md), and open it, when `yourKeybind` is pressed, you could modify the code like so:
 ```java
 [...]
 static ConfigScreen yourScreen;

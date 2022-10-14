@@ -40,7 +40,7 @@ public class ListConfig extends SlideableConfig {
             return String.format(TextTools.translateOrDefault("vanillaconfig.narration.list.select"), this.getName(), this.getOption(), this.getName(), this.getOption((this.getOptionIndex() + 1) % this.getOptions().length));
         });
         this.setActivateNarration(() -> String.format(TextTools.translateOrDefault("vanillaconfig.narration.list.activate"), this.getName(), this.getOption()));
-        this.setChangeNarration(() -> String.format(TextTools.translateOrDefault("vanillaconfig.narration.list.slider.change"), this.getOption()));
+        this.setChangeSliderNarration(() -> String.format(TextTools.translateOrDefault("vanillaconfig.narration.list.slider.change"), this.getOption()));
 
         this.resetValue();
     }
@@ -180,10 +180,10 @@ public class ListConfig extends SlideableConfig {
         return true;
     }
 
-    public String getChangeNarration() { return this.getChangeNarration.get(); }
-    Supplier<String> getChangeNarration = () -> "";
-    public boolean setChangeNarration(Supplier<String> method) {
-        this.getChangeNarration = method;
+    public String getChangeSliderNarration() { return this.getChangeSliderNarration.get(); }
+    Supplier<String> getChangeSliderNarration = () -> "";
+    public boolean setChangeSliderNarration(Supplier<String> method) {
+        this.getChangeSliderNarration = method;
         return true;
     }
 }

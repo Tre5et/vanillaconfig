@@ -1,11 +1,12 @@
-﻿# Documentation (updated v1.2.1)
-### [Setup](https://github.com/Tre5et/vanillaconfig/blob/1.18/docs/SETUP.md)
-### [Creating a Config](https://github.com/Tre5et/vanillaconfig/blob/1.18/docs/CONFIG.md)
-### [Config Types](https://github.com/Tre5et/vanillaconfig/blob/1.18/docs/TYPES.md)
-### [Option Migration](https://github.com/Tre5et/vanillaconfig/blob/1.18/docs/MIGRATE.md)
-### [Version Management](https://github.com/Tre5et/vanillaconfig/blob/1.18/docs/VERSION.md)
-### [Callbacks](https://github.com/Tre5et/vanillaconfig/blob/1.18/docs/CALLBACKS.md)
-### [Config Screen](https://github.com/Tre5et/vanillaconfig/blob/1.18/docs/SCREEN.md)
+﻿# Documentation (updated v1.2.2)
+### [Setup](SETUP.md)
+### [Creating a Config](CONFIG.md)
+### [Config Types](TYPES.md)
+### [Option Migration](MIGRATE.md)
+### [Version Management](VERSION.md)
+### [Callbacks](CALLBACKS.md)
+### [Config Screen](SCREEN.md)
+### [Accessibility](ACCESSIBILITY.md)
 
 ### Note: Undocumented functions might change without notice. Use at your own risk.
 

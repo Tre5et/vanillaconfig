@@ -10,7 +10,6 @@ import net.minecraft.sound.SoundEvents;
 import net.treset.vanillaconfig.config.ListConfig;
 import net.treset.vanillaconfig.screen.ConfigScreen;
 import net.treset.vanillaconfig.screen.widgets.base.GuiClickableWidget;
-import net.treset.vanillaconfig.tools.TextTools;
 import org.lwjgl.glfw.GLFW;
 
 public class GuiListWidget extends GuiClickableWidget {
@@ -39,7 +38,7 @@ public class GuiListWidget extends GuiClickableWidget {
     public String getSelectNarration() { return this.config.getSelectNarration(); }
     @Override
     public String getActivateNarration() { return this.config.getActivateNarration(); }
-    public String getChangeSliderNarration() { return this.config.getChangeNarration(); }
+    public String getChangeSliderNarration() { return this.config.getChangeSliderNarration(); }
 
 
     @Override
