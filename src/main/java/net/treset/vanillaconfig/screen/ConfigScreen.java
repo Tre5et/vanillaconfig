@@ -58,7 +58,7 @@ public class ConfigScreen extends Screen {
 
     private String[] renderTooltip = new String[]{};
 
-    private int currentSelected = -2;
+    private int currentSelected = -1;
 
     public ConfigScreen(PageConfig config, Screen parent) {
         super(Text.literal(config.getName()));
@@ -82,7 +82,7 @@ public class ConfigScreen extends Screen {
 
         this.setScroll(0);
 
-        this.currentSelected = -2;
+        this.currentSelected = -1;
 
         this.active = true;
         this.onOpenDep.run();
@@ -270,7 +270,7 @@ public class ConfigScreen extends Screen {
     private void renderDoneButton(MatrixStack matrices, int mouseX, int mouseY) {
         final Identifier WIDGETS_TEXTURE = new Identifier("textures/gui/widgets.png");
         RenderSystem.setShaderTexture(0, WIDGETS_TEXTURE);
-        int texY = (this.isHoveredOverDone(mouseX, mouseY) || this.currentSelected == -1) ? 86 : 66;
+        int texY = (this.isHoveredOverDone(mouseX, mouseY) || this.currentSelected == this.getWidgets().length) ? 86 : 66;
         DrawableHelper drawHelper = new DrawableHelper() {};
         drawHelper.drawTexture(matrices, this.width / 2 - 100, this.bottom + 5, 0, texY, 200, 20);
         DrawableHelper.drawCenteredText(matrices, textRenderer, Text.translatable("gui.done"), this.width / 2, this.bottom + 11, Formatting.WHITE.getColorValue());
@@ -322,11 +322,11 @@ public class ConfigScreen extends Screen {
     }
 
     public void tabNavigate(int step) {
-        if (this.currentSelected >= 0) this.getWidgets()[this.currentSelected].select(false);
-        this.currentSelected = ((this.getWidgets().length + this.currentSelected + step + 2) % (this.getWidgets().length + 1)) - 1; //range -1..amountOfWidgets-1
+        if (0 <= this.currentSelected && this.currentSelected < this.getWidgets().length) this.getWidgets()[this.currentSelected].select(false);
+        this.currentSelected = ((this.getWidgets().length + 1 + this.currentSelected + step) % (this.getWidgets().length + 1)); //range 0..amountOfWidgets
 
         //done button handles itself
-        if(this.currentSelected == -1) {
+        if(this.currentSelected == this.getWidgets().length) {
             if(NarratorManager.INSTANCE.isActive()) {
                 NarratorManager.INSTANCE.narrate(TextTools.translateOrDefault("vanillaconfig.narration.button.done.select"));
             }
