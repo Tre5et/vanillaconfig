@@ -44,14 +44,14 @@ public class GuiNumberWidget extends GuiTypableWidget {
         if(!this.selected) return;
         if(key == GLFW.GLFW_KEY_RIGHT) {
             this.slideConfig.setDoubleValue(this.slideConfig.getDoubleValue() + 1);
-            if(NarratorManager.INSTANCE.isActive()) {
-                NarratorManager.INSTANCE.narrate(getChangeSliderNarration());
+            if(MinecraftClient.getInstance().getNarratorManager().isActive()) {
+                MinecraftClient.getInstance().getNarratorManager().narrate(getChangeSliderNarration());
             }
             this.requestIoInterrupt();
         } else if(key == GLFW.GLFW_KEY_LEFT) {
             this.slideConfig.setDoubleValue(this.slideConfig.getDoubleValue() - 1);
-            if(NarratorManager.INSTANCE.isActive()) {
-                NarratorManager.INSTANCE.narrate(getChangeSliderNarration());
+            if(MinecraftClient.getInstance().getNarratorManager().isActive()) {
+                MinecraftClient.getInstance().getNarratorManager().narrate(getChangeSliderNarration());
             }
             this.requestIoInterrupt();
         }

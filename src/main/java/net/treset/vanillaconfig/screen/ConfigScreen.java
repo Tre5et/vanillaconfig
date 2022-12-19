@@ -2,6 +2,7 @@ package net.treset.vanillaconfig.screen;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.text2speech.Narrator;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.Screen;
@@ -133,7 +134,7 @@ public class ConfigScreen extends Screen {
 
         Tessellator t = Tessellator.getInstance();
         BufferBuilder b = t.getBuffer();
-        RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
+        RenderSystem.setShader(GameRenderer::getPositionTexColorProgram);
 
         if(this.isBackgroundTextured()) this.renderBackground(t, b);
         this.renderOptions(matrices, mouseX, mouseY);
@@ -163,7 +164,7 @@ public class ConfigScreen extends Screen {
     private void renderScrollbar(Tessellator t, BufferBuilder b) {
         if(this.getScrollHeight() == 0) return;
         RenderSystem.disableTexture();
-        RenderSystem.setShader(GameRenderer::getPositionColorShader);
+        RenderSystem.setShader(GameRenderer::getPositionColorProgram);
 
         int scrollBarHeight = (int)((float)(this.getDisplayAreaHeight() * this.getDisplayAreaHeight()) / (float)this.getOptionsHeight());
         scrollBarHeight = MathHelper.clamp(scrollBarHeight, this.top, this.getDisplayAreaHeight() - 8);
@@ -220,7 +221,7 @@ public class ConfigScreen extends Screen {
     }
     
     private void renderBars(Tessellator t, BufferBuilder b) {
-        RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
+        RenderSystem.setShader(GameRenderer::getPositionTexColorProgram);
         RenderSystem.setShaderTexture(0, DrawableHelper.OPTIONS_BACKGROUND_TEXTURE);
         RenderSystem.enableDepthTest();
         RenderSystem.depthFunc(519);
@@ -243,7 +244,7 @@ public class ConfigScreen extends Screen {
     }
 
     private void renderShadows(Tessellator t, BufferBuilder b) {
-        RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
+        RenderSystem.setShader(GameRenderer::getPositionTexColorProgram);
         RenderSystem.setShaderTexture(0, DrawableHelper.OPTIONS_BACKGROUND_TEXTURE);
 
         RenderSystem.depthFunc(515);
@@ -251,7 +252,7 @@ public class ConfigScreen extends Screen {
         RenderSystem.enableBlend();
         RenderSystem.blendFuncSeparate(GlStateManager.SrcFactor.SRC_ALPHA, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SrcFactor.ZERO, GlStateManager.DstFactor.ONE);
         RenderSystem.disableTexture();
-        RenderSystem.setShader(GameRenderer::getPositionColorShader);
+        RenderSystem.setShader(GameRenderer::getPositionColorProgram);
 
         b.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
         //draw top shadow
@@ -327,8 +328,8 @@ public class ConfigScreen extends Screen {
 
         //done button handles itself
         if(this.currentSelected == this.getWidgets().length) {
-            if(NarratorManager.INSTANCE.isActive()) {
-                NarratorManager.INSTANCE.narrate(TextTools.translateOrDefault("vanillaconfig.narration.button.done.select"));
+            if(MinecraftClient.getInstance().getNarratorManager().isActive()) {
+                MinecraftClient.getInstance().getNarratorManager().narrate(TextTools.translateOrDefault("vanillaconfig.narration.button.done.select"));
             }
             return;
         }

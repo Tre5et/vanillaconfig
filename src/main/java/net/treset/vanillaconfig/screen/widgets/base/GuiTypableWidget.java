@@ -29,8 +29,8 @@ public class GuiTypableWidget extends GuiClickableWidget {
     public void setFocused(boolean focused) {
         if (focused) {
             getParentScreen().requestUnfocus(this.getBaseConfig().getKey());
-            if(NarratorManager.INSTANCE.isActive()) {
-                NarratorManager.INSTANCE.narrate(this.getActivateNarration());
+            if(MinecraftClient.getInstance().getNarratorManager().isActive()) {
+                MinecraftClient.getInstance().getNarratorManager().narrate(this.getActivateNarration());
             }
         }
         else if(this.isFocused()) {
@@ -51,16 +51,16 @@ public class GuiTypableWidget extends GuiClickableWidget {
         this.requestIoInterrupt();
         if(key == GLFW.GLFW_KEY_BACKSPACE && this.getValue().length() > 0) {
             this.removeLastChar();
-            if (NarratorManager.INSTANCE.isActive()) {
-                NarratorManager.INSTANCE.narrate(this.getChangeNarration());
+            if (MinecraftClient.getInstance().getNarratorManager().isActive()) {
+                MinecraftClient.getInstance().getNarratorManager().narrate(this.getChangeNarration());
             }
         } else if(key == GLFW.GLFW_KEY_ENTER) {
             this.confirmText();
         } else if(key == GLFW.GLFW_KEY_ESCAPE) {
             MinecraftClient.getInstance().getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
             this.setValue(this.getDefaultValue());
-            if (NarratorManager.INSTANCE.isActive()) {
-                NarratorManager.INSTANCE.narrate(this.getResetNarration());
+            if (MinecraftClient.getInstance().getNarratorManager().isActive()) {
+                MinecraftClient.getInstance().getNarratorManager().narrate(this.getResetNarration());
             }
             this.setFocused(false);
             this.save();
@@ -68,8 +68,8 @@ public class GuiTypableWidget extends GuiClickableWidget {
             String keyName = GLFW.glfwGetKeyName(-1, scancode);
             if(keyName != null && !keyName.isEmpty() && Arrays.asList(this.allowedChars.getChars()).contains(keyName)) {
                 this.setDisplayValue(this.getValue() + keyName);
-                if (NarratorManager.INSTANCE.isActive()) {
-                    NarratorManager.INSTANCE.narrate(this.getChangeNarration());
+                if (MinecraftClient.getInstance().getNarratorManager().isActive()) {
+                    MinecraftClient.getInstance().getNarratorManager().narrate(this.getChangeNarration());
                 }
             }
         }
@@ -83,8 +83,8 @@ public class GuiTypableWidget extends GuiClickableWidget {
         MinecraftClient.getInstance().getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
         this.setFocused(false);
         this.save();
-        if (NarratorManager.INSTANCE.isActive()) {
-            NarratorManager.INSTANCE.narrate(this.getSaveNarration());
+        if (MinecraftClient.getInstance().getNarratorManager().isActive()) {
+            MinecraftClient.getInstance().getNarratorManager().narrate(this.getSaveNarration());
         }
         this.setDefaultValue(this.getValue());
     }
@@ -95,8 +95,8 @@ public class GuiTypableWidget extends GuiClickableWidget {
         this.requestIoInterrupt();
         if((Arrays.asList(this.allowedChars.getChars()).contains(text) && !this.allowedChars.ignoreShift()) || this.allowedChars == AllowedChars.ALL) {
             this.setDisplayValue(this.getValue() + text);
-            if (NarratorManager.INSTANCE.isActive()) {
-                NarratorManager.INSTANCE.narrate(this.getChangeNarration());
+            if (MinecraftClient.getInstance().getNarratorManager().isActive()) {
+                MinecraftClient.getInstance().getNarratorManager().narrate(this.getChangeNarration());
             }
         }
     }
@@ -144,8 +144,8 @@ public class GuiTypableWidget extends GuiClickableWidget {
     public void onClickR() {
         if(this.isFocused()) {
             MinecraftClient.getInstance().getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
-            if (NarratorManager.INSTANCE.isActive()) {
-                NarratorManager.INSTANCE.narrate(this.getResetNarration());
+            if (MinecraftClient.getInstance().getNarratorManager().isActive()) {
+                MinecraftClient.getInstance().getNarratorManager().narrate(this.getResetNarration());
             }
             this.reset();
         }

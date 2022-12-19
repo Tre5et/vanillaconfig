@@ -91,22 +91,22 @@ public class GuiKeybindWidget extends GuiTypableWidget {
             MinecraftClient.getInstance().getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
             this.setFocused(false);
             this.save();
-            if(NarratorManager.INSTANCE.isActive()) {
-                NarratorManager.INSTANCE.narrate(getSaveNarration());
+            if(MinecraftClient.getInstance().getNarratorManager().isActive()) {
+                MinecraftClient.getInstance().getNarratorManager().narrate(getSaveNarration());
             }
         } else if(key == GLFW.GLFW_KEY_ESCAPE) {
             MinecraftClient.getInstance().getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
             this.reset();
-            if(NarratorManager.INSTANCE.isActive()) {
-                NarratorManager.INSTANCE.narrate(getResetNarration());
+            if(MinecraftClient.getInstance().getNarratorManager().isActive()) {
+                MinecraftClient.getInstance().getNarratorManager().narrate(getResetNarration());
             }
         } else {
             currentScancodes.add(scancode);
             String newKey = TextTools.getKeyFromScancode(scancode, true);
             if(newKey == null) return;
             this.setDisplayValue(TextTools.appendKeyToDisplayKeys(newKey, this.getValue()));
-            if(NarratorManager.INSTANCE.isActive()) {
-                NarratorManager.INSTANCE.narrate(getChangeNarration());
+            if(MinecraftClient.getInstance().getNarratorManager().isActive()) {
+                MinecraftClient.getInstance().getNarratorManager().narrate(getChangeNarration());
             }
         }
     }

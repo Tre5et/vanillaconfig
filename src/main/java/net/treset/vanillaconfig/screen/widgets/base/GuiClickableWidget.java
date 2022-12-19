@@ -63,8 +63,8 @@ public class GuiClickableWidget extends GuiBaseWidget {
     public boolean select(boolean select) {
         if(!this.getBaseConfig().isEditable()) return false;
         if(select) {
-            if (NarratorManager.INSTANCE.isActive()) {
-                NarratorManager.INSTANCE.narrate(this.getSelectNarration());
+            if (MinecraftClient.getInstance().getNarratorManager().isActive()) {
+                MinecraftClient.getInstance().getNarratorManager().narrate(this.getSelectNarration());
             }
         }
         this.selected = select;
@@ -74,8 +74,8 @@ public class GuiClickableWidget extends GuiBaseWidget {
     @Override
     public boolean activate() {
         this.onClickL();
-        if(NarratorManager.INSTANCE.isActive()) {
-            NarratorManager.INSTANCE.narrate(this.getActivateNarration());
+        if(MinecraftClient.getInstance().getNarratorManager().isActive()) {
+            MinecraftClient.getInstance().getNarratorManager().narrate(this.getActivateNarration());
         }
         return true;
     }
@@ -115,7 +115,7 @@ public class GuiClickableWidget extends GuiBaseWidget {
         MinecraftClient cli = MinecraftClient.getInstance();
         if (cli == null) return false;
         TextRenderer t = cli.textRenderer;
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShader(GameRenderer::getPositionTexProgram);
         RenderSystem.setShaderTexture(0, WIDGETS_TEXTURE);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.enableBlend();
@@ -183,8 +183,8 @@ public class GuiClickableWidget extends GuiBaseWidget {
     public void onClickR() {}
     public void onClickM() {}
     public void onMouseEnter() {
-        if(NarratorManager.INSTANCE.isActive()) {
-            NarratorManager.INSTANCE.narrate(getSelectNarration());
+        if(MinecraftClient.getInstance().getNarratorManager().isActive()) {
+            MinecraftClient.getInstance().getNarratorManager().narrate(getSelectNarration());
         }
     }
     public void onMouseLeave() {}
