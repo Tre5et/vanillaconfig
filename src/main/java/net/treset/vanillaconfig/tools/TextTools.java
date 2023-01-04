@@ -53,7 +53,7 @@ public class TextTools {
         if(!s.contains(".")) return s;
         boolean startsMinus = s.startsWith("-");
         double d = stringToDouble(s);
-        int i = (int)Math.rint(d * Math.pow(10, decPlaces));
+        long i = Math.round(d * Math.pow(10, decPlaces));
         d = i / Math.pow(10, decPlaces);
         s = doubleToString(d);
         if(startsMinus && !s.startsWith("-")) s = "-" + s;
