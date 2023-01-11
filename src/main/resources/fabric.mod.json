@@ -21,9 +21,6 @@
   "entrypoints": {
     "main": [
       "net.treset.vanillaconfig.VanillaConfigMod"
-    ],
-    "client": [
-      "net.treset.vanillaconfig.ExampleConfig"
     ]
   },
   "mixins": [
