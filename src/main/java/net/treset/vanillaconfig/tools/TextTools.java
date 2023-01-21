@@ -7,6 +7,8 @@ import org.lwjgl.glfw.GLFW;
 
 import javax.annotation.Nullable;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.text.ParseException;
 
 public class TextTools {
 
@@ -30,32 +32,35 @@ public class TextTools {
         String s = Integer.toString(i);
         return asDisplayIntString(s);
     }
+
+    public static String getDecimalSymbol() {
+         return String.valueOf(((DecimalFormat)DecimalFormat.getInstance()).getDecimalFormatSymbols().getDecimalSeparator());
+    }
+
     public static String asIntString(String i) {
         if(i.equals("")) i = "0";
         else if(i.equals("-") || i.equals("0-")) i = "-0";
         return i;
     }
     public static String asDisplayIntString(String i) {
-        if(i.startsWith("0") && i.length() > 1 && !i.startsWith("0.")) i = i.substring(1);
-        else if(i.startsWith("-0") && i.length() > 2 && !i.startsWith("-0.")) i = "-" + i.substring(2);
-        if(i.contains(".")) i = roundString(i, 0);
+        if(i.startsWith("0") && i.length() > 1 && !i.startsWith("0" + getDecimalSymbol())) i = i.substring(1);
+        else if(i.startsWith("-0") && i.length() > 2 && !i.startsWith("-0" + getDecimalSymbol())) i = "-" + i.substring(2);
+        if(i.contains(getDecimalSymbol())) i = roundString(i, 0);
         return i;
     }
     public static int stringToInt(String i) {
         try {
-            return Integer.parseInt(asIntString(i));
-        } catch(NumberFormatException e) {
+            return NumberFormat.getInstance().parse(asIntString(i)).intValue();
+        } catch(NumberFormatException | ParseException e) {
             return 0;
         }
     }
 
     public static String roundString(String s, int decPlaces) {
-        if(!s.contains(".")) return s;
+        if(!s.contains(getDecimalSymbol())) return s;
         boolean startsMinus = s.startsWith("-");
-        double d = stringToDouble(s);
-        long i = Math.round(d * Math.pow(10, decPlaces));
-        d = i / Math.pow(10, decPlaces);
-        s = doubleToString(d);
+        s += "00";
+        s = s.substring(0, s.indexOf(getDecimalSymbol()) + 2);
         if(startsMinus && !s.startsWith("-")) s = "-" + s;
         return s;
     }
@@ -72,16 +77,16 @@ public class TextTools {
         return d;
     }
     public static String asDisplayDoubleString(String d) {
-        if(d.startsWith("0") && d.length() > 1 && !d.startsWith("0.")) d = d.substring(1);
-        else if(d.startsWith("-0") && d.length() > 2 && !d.startsWith("-0.")) d = "-" + d.substring(2);
-        else if(d.startsWith(".")) d = "0" + d;
-        else if(d.startsWith("-.")) d = "-0" + d.substring(1);
+        if(d.startsWith("0") && d.length() > 1 && !d.startsWith("0" + getDecimalSymbol())) d = d.substring(1);
+        else if(d.startsWith("-0") && d.length() > 2 && !d.startsWith("-0" + getDecimalSymbol())) d = "-" + d.substring(2);
+        else if(d.startsWith(getDecimalSymbol())) d = "0" + d;
+        else if(d.startsWith("-" + getDecimalSymbol())) d = "-0" + d.substring(1);
         return d;
     }
     public static double stringToDouble(String d) {
         try {
-            return  Double.parseDouble(TextTools.asDoubleString(d));
-        } catch (NumberFormatException e) {
+            return NumberFormat.getInstance().parse(asDoubleString(d)).doubleValue();
+        } catch (NumberFormatException | ParseException e) {
             return 0;
         }
     }
