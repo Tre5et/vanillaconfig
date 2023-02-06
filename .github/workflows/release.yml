@@ -1,0 +1,24 @@
+on:
+  release:
+    types: [created]
+  workflow_dispatch:
+  
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: Kir-Antipov/mc-publish@v3.2
+        with:
+          # You don't need this section if you don't want to publish
+          # your assets to Modrinth
+          modrinth-id: vtYpD93u
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+
+          # You don't need this section if you don't want to publish
+          # your assets to CurseForge
+          curseforge-id: 615185
+          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
+
+          # You don't need this section if you don't want to publish
+          # your assets to GitHub
+          github-token: ${{ secrets.GITHUB_TOKEN }}
