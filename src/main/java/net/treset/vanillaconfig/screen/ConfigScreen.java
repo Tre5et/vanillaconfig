@@ -143,7 +143,7 @@ public class ConfigScreen extends Screen {
         this.renderDoneButton(matrices, mouseX, mouseY);
         this.renderTooltip(matrices, mouseX, mouseY);
 
-        RenderSystem.enableTexture();
+        //RenderSystem.enableTexture();
         RenderSystem.disableBlend();
 
         super.render(matrices, mouseX, mouseY, delta);
@@ -163,7 +163,7 @@ public class ConfigScreen extends Screen {
 
     private void renderScrollbar(Tessellator t, BufferBuilder b) {
         if(this.getScrollHeight() == 0) return;
-        RenderSystem.disableTexture();
+        //RenderSystem.disableTexture();
         RenderSystem.setShader(GameRenderer::getPositionColorProgram);
 
         int scrollBarHeight = (int)((float)(this.getDisplayAreaHeight() * this.getDisplayAreaHeight()) / (float)this.getOptionsHeight());
@@ -217,7 +217,7 @@ public class ConfigScreen extends Screen {
     private void renderOverlay(MatrixStack matrices, Tessellator t, BufferBuilder b) {
         this.renderBars(t, b);
 
-        drawCenteredText(matrices, this.textRenderer, this.getConfig().getName(), this.width / 2, 5, 16777215);
+        drawCenteredTextWithShadow(matrices, this.textRenderer, this.getConfig().getName(), this.width / 2, 5, 16777215);
     }
     
     private void renderBars(Tessellator t, BufferBuilder b) {
@@ -251,7 +251,7 @@ public class ConfigScreen extends Screen {
         RenderSystem.disableDepthTest();
         RenderSystem.enableBlend();
         RenderSystem.blendFuncSeparate(GlStateManager.SrcFactor.SRC_ALPHA, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SrcFactor.ZERO, GlStateManager.DstFactor.ONE);
-        RenderSystem.disableTexture();
+        //RenderSystem.disableTexture();
         RenderSystem.setShader(GameRenderer::getPositionColorProgram);
 
         b.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
@@ -274,7 +274,7 @@ public class ConfigScreen extends Screen {
         int texY = (this.isHoveredOverDone(mouseX, mouseY) || this.currentSelected == this.getWidgets().length) ? 86 : 66;
         DrawableHelper drawHelper = new DrawableHelper() {};
         drawHelper.drawTexture(matrices, this.width / 2 - 100, this.bottom + 5, 0, texY, 200, 20);
-        DrawableHelper.drawCenteredText(matrices, textRenderer, Text.translatable("gui.done"), this.width / 2, this.bottom + 11, Formatting.WHITE.getColorValue());
+        DrawableHelper.drawCenteredTextWithShadow(matrices, textRenderer, Text.translatable("gui.done"), this.width / 2, this.bottom + 11, Formatting.WHITE.getColorValue());
     }
 
     private boolean isHoveredOverDone(int mouseX, int mouseY) {

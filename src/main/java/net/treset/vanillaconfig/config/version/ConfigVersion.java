@@ -1,7 +1,5 @@
 package net.treset.vanillaconfig.config.version;
 
-import javax.annotation.Nullable;
-
 public class ConfigVersion {
     Integer a, b, c = null;
     boolean valid = false;
@@ -75,7 +73,6 @@ public class ConfigVersion {
         return str;
     }
 
-    @Nullable
     public static Integer[] getFromString(String version) {
         Integer[] ints = new Integer[3];
         String[] versions = version.split("\\.");

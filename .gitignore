@@ -33,5 +33,5 @@ bin/
 run/
 
 #own
-
+ExampleConfig.java
 assets/

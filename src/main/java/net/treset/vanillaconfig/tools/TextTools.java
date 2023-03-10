@@ -5,7 +5,6 @@ import net.minecraft.client.util.InputUtil;
 import net.minecraft.util.Language;
 import org.lwjgl.glfw.GLFW;
 
-import javax.annotation.Nullable;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
@@ -116,7 +115,7 @@ public class TextTools {
             GLFW.GLFW_KEY_KP_ADD,
             GLFW.GLFW_KEY_KP_DECIMAL
     );
-    @Nullable
+
     public static String getKeyFromScancode(int scancode, boolean allowNonText) {
         String str = GLFW.glfwGetKeyName(-1, scancode);
 
