@@ -4,7 +4,6 @@ import net.treset.vanillaconfig.tools.helpers.Keybind;
 import net.treset.vanillaconfig.tools.helpers.KeybindContext;
 import org.lwjgl.glfw.GLFW;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +21,6 @@ public class KeybindTools {
         return keybinds.remove(getKeybind(name));
     }
 
-    @Nullable
     public static Keybind getKeybind(String name) {
         for (Keybind e : keybinds) {
             if(e.getName().equals(name)) {

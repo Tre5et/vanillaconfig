@@ -6,7 +6,6 @@ import net.treset.vanillaconfig.config.config_type.ConfigType;
 import net.treset.vanillaconfig.tools.FileTools;
 import net.treset.vanillaconfig.tools.TextTools;
 
-import javax.annotation.Nullable;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -77,7 +76,6 @@ public class BaseConfig {
 
     public boolean resetValue() { return false; }
 
-    @Nullable
     public JsonObject getBaseObject() { return this.baseObject; }
     private boolean setBaseObject(JsonObject obj) { this.baseObject = obj; return true; }
 

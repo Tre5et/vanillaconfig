@@ -138,7 +138,7 @@ public class GuiClickableWidget extends GuiBaseWidget {
     }
     public boolean renderText(MatrixStack m, TextRenderer t) {
         int textColor = this.getTextColor();
-        DrawableHelper.drawCenteredText(m, t, this.getMessage(), this.screenX + this.width / 2, this.screenY + (this.height - 8) / 2, textColor);
+        DrawableHelper.drawCenteredTextWithShadow(m, t, this.getMessage(), this.screenX + this.width / 2, this.screenY + (this.height - 8) / 2, textColor);
         return true;
     }
     public boolean renderTooltip(int mouseX, int mouseY) {
