@@ -29,10 +29,10 @@ static BooleanConfig yourOtherBoolean;
 
 static void init() {
     [...]
-    yourBoolean.setSelectCallback(
+    yourBoolean.setSelectNarration(
         () -> String.format("Wow, you selected my awesome boolean with the value %s.", yourBoolean.getBoolean());  
     );
-    yourOtherBoolean.setActivateCallback(
+    yourOtherBoolean.setActivateNarration(
         () -> {
             boolean yourOtherBooleanName = yourOtherBoolean.getName();
             return String.format(
