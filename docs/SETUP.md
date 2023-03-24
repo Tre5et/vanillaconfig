@@ -2,7 +2,7 @@
 # Setup
 - Start your mod project like normal
  - In your `gradle.properties` file, add a line:
-	 -  `vanillaconfig_version = [version]`. Replace `[version]` with the API version you would like to use. The latest version is `1.1.2+1.18.x`.
+	 -  `vanillaconfig_version = [version]`. Replace `[version]` with the API version you would like to use. Version names follow the standard SemVer format `[ModVersion]+[MinecraftVersion]`.
  - In your `build.gradle` file, add:
 	 - In the `repositories` section: 
 	 `maven { url 'https://raw.githubusercontent.com/Tre5et/maven/main/' }`
