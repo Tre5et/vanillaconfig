@@ -1,6 +1,7 @@
 package net.treset.vanillaconfig.tools;
 
 import com.google.gson.*;
+import net.minecraft.client.MinecraftClient;
 import net.treset.vanillaconfig.VanillaConfigMod;
 import net.treset.vanillaconfig.config.version.ConfigVersion;
 
@@ -63,12 +64,15 @@ public class FileTools {
     }
 
     public static File getConfigFile(String name, String path) {
-        String finalPath = "./config/" + assemblePathString(name, path);
-        return new File(finalPath);
+        return getConfigFile(assemblePathString(name, path));
     }
     public static File getConfigFile(String path) {
-        String finalPath = "./config/" + path;
-        return new File(finalPath);
+        File configDir = new File(".");
+        if(MinecraftClient.getInstance() != null && MinecraftClient.getInstance().runDirectory != null) {
+            configDir = MinecraftClient.getInstance().runDirectory;
+        }
+        String finalPath = "config/" + path;
+        return new File(configDir, finalPath);
     }
     public static String assemblePathString(String name, String path) {
         String finalPath = "";
