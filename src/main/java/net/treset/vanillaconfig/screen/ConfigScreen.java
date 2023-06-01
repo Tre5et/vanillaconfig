@@ -4,7 +4,8 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.text2speech.Narrator;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.render.*;
 import net.minecraft.client.sound.PositionedSoundInstance;
@@ -129,28 +130,29 @@ public class ConfigScreen extends Screen {
     public int getLeft() { return this.left; }
     public int getRight() { return this.right; }
 
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        this.renderBackground(matrices);
+    @Override
+    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+        this.renderBackground(context);
 
         Tessellator t = Tessellator.getInstance();
         BufferBuilder b = t.getBuffer();
         RenderSystem.setShader(GameRenderer::getPositionTexColorProgram);
 
         if(this.isBackgroundTextured()) this.renderBackground(t, b);
-        this.renderOptions(matrices, mouseX, mouseY);
-        if(this.isBackgroundTextured()) this.renderOverlay(matrices, t, b);
+        this.renderOptions(context, mouseX, mouseY);
+        if(this.isBackgroundTextured()) this.renderOverlay(context, t, b);
         this.renderScrollbar(t, b);
-        this.renderDoneButton(matrices, mouseX, mouseY);
-        this.renderTooltip(matrices, mouseX, mouseY);
+        this.renderDoneButton(context, mouseX, mouseY);
+        this.renderTooltip(context, mouseX, mouseY);
 
         //RenderSystem.enableTexture();
         RenderSystem.disableBlend();
 
-        super.render(matrices, mouseX, mouseY, delta);
+        super.render(context, mouseX, mouseY, delta);
     }
     
     private void renderBackground(Tessellator t, BufferBuilder b) {
-        RenderSystem.setShaderTexture(0, DrawableHelper.OPTIONS_BACKGROUND_TEXTURE);
+        RenderSystem.setShaderTexture(0, Screen.OPTIONS_BACKGROUND_TEXTURE);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
         b.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE_COLOR);
@@ -199,12 +201,12 @@ public class ConfigScreen extends Screen {
         t.draw();
     }
 
-    private void renderOptions(MatrixStack matrices, int mouseX, int mouseY) {
+    private void renderOptions(DrawContext ctx, int mouseX, int mouseY) {
         if(!this.isMouseOverOptions(mouseX, mouseY)) mouseX = mouseY = -1;
         int displayedOptions = 0;
         for (int i = 0; i < this.getWidgets().length; i++) {
             if(this.getWidgets()[i].isRendered()) {
-                this.getWidgets()[i].render(matrices, displayedOptions, mouseX, mouseY, (int) this.getScrollOffset());
+                this.getWidgets()[i].render(ctx, displayedOptions, mouseX, mouseY, (int) this.getScrollOffset());
                 displayedOptions += this.getWidgets()[i].getBaseConfig().isFullWidth()? ((displayedOptions % 2 == 0)? 2 : 3) : 1;
             }
         }
@@ -214,15 +216,15 @@ public class ConfigScreen extends Screen {
         }
     }
 
-    private void renderOverlay(MatrixStack matrices, Tessellator t, BufferBuilder b) {
+    private void renderOverlay(DrawContext context, Tessellator t, BufferBuilder b) {
         this.renderBars(t, b);
-
-        drawCenteredTextWithShadow(matrices, this.textRenderer, this.getConfig().getName(), this.width / 2, 5, 16777215);
+        context.drawTextWithShadow(textRenderer, this.config.getName(), this.width / 2, 5, 16777215);
+        //drawCenteredTextWithShadow(matrices, this.textRenderer, this.getConfig().getName(), this.width / 2, 5, 16777215);
     }
     
     private void renderBars(Tessellator t, BufferBuilder b) {
         RenderSystem.setShader(GameRenderer::getPositionTexColorProgram);
-        RenderSystem.setShaderTexture(0, DrawableHelper.OPTIONS_BACKGROUND_TEXTURE);
+        RenderSystem.setShaderTexture(0, OPTIONS_BACKGROUND_TEXTURE);
         RenderSystem.enableDepthTest();
         RenderSystem.depthFunc(519);
 
@@ -245,7 +247,7 @@ public class ConfigScreen extends Screen {
 
     private void renderShadows(Tessellator t, BufferBuilder b) {
         RenderSystem.setShader(GameRenderer::getPositionTexColorProgram);
-        RenderSystem.setShaderTexture(0, DrawableHelper.OPTIONS_BACKGROUND_TEXTURE);
+        RenderSystem.setShaderTexture(0, OPTIONS_BACKGROUND_TEXTURE);
 
         RenderSystem.depthFunc(515);
         RenderSystem.disableDepthTest();
@@ -268,27 +270,25 @@ public class ConfigScreen extends Screen {
         t.draw();
     }
 
-    private void renderDoneButton(MatrixStack matrices, int mouseX, int mouseY) {
+    private void renderDoneButton(DrawContext context, int mouseX, int mouseY) {
         final Identifier WIDGETS_TEXTURE = new Identifier("textures/gui/widgets.png");
-        RenderSystem.setShaderTexture(0, WIDGETS_TEXTURE);
         int texY = (this.isHoveredOverDone(mouseX, mouseY) || this.currentSelected == this.getWidgets().length) ? 86 : 66;
-        DrawableHelper drawHelper = new DrawableHelper() {};
-        drawHelper.drawTexture(matrices, this.width / 2 - 100, this.bottom + 5, 0, texY, 200, 20);
-        DrawableHelper.drawCenteredTextWithShadow(matrices, textRenderer, Text.translatable("gui.done"), this.width / 2, this.bottom + 11, Formatting.WHITE.getColorValue());
+        context.drawTexture(WIDGETS_TEXTURE, this.width / 2 - 100, this.bottom + 5, 0, texY, 200, 20);
+        context.drawCenteredTextWithShadow(textRenderer, Text.translatable("gui.done"), this.width / 2, this.bottom + 11, Formatting.WHITE.getColorValue());
     }
 
     private boolean isHoveredOverDone(int mouseX, int mouseY) {
         return this.width / 2 - 100 <= mouseX && mouseX <= this.width / 2 + 100 && this.bottom + 5 <= mouseY && mouseY <= this.bottom + 25;
     }
 
-    private void renderTooltip(MatrixStack matrices, int mouseX, int mouseY) {
+    private void renderTooltip(DrawContext context, int mouseX, int mouseY) {
         if(this.renderTooltip != null && this.renderTooltip.length > 0 && !this.renderTooltip[0].isEmpty()) {
             List<Text> texts = new ArrayList<>();
             for (String s : this.renderTooltip) {
                 if(!TextTools.translateOrDefault(s).isEmpty())
                     texts.add(Text.translatable(s));
             }
-            this.renderTooltip(matrices, texts, mouseX, mouseY);
+            context.drawTooltip(textRenderer, texts, mouseX, mouseY);
             this.renderTooltip = null;
         }
     }

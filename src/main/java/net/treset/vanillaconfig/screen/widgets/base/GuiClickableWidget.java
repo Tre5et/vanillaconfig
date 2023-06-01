@@ -3,7 +3,7 @@ package net.treset.vanillaconfig.screen.widgets.base;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.NarratorManager;
 import net.minecraft.client.util.math.MatrixStack;
@@ -81,7 +81,7 @@ public class GuiClickableWidget extends GuiBaseWidget {
     }
 
     @Override
-    public boolean render(MatrixStack m, int index, int mouseX, int mouseY, int scrollOffset) {
+    public boolean render(DrawContext ctx, int index, int mouseX, int mouseY, int scrollOffset) {
         if (!this.isRendered()) return false;
 
         this.y = 5 + index * 25 + this.parentScreen.getTop();
@@ -122,23 +122,21 @@ public class GuiClickableWidget extends GuiBaseWidget {
         RenderSystem.defaultBlendFunc();
         RenderSystem.enableDepthTest();
 
-        DrawableHelper d = new DrawableHelper() {};
-
         return
-                this.renderTexture(d, m, mouseX, mouseY) &&
-                this.renderText(m, t) &&
+                this.renderTexture(ctx, WIDGETS_TEXTURE, mouseX, mouseY) &&
+                this.renderText(ctx, t) &&
                 this.renderTooltip(mouseX, mouseY);
     }
 
-    public boolean renderTexture(DrawableHelper d, MatrixStack m, int mouseX, int mouseY) {
+    public boolean renderTexture(DrawContext ctx, Identifier texture, int mouseX, int mouseY) {
         int textureOffset = this.getTextureOffset(mouseX, mouseY);
-        d.drawTexture(m, this.screenX, this.screenY, 0, 46 + textureOffset, this.width / 2, this.getHeight()); // draw left half
-        d.drawTexture(m, this.screenX + this.width / 2, this.screenY, 200 - this.width / 2, 46 + textureOffset, this.width / 2, this.getHeight()); //draw right half
+        ctx.drawTexture(texture, this.screenX, this.screenY, 0, 46 + textureOffset, this.width / 2, this.getHeight()); // draw left half
+        ctx.drawTexture(texture, this.screenX + this.width / 2, this.screenY, 200 - this.width / 2, 46 + textureOffset, this.width / 2, this.getHeight()); //draw right half
         return true;
     }
-    public boolean renderText(MatrixStack m, TextRenderer t) {
+    public boolean renderText(DrawContext ctx, TextRenderer t) {
         int textColor = this.getTextColor();
-        DrawableHelper.drawCenteredTextWithShadow(m, t, this.getMessage(), this.screenX + this.width / 2, this.screenY + (this.height - 8) / 2, textColor);
+        ctx.drawCenteredTextWithShadow(t, this.getMessage(), this.screenX + this.width / 2, this.screenY + (this.height - 8) / 2, textColor);
         return true;
     }
     public boolean renderTooltip(int mouseX, int mouseY) {

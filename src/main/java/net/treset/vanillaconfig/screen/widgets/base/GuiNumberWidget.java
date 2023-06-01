@@ -2,11 +2,10 @@ package net.treset.vanillaconfig.screen.widgets.base;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.sound.PositionedSoundInstance;
-import net.minecraft.client.util.NarratorManager;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.Identifier;
 import net.treset.vanillaconfig.config.base.SlideableConfig;
 import net.treset.vanillaconfig.screen.ConfigScreen;
 import net.treset.vanillaconfig.tools.TextTools;
@@ -91,8 +90,8 @@ public class GuiNumberWidget extends GuiTypableWidget {
     }
 
     @Override
-    public boolean renderTexture(DrawableHelper d, MatrixStack m, int mouseX, int mouseY) {
-        boolean success = super.renderTexture(d, m, mouseX, mouseY);
+    public boolean renderTexture(DrawContext ctx, Identifier texture, int mouseX, int mouseY) {
+        boolean success = super.renderTexture(ctx, texture, mouseX, mouseY);
 
         if(this.slideConfig.isSlider()) {
             this.setFocused(false);
@@ -112,7 +111,6 @@ public class GuiNumberWidget extends GuiTypableWidget {
                 this.save();
             }
 
-            RenderSystem.setShaderTexture(0, WIDGETS_TEXTURE);
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
             double sliderPercentage = (this.slideConfig.getDoubleValue() - this.slideConfig.getMinDoubleValue())
@@ -122,8 +120,8 @@ public class GuiNumberWidget extends GuiTypableWidget {
 
             int offset = (this.isHoveredOver(mouseX, mouseY) || this.selected ? 2 : 1) * 20;
 
-            d.drawTexture(m, this.screenX + sliderPos, this.screenY, 0, 46 + offset, 4, 20);
-            d.drawTexture(m, this.screenX + sliderPos + 4, this.screenY, 196, 46 + offset, 4, 20);
+            ctx.drawTexture(WIDGETS_TEXTURE, this.screenX + sliderPos, this.screenY, 0, 46 + offset, 4, 20);
+            ctx.drawTexture(WIDGETS_TEXTURE, this.screenX + sliderPos + 4, this.screenY, 196, 46 + offset, 4, 20);
         } else isMouseDown = false;
 
         return success;

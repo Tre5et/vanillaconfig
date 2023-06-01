@@ -1,5 +1,6 @@
 package net.treset.vanillaconfig.screen.widgets.base;
 
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.util.math.MatrixStack;
 import net.treset.vanillaconfig.config.base.BaseConfig;
 
@@ -29,9 +30,9 @@ public class GuiBaseWidget {
 
     public void onClose() {}
 
-    public boolean render(MatrixStack matrices, int index, int mouseX, int mouseY, int scrollOffset) { return false; }
-    public boolean render(MatrixStack matrices, int mouseX, int mouseY, int scrollOffset) {
-        return this.render(matrices, this.y, mouseX, mouseY, scrollOffset);
+    public boolean render(DrawContext context, int index, int mouseX, int mouseY, int scrollOffset) { return false; }
+    public boolean render(DrawContext context, int mouseX, int mouseY, int scrollOffset) {
+        return this.render(context, this.y, mouseX, mouseY, scrollOffset);
     }
 
     public boolean select(boolean select) {
