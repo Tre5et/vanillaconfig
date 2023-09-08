@@ -1,12 +1,8 @@
 package net.treset.vanillaconfig.screen.widgets.base;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.render.GameRenderer;
-import net.minecraft.client.util.NarratorManager;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.treset.vanillaconfig.config.base.BaseConfig;
@@ -14,7 +10,9 @@ import net.treset.vanillaconfig.screen.ConfigScreen;
 import net.treset.vanillaconfig.tools.TextTools;
 
 public class GuiClickableWidget extends GuiBaseWidget {
-    public static final Identifier WIDGETS_TEXTURE = new Identifier("textures/gui/widgets.png");
+    public static final Identifier BUTTON = new Identifier("textures/gui/sprites/widget/button.png");
+    public static final Identifier BUTTON_HIGHLIGHT = new Identifier("textures/gui/sprites/widget/button_highlighted.png");
+    public static final Identifier BUTTON_DISABLED = new Identifier("textures/gui/sprites/widget/button_disabled.png");
 
     ConfigScreen parentScreen;
 
@@ -115,23 +113,17 @@ public class GuiClickableWidget extends GuiBaseWidget {
         MinecraftClient cli = MinecraftClient.getInstance();
         if (cli == null) return false;
         TextRenderer t = cli.textRenderer;
-        RenderSystem.setShader(GameRenderer::getPositionTexProgram);
-        RenderSystem.setShaderTexture(0, WIDGETS_TEXTURE);
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.enableBlend();
-        RenderSystem.defaultBlendFunc();
-        RenderSystem.enableDepthTest();
 
         return
-                this.renderTexture(ctx, WIDGETS_TEXTURE, mouseX, mouseY) &&
+                this.renderTexture(ctx, mouseX, mouseY) &&
                 this.renderText(ctx, t) &&
                 this.renderTooltip(mouseX, mouseY);
     }
 
-    public boolean renderTexture(DrawContext ctx, Identifier texture, int mouseX, int mouseY) {
-        int textureOffset = this.getTextureOffset(mouseX, mouseY);
-        ctx.drawTexture(texture, this.screenX, this.screenY, 0, 46 + textureOffset, this.width / 2, this.getHeight()); // draw left half
-        ctx.drawTexture(texture, this.screenX + this.width / 2, this.screenY, 200 - this.width / 2, 46 + textureOffset, this.width / 2, this.getHeight()); //draw right half
+    public boolean renderTexture(DrawContext ctx, int mouseX, int mouseY) {
+        Identifier texture = this.getTexture(mouseX, mouseY);
+        ctx.drawTexture(texture, this.screenX, this.screenY, 0, 0, this.width / 2, this.getHeight(), 200, 20); // draw left half
+        ctx.drawTexture(texture, this.screenX + this.width / 2, this.screenY, 200 - this.width / 2, 0, this.width / 2, this.getHeight(), 200, 20); //draw right half
         return true;
     }
     public boolean renderText(DrawContext ctx, TextRenderer t) {
@@ -146,12 +138,10 @@ public class GuiClickableWidget extends GuiBaseWidget {
         return true;
     }
 
-    public int getTextureOffset(int mouseX, int mouseY) {
-        int offset;
-        if(!this.getBaseConfig().isEditable()) offset = 0;
-        else if(this.isHoveredOver(mouseX, mouseY) || this.selected) offset = 40;
-        else offset = 20;
-        return offset;
+    public Identifier getTexture(int mouseX, int mouseY) {
+        if(!this.getBaseConfig().isEditable()) return BUTTON_DISABLED;
+        else if(this.isHoveredOver(mouseX, mouseY) || this.selected) return BUTTON_HIGHLIGHT;
+        return BUTTON;
     }
 
     public int getTextColor() { return this.getBaseConfig().isEditable() ? Formatting.WHITE.getColorValue() : 10526880; }

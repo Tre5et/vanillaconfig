@@ -1,6 +1,5 @@
 package net.treset.vanillaconfig.screen.widgets;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.sound.PositionedSoundInstance;
@@ -12,6 +11,10 @@ import net.treset.vanillaconfig.screen.widgets.base.GuiClickableWidget;
 import org.lwjgl.glfw.GLFW;
 
 public class GuiListWidget extends GuiClickableWidget {
+    public static Identifier SLIDER = new Identifier("textures/gui/sprites/widget/slider.png");
+    public static Identifier SLIDER_HANDLE = new Identifier("textures/gui/sprites/widget/slider_handle.png");
+    public static Identifier SLIDER_HANDLE_HIGHLIGHTED = new Identifier("textures/gui/sprites/widget/slider_handle_highlighted.png");
+
     ListConfig config;
 
     boolean isMouseDown = false;
@@ -41,14 +44,14 @@ public class GuiListWidget extends GuiClickableWidget {
 
 
     @Override
-    public int getTextureOffset(int mouseX, int mouseY) {
-        if(!this.config.isSlider()) return super.getTextureOffset(mouseX, mouseY);
-        return 0;
+    public Identifier getTexture(int mouseX, int mouseY) {
+        if(!this.config.isSlider()) return super.getTexture(mouseX, mouseY);
+        return SLIDER;
     }
 
     @Override
-    public boolean renderTexture(DrawContext ctx, Identifier texture, int mouseX, int mouseY) {
-        boolean success = super.renderTexture(ctx, texture, mouseX, mouseY);
+    public boolean renderTexture(DrawContext ctx, int mouseX, int mouseY) {
+        boolean success = super.renderTexture(ctx, mouseX, mouseY);
 
         if(this.config.isSlider()) {
 
@@ -63,21 +66,16 @@ public class GuiListWidget extends GuiClickableWidget {
                         + this.config.getMinDoubleValue());
 
                 this.config.setOptionIndex(mouseValue);
-
-
             }
-
-            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
             double sliderPercentage = (this.config.getDoubleValue() - this.config.getMinDoubleValue())
                     / (this.config.getMaxDoubleValue() - this.config.getMinDoubleValue());
 
             int sliderPos = (int)Math.rint(sliderPercentage * (this.getWidth() - 8));
 
-            int offset = (this.isHoveredOver(mouseX, mouseY) || this.selected ? 2 : 1) * 20;
+            Identifier identifier = this.isHoveredOver(mouseX, mouseY) || this.selected ? SLIDER_HANDLE_HIGHLIGHTED : SLIDER_HANDLE;
 
-            ctx.drawTexture(WIDGETS_TEXTURE, this.screenX + sliderPos, this.screenY, 0, 46 + offset, 4, 20);
-            ctx.drawTexture(WIDGETS_TEXTURE, this.screenX + sliderPos + 4, this.screenY, 196, 46 + offset, 4, 20);
+            ctx.drawTexture(identifier, this.screenX + sliderPos, this.screenY, 0, 0, 8, 20, 8, 20);
         } else isMouseDown = false;
 
         return success;

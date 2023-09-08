@@ -1,19 +1,12 @@
 package net.treset.vanillaconfig.screen;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.text2speech.Narrator;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.render.*;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.sound.PositionedSoundInstance;
-import net.minecraft.client.util.NarratorManager;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import net.treset.vanillaconfig.config.*;
@@ -30,6 +23,8 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class ConfigScreen extends Screen {
+    public static final Identifier BUTTON = new Identifier("textures/gui/sprites/widget/button.png");
+    public static final Identifier BUTTON_HIGHLIGHT = new Identifier("textures/gui/sprites/widget/button_highlighted.png");
 
     Screen parent;
 
@@ -132,41 +127,37 @@ public class ConfigScreen extends Screen {
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        this.renderBackground(context);
+        super.render(context, mouseX, mouseY, delta);
 
-        Tessellator t = Tessellator.getInstance();
-        BufferBuilder b = t.getBuffer();
-        RenderSystem.setShader(GameRenderer::getPositionTexColorProgram);
-
-        if(this.isBackgroundTextured()) this.renderBackground(t, b);
         this.renderOptions(context, mouseX, mouseY);
-        if(this.isBackgroundTextured()) this.renderOverlay(context, t, b);
-        this.renderScrollbar(t, b);
         this.renderDoneButton(context, mouseX, mouseY);
         this.renderTooltip(context, mouseX, mouseY);
-
-        //RenderSystem.enableTexture();
-        RenderSystem.disableBlend();
-
-        super.render(context, mouseX, mouseY, delta);
-    }
-    
-    private void renderBackground(Tessellator t, BufferBuilder b) {
-        RenderSystem.setShaderTexture(0, Screen.OPTIONS_BACKGROUND_TEXTURE);
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-
-        b.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE_COLOR);
-        b.vertex(this.left, this.bottom, 0.0D).texture((float)this.left / 32.0F, (float)(this.bottom + (int)this.getScrollOffset()) / 32.0F).color(32, 32, 32, 255).next();
-        b.vertex(this.right, this.bottom, 0.0D).texture((float)this.right / 32.0F, (float)(this.bottom + (int)this.getScrollOffset()) / 32.0F).color(32, 32, 32, 255).next();
-        b.vertex(this.right, this.top, 0.0D).texture((float)this.right / 32.0F, (float)(this.top + (int)this.getScrollOffset()) / 32.0F).color(32, 32, 32, 255).next();
-        b.vertex(this.left, this.top, 0.0D).texture((float)this.left / 32.0F, (float)(this.top + (int)this.getScrollOffset()) / 32.0F).color(32, 32, 32, 255).next();
-        t.draw();
+        this.renderScrollbar(context);
     }
 
-    private void renderScrollbar(Tessellator t, BufferBuilder b) {
+    @Override
+    public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {
+        super.renderBackground(context, mouseX, mouseY, delta);
+        if(this.isBackgroundTextured()) {
+            // Bars
+            context.setShaderColor(0.25F, 0.25F, 0.25F, 1.0F);
+            context.drawTexture(OPTIONS_BACKGROUND_TEXTURE, 0, 0, 0, 0.0F, 0.0F, this.width, this.height, 32, 32);
+            context.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+            // Options Background
+            context.setShaderColor(0.125F, 0.125F, 0.125F, 1.0F);
+            context.drawTexture(Screen.OPTIONS_BACKGROUND_TEXTURE, this.left, this.top, (float)this.right, (float)(this.bottom + (int)this.getScrollHeight()), this.right - this.left, this.bottom - this.top, 32, 32);
+            context.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+            // Shadows
+            context.fillGradient(RenderLayer.getGuiOverlay(), this.left, this.top, this.right, this.top + 4, -16777216, 0, 0);
+            context.fillGradient(RenderLayer.getGuiOverlay(), this.left, this.bottom - 4, this.right, this.bottom, 0, -16777216, 0);
+        } else {
+            context.fillGradient(0, 0, this.width, this.height, -1072689136, -804253680);
+        }
+        context.drawCenteredTextWithShadow(textRenderer, this.config.getName(), this.width / 2, this.top - 15, 16777215);
+    }
+
+    private void renderScrollbar(DrawContext context) {
         if(this.getScrollHeight() == 0) return;
-        //RenderSystem.disableTexture();
-        RenderSystem.setShader(GameRenderer::getPositionColorProgram);
 
         int scrollBarHeight = (int)((float)(this.getDisplayAreaHeight() * this.getDisplayAreaHeight()) / (float)this.getOptionsHeight());
         scrollBarHeight = MathHelper.clamp(scrollBarHeight, this.top, this.getDisplayAreaHeight() - 8);
@@ -181,100 +172,30 @@ public class ConfigScreen extends Screen {
         int scrollAreaL = this.scrollbarX;
         int scrollAreaR = scrollAreaL + 6;
 
-        b.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
-        //draw scroll background
-        b.vertex(scrollAreaL, this.bottom, 0.0D).color(0, 0, 0, 255).next();
-        b.vertex(scrollAreaR, this.bottom, 0.0D).color(0, 0, 0, 255).next();
-        b.vertex(scrollAreaR, this.top, 0.0D).color(0, 0, 0, 255).next();
-        b.vertex(scrollAreaL, this.top, 0.0D).color(0, 0, 0, 255).next();
-        //draw scroll bar
-        b.vertex(scrollAreaL, scrollBarY + scrollBarHeight, 0.0D).color(128, 128, 128, 255).next();
-        b.vertex(scrollAreaR, scrollBarY + scrollBarHeight, 0.0D).color(128, 128, 128, 255).next();
-        b.vertex(scrollAreaR, scrollBarY, 0.0D).color(128, 128, 128, 255).next();
-        b.vertex(scrollAreaL, scrollBarY, 0.0D).color(128, 128, 128, 255).next();
-        //draw white bit
-        b.vertex(scrollAreaL, scrollBarY + scrollBarHeight - 1, 0.0D).color(192, 192, 192, 255).next();
-        b.vertex((scrollAreaR - 1), scrollBarY + scrollBarHeight - 1, 0.0D).color(192, 192, 192, 255).next();
-        b.vertex((scrollAreaR - 1), scrollBarY, 0.0D).color(192, 192, 192, 255).next();
-        b.vertex(scrollAreaL, scrollBarY, 0.0D).color(192, 192, 192, 255).next();
-
-        t.draw();
+        context.fill(scrollAreaL, this.top, scrollAreaR , this.bottom, -16777216);
+        context.drawGuiTexture(new Identifier("widget/scroller"), scrollAreaL, scrollBarY, 6, scrollBarHeight);
     }
 
     private void renderOptions(DrawContext ctx, int mouseX, int mouseY) {
-        if(!this.isMouseOverOptions(mouseX, mouseY)) mouseX = mouseY = -1;
+        ctx.enableScissor(this.left, this.top, this.right, this.bottom);
+        if (!this.isMouseOverOptions(mouseX, mouseY)) mouseX = mouseY = -1;
         int displayedOptions = 0;
         for (int i = 0; i < this.getWidgets().length; i++) {
-            if(this.getWidgets()[i].isRendered()) {
+            if (this.getWidgets()[i].isRendered()) {
                 this.getWidgets()[i].render(ctx, displayedOptions, mouseX, mouseY, (int) this.getScrollOffset());
-                displayedOptions += this.getWidgets()[i].getBaseConfig().isFullWidth()? ((displayedOptions % 2 == 0)? 2 : 3) : 1;
+                displayedOptions += this.getWidgets()[i].getBaseConfig().isFullWidth() ? ((displayedOptions % 2 == 0) ? 2 : 3) : 1;
             }
         }
-        if(this.displayedIndexes != displayedOptions) {
+        if (this.displayedIndexes != displayedOptions) {
             this.displayedIndexes = displayedOptions;
-            setScroll(this.getScrollOffset());
         }
-    }
-
-    private void renderOverlay(DrawContext context, Tessellator t, BufferBuilder b) {
-        this.renderBars(t, b);
-        context.drawTextWithShadow(textRenderer, this.config.getName(), this.width / 2, 5, 16777215);
-        //drawCenteredTextWithShadow(matrices, this.textRenderer, this.getConfig().getName(), this.width / 2, 5, 16777215);
-    }
-    
-    private void renderBars(Tessellator t, BufferBuilder b) {
-        RenderSystem.setShader(GameRenderer::getPositionTexColorProgram);
-        RenderSystem.setShaderTexture(0, OPTIONS_BACKGROUND_TEXTURE);
-        RenderSystem.enableDepthTest();
-        RenderSystem.depthFunc(519);
-
-        b.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE_COLOR);
-        //draw top bar
-        b.vertex(this.left, this.top, -100.0D).texture(0.0F, (float)this.top / 32.0F).color(64, 64, 64, 255).next();
-        b.vertex(this.left + this.width, this.top, -100.0D).texture((float)this.width / 32.0F, (float)this.top / 32.0F).color(64, 64, 64, 255).next();
-        b.vertex(this.left + this.width, 0.0D, -100.0D).texture((float)this.width / 32.0F, 0.0F).color(64, 64, 64, 255).next();
-        b.vertex(this.left, 0.0D, -100.0D).texture(0.0F, 0.0F).color(64, 64, 64, 255).next();
-        //draw bottom bar
-        b.vertex(this.left, this.height, -100.0D).texture(0.0F, (float)this.height / 32.0F).color(64, 64, 64, 255).next();
-        b.vertex(this.left + this.width, this.height, -100.0D).texture((float)this.width / 32.0F, (float)this.height / 32.0F).color(64, 64, 64, 255).next();
-        b.vertex(this.left + this.width, this.bottom, -100.0D).texture((float)this.width / 32.0F, (float)this.bottom / 32.0F).color(64, 64, 64, 255).next();
-        b.vertex(this.left, this.bottom, -100.0D).texture(0.0F, (float)this.bottom / 32.0F).color(64, 64, 64, 255).next();
-
-        t.draw();
-
-        this.renderShadows(t, b);
-    }
-
-    private void renderShadows(Tessellator t, BufferBuilder b) {
-        RenderSystem.setShader(GameRenderer::getPositionTexColorProgram);
-        RenderSystem.setShaderTexture(0, OPTIONS_BACKGROUND_TEXTURE);
-
-        RenderSystem.depthFunc(515);
-        RenderSystem.disableDepthTest();
-        RenderSystem.enableBlend();
-        RenderSystem.blendFuncSeparate(GlStateManager.SrcFactor.SRC_ALPHA, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SrcFactor.ZERO, GlStateManager.DstFactor.ONE);
-        //RenderSystem.disableTexture();
-        RenderSystem.setShader(GameRenderer::getPositionColorProgram);
-
-        b.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
-        //draw top shadow
-        b.vertex(this.left, this.top + 4, 0.0D).color(0, 0, 0, 0).next();
-        b.vertex(this.right, this.top + 4, 0.0D).color(0, 0, 0, 0).next();
-        b.vertex(this.right, this.top, 0.0D).color(0, 0, 0, 255).next();
-        b.vertex(this.left, this.top, 0.0D).color(0, 0, 0, 255).next();
-        //draw bottom shadow
-        b.vertex(this.left, this.bottom, 0.0D).color(0, 0, 0, 255).next();
-        b.vertex(this.right, this.bottom, 0.0D).color(0, 0, 0, 255).next();
-        b.vertex(this.right, this.bottom - 4, 0.0D).color(0, 0, 0, 0).next();
-        b.vertex(this.left, this.bottom - 4, 0.0D).color(0, 0, 0, 0).next();
-        t.draw();
+        ctx.disableScissor();
     }
 
     private void renderDoneButton(DrawContext context, int mouseX, int mouseY) {
-        final Identifier WIDGETS_TEXTURE = new Identifier("textures/gui/widgets.png");
-        int texY = (this.isHoveredOverDone(mouseX, mouseY) || this.currentSelected == this.getWidgets().length) ? 86 : 66;
-        context.drawTexture(WIDGETS_TEXTURE, this.width / 2 - 100, this.bottom + 5, 0, texY, 200, 20);
-        context.drawCenteredTextWithShadow(textRenderer, Text.translatable("gui.done"), this.width / 2, this.bottom + 11, Formatting.WHITE.getColorValue());
+        final Identifier WIDGETS_TEXTURE = (this.isHoveredOverDone(mouseX, mouseY) || this.currentSelected == this.getWidgets().length) ? BUTTON_HIGHLIGHT : BUTTON;
+        context.drawTexture(WIDGETS_TEXTURE, this.width / 2 - 100, this.bottom + 5, 0, 0, 200, 20, 200, 20);
+        context.drawCenteredTextWithShadow(textRenderer, Text.translatable("gui.done"), this.width / 2, this.bottom + 11, 16777215);
     }
 
     private boolean isHoveredOverDone(int mouseX, int mouseY) {
@@ -403,9 +324,9 @@ public class ConfigScreen extends Screen {
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
-        this.scroll(-amount * this.getAverageWidgetHeight() / 2D);
-        return super.mouseScrolled(mouseX, mouseY, amount);
+    public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
+        this.scroll(-verticalAmount * this.getAverageWidgetHeight() / 2D);
+        return super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
     }
 
     @Override

@@ -20,7 +20,12 @@ public class ClientTools {
                 return name.toLowerCase(Locale.US).replaceAll("\\W", "_"); //lowercase and replace space with _
             }
         } else {
-            if (cli.isConnectedToRealms()) { //is player in realms?
+            ServerInfo server = cli.getCurrentServerEntry();
+            if(server == null) {
+                return null;
+            }
+
+            if (server.isRealm()) { //is player in realms?
                 ClientPlayNetworkHandler handler = cli.getNetworkHandler();
                 ClientConnection connection = handler != null ? handler.getConnection() : null;
 
@@ -35,11 +40,7 @@ public class ClientTools {
                 }
             }
 
-            ServerInfo server = cli.getCurrentServerEntry();
-
-            if (server != null) {
-                return server.address.replace(':', '_'); //get server adress; replace : with _
-            }
+            return server.address.replace(':', '_'); //get server address; replace : with _
         }
         return null;
     }
