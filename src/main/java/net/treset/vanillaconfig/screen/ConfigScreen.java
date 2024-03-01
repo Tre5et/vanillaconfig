@@ -1,9 +1,9 @@
 package net.treset.vanillaconfig.screen;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
@@ -25,6 +25,9 @@ import java.util.function.Consumer;
 public class ConfigScreen extends Screen {
     public static final Identifier BUTTON = new Identifier("textures/gui/sprites/widget/button.png");
     public static final Identifier BUTTON_HIGHLIGHT = new Identifier("textures/gui/sprites/widget/button_highlighted.png");
+    public static final Identifier MENU_LIST_BACKGROUND = new Identifier("textures/gui/menu_list_background.png");
+    public static final Identifier HEADER_SEPARATOR = new Identifier("textures/gui/header_separator.png");
+    public static final Identifier FOOTER_SEPARATOR = new Identifier("textures/gui/footer_separator.png");
 
     Screen parent;
 
@@ -32,7 +35,7 @@ public class ConfigScreen extends Screen {
     List<GuiBaseWidget> widgets;
 
     boolean active = false;
-    boolean textureBackground = true;
+    boolean listBackground = true;
 
     double scrollOffset = 0;
 
@@ -40,7 +43,7 @@ public class ConfigScreen extends Screen {
 
     private boolean scrolling = false;
 
-    private final int marginY = 32;
+    private final int marginY = 33;
     private final int top = this.marginY;
     private int bottom = this.height - this.marginY;
 
@@ -88,8 +91,13 @@ public class ConfigScreen extends Screen {
 
     public boolean isActive() { return this.active; }
 
-    public boolean isBackgroundTextured() { return this.textureBackground; }
-    public boolean setBackgroundTextured(boolean textured) { this.textureBackground = textured; return true; }
+    public boolean isListBackground() {
+        return listBackground;
+    }
+
+    public void setListBackground(boolean listBackground) {
+        this.listBackground = listBackground;
+    }
 
     public boolean isMouseOverOptions(int mouseX, int mouseY) { return mouseX >= this.left && mouseX <= this.right && mouseY >= this.top && mouseY <= this.bottom; }
 
@@ -138,22 +146,14 @@ public class ConfigScreen extends Screen {
     @Override
     public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {
         super.renderBackground(context, mouseX, mouseY, delta);
-        if(this.isBackgroundTextured()) {
-            // Bars
-            context.setShaderColor(0.25F, 0.25F, 0.25F, 1.0F);
-            context.drawTexture(OPTIONS_BACKGROUND_TEXTURE, 0, 0, 0, 0.0F, 0.0F, this.width, this.height, 32, 32);
-            context.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-            // Options Background
-            context.setShaderColor(0.125F, 0.125F, 0.125F, 1.0F);
-            context.drawTexture(Screen.OPTIONS_BACKGROUND_TEXTURE, this.left, this.top, (float)this.right, (float)(this.bottom + (int)this.getScrollHeight()), this.right - this.left, this.bottom - this.top, 32, 32);
-            context.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-            // Shadows
-            context.fillGradient(RenderLayer.getGuiOverlay(), this.left, this.top, this.right, this.top + 4, -16777216, 0, 0);
-            context.fillGradient(RenderLayer.getGuiOverlay(), this.left, this.bottom - 4, this.right, this.bottom, 0, -16777216, 0);
-        } else {
-            context.fillGradient(0, 0, this.width, this.height, -1072689136, -804253680);
+        if(this.isListBackground()) {
+            RenderSystem.enableBlend();
+            context.drawTexture(MENU_LIST_BACKGROUND, 0, this.top, (float)this.getRight(), (float)(this.getBottom() + (int)this.getScrollHeight()), this.width, this.bottom - this.top, 32, 32);
+            context.drawTexture(HEADER_SEPARATOR, 0, this.top - 2, 0.0F, 0.0F, this.width, 2, 32, 2);
+            context.drawTexture(FOOTER_SEPARATOR, 0, this.getBottom(), 0.0F, 0.0F, this.width, 2, 32, 2);
+            RenderSystem.disableBlend();
         }
-        context.drawCenteredTextWithShadow(textRenderer, this.config.getName(), this.width / 2, this.top - 15, 16777215);
+        context.drawCenteredTextWithShadow(textRenderer, this.config.getName(), this.width / 2, Math.round(MathHelper.lerp(0.5f, 0f, (float)this.top - 9)), 16777215);
     }
 
     private void renderScrollbar(DrawContext context) {
@@ -194,8 +194,8 @@ public class ConfigScreen extends Screen {
 
     private void renderDoneButton(DrawContext context, int mouseX, int mouseY) {
         final Identifier WIDGETS_TEXTURE = (this.isHoveredOverDone(mouseX, mouseY) || this.currentSelected == this.getWidgets().length) ? BUTTON_HIGHLIGHT : BUTTON;
-        context.drawTexture(WIDGETS_TEXTURE, this.width / 2 - 100, this.bottom + 5, 0, 0, 200, 20, 200, 20);
-        context.drawCenteredTextWithShadow(textRenderer, Text.translatable("gui.done"), this.width / 2, this.bottom + 11, 16777215);
+        context.drawTexture(WIDGETS_TEXTURE, this.width / 2 - 100, Math.round(MathHelper.lerp(0.5f, (float)this.bottom, (float)this.height - 20)), 0, 0, 200, 20, 200, 20);
+        context.drawCenteredTextWithShadow(textRenderer, Text.translatable("gui.done"), this.width / 2, Math.round(MathHelper.lerp(0.5f, (float)this.bottom, (float)this.height - 8)), 16777215);
     }
 
     private boolean isHoveredOverDone(int mouseX, int mouseY) {
