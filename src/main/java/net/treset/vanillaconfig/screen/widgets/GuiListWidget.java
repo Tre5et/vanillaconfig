@@ -11,9 +11,9 @@ import net.treset.vanillaconfig.screen.widgets.base.GuiClickableWidget;
 import org.lwjgl.glfw.GLFW;
 
 public class GuiListWidget extends GuiClickableWidget {
-    public static Identifier SLIDER = new Identifier("textures/gui/sprites/widget/slider.png");
-    public static Identifier SLIDER_HANDLE = new Identifier("textures/gui/sprites/widget/slider_handle.png");
-    public static Identifier SLIDER_HANDLE_HIGHLIGHTED = new Identifier("textures/gui/sprites/widget/slider_handle_highlighted.png");
+    public static Identifier SLIDER = Identifier.ofVanilla("textures/gui/sprites/widget/slider.png");
+    public static Identifier SLIDER_HANDLE = Identifier.ofVanilla("textures/gui/sprites/widget/slider_handle.png");
+    public static Identifier SLIDER_HANDLE_HIGHLIGHTED = Identifier.ofVanilla("textures/gui/sprites/widget/slider_handle_highlighted.png");
 
     ListConfig config;
 

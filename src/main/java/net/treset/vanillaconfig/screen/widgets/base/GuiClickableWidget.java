@@ -10,9 +10,9 @@ import net.treset.vanillaconfig.screen.ConfigScreen;
 import net.treset.vanillaconfig.tools.TextTools;
 
 public class GuiClickableWidget extends GuiBaseWidget {
-    public static final Identifier BUTTON = new Identifier("textures/gui/sprites/widget/button.png");
-    public static final Identifier BUTTON_HIGHLIGHT = new Identifier("textures/gui/sprites/widget/button_highlighted.png");
-    public static final Identifier BUTTON_DISABLED = new Identifier("textures/gui/sprites/widget/button_disabled.png");
+    public static final Identifier BUTTON = Identifier.ofVanilla("textures/gui/sprites/widget/button.png");
+    public static final Identifier BUTTON_HIGHLIGHT = Identifier.ofVanilla("textures/gui/sprites/widget/button_highlighted.png");
+    public static final Identifier BUTTON_DISABLED = Identifier.ofVanilla("textures/gui/sprites/widget/button_disabled.png");
 
     ConfigScreen parentScreen;
 

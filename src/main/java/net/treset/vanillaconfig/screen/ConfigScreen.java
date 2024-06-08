@@ -23,11 +23,12 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class ConfigScreen extends Screen {
-    public static final Identifier BUTTON = new Identifier("textures/gui/sprites/widget/button.png");
-    public static final Identifier BUTTON_HIGHLIGHT = new Identifier("textures/gui/sprites/widget/button_highlighted.png");
-    public static final Identifier MENU_LIST_BACKGROUND = new Identifier("textures/gui/menu_list_background.png");
-    public static final Identifier HEADER_SEPARATOR = new Identifier("textures/gui/header_separator.png");
-    public static final Identifier FOOTER_SEPARATOR = new Identifier("textures/gui/footer_separator.png");
+    public static final Identifier BUTTON = Identifier.ofVanilla("textures/gui/sprites/widget/button.png");
+    public static final Identifier BUTTON_HIGHLIGHT = Identifier.ofVanilla("textures/gui/sprites/widget/button_highlighted.png");
+    public static final Identifier MENU_LIST_BACKGROUND = Identifier.ofVanilla("textures/gui/menu_list_background.png");
+    public static final Identifier HEADER_SEPARATOR = Identifier.ofVanilla("textures/gui/header_separator.png");
+    public static final Identifier FOOTER_SEPARATOR = Identifier.ofVanilla("textures/gui/footer_separator.png");
+    public static final Identifier SCROLLER = Identifier.ofVanilla("widget/scroller");
 
     Screen parent;
 
@@ -173,7 +174,7 @@ public class ConfigScreen extends Screen {
         int scrollAreaR = scrollAreaL + 6;
 
         context.fill(scrollAreaL, this.top, scrollAreaR , this.bottom, -16777216);
-        context.drawGuiTexture(new Identifier("widget/scroller"), scrollAreaL, scrollBarY, 6, scrollBarHeight);
+        context.drawGuiTexture(SCROLLER, scrollAreaL, scrollBarY, 6, scrollBarHeight);
     }
 
     private void renderOptions(DrawContext ctx, int mouseX, int mouseY) {
