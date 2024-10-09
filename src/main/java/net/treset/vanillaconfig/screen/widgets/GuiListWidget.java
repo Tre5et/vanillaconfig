@@ -2,6 +2,7 @@ package net.treset.vanillaconfig.screen.widgets;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
@@ -75,7 +76,7 @@ public class GuiListWidget extends GuiClickableWidget {
 
             Identifier identifier = this.isHoveredOver(mouseX, mouseY) || this.selected ? SLIDER_HANDLE_HIGHLIGHTED : SLIDER_HANDLE;
 
-            ctx.drawTexture(identifier, this.screenX + sliderPos, this.screenY, 0, 0, 8, 20, 8, 20);
+            ctx.drawTexture(RenderLayer::getGuiTextured, identifier, this.screenX + sliderPos, this.screenY, 0, 0, 8, 20, 8, 20);
         } else isMouseDown = false;
 
         return success;

@@ -3,6 +3,7 @@ package net.treset.vanillaconfig.screen.widgets.base;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.treset.vanillaconfig.config.base.BaseConfig;
@@ -122,8 +123,8 @@ public class GuiClickableWidget extends GuiBaseWidget {
 
     public boolean renderTexture(DrawContext ctx, int mouseX, int mouseY) {
         Identifier texture = this.getTexture(mouseX, mouseY);
-        ctx.drawTexture(texture, this.screenX, this.screenY, 0, 0, this.width / 2, this.getHeight(), 200, 20); // draw left half
-        ctx.drawTexture(texture, this.screenX + this.width / 2, this.screenY, 200 - this.width / 2, 0, this.width / 2, this.getHeight(), 200, 20); //draw right half
+        ctx.drawTexture(RenderLayer::getGuiTextured, texture, this.screenX, this.screenY, 0, 0, this.width / 2, this.getHeight(), 200, 20); // draw left half
+        ctx.drawTexture(RenderLayer::getGuiTextured, texture, this.screenX + this.width / 2, this.screenY, 200 - this.width / 2, 0, this.width / 2, this.getHeight(), 200, 20); //draw right half
         return true;
     }
     public boolean renderText(DrawContext ctx, TextRenderer t) {

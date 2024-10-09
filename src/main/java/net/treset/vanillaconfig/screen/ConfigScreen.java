@@ -4,6 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
@@ -149,9 +150,9 @@ public class ConfigScreen extends Screen {
         super.renderBackground(context, mouseX, mouseY, delta);
         if(this.isListBackground()) {
             RenderSystem.enableBlend();
-            context.drawTexture(MENU_LIST_BACKGROUND, 0, this.top, (float)this.getRight(), (float)(this.getBottom() + (int)this.getScrollHeight()), this.width, this.bottom - this.top, 32, 32);
-            context.drawTexture(HEADER_SEPARATOR, 0, this.top - 2, 0.0F, 0.0F, this.width, 2, 32, 2);
-            context.drawTexture(FOOTER_SEPARATOR, 0, this.getBottom(), 0.0F, 0.0F, this.width, 2, 32, 2);
+            context.drawTexture(RenderLayer::getGuiTextured, MENU_LIST_BACKGROUND, 0, this.top, (float)this.getRight(), (float)(this.getBottom() + (int)this.getScrollHeight()), this.width, this.bottom - this.top, 32, 32);
+            context.drawTexture(RenderLayer::getGuiTextured, HEADER_SEPARATOR, 0, this.top - 2, 0.0F, 0.0F, this.width, 2, 32, 2);
+            context.drawTexture(RenderLayer::getGuiTextured, FOOTER_SEPARATOR, 0, this.getBottom(), 0.0F, 0.0F, this.width, 2, 32, 2);
             RenderSystem.disableBlend();
         }
         context.drawCenteredTextWithShadow(textRenderer, this.config.getName(), this.width / 2, Math.round(MathHelper.lerp(0.5f, 0f, (float)this.top - 9)), 16777215);
@@ -174,7 +175,7 @@ public class ConfigScreen extends Screen {
         int scrollAreaR = scrollAreaL + 6;
 
         context.fill(scrollAreaL, this.top, scrollAreaR , this.bottom, -16777216);
-        context.drawGuiTexture(SCROLLER, scrollAreaL, scrollBarY, 6, scrollBarHeight);
+        context.drawGuiTexture(RenderLayer::getGuiTextured, SCROLLER, scrollAreaL, scrollBarY, 6, scrollBarHeight);
     }
 
     private void renderOptions(DrawContext ctx, int mouseX, int mouseY) {
@@ -195,7 +196,7 @@ public class ConfigScreen extends Screen {
 
     private void renderDoneButton(DrawContext context, int mouseX, int mouseY) {
         final Identifier WIDGETS_TEXTURE = (this.isHoveredOverDone(mouseX, mouseY) || this.currentSelected == this.getWidgets().length) ? BUTTON_HIGHLIGHT : BUTTON;
-        context.drawTexture(WIDGETS_TEXTURE, this.width / 2 - 100, Math.round(MathHelper.lerp(0.5f, (float)this.bottom, (float)this.height - 20)), 0, 0, 200, 20, 200, 20);
+        context.drawTexture(RenderLayer::getGuiTextured, WIDGETS_TEXTURE, this.width / 2 - 100, Math.round(MathHelper.lerp(0.5f, (float)this.bottom, (float)this.height - 20)), 0, 0, 200, 20, 200, 20);
         context.drawCenteredTextWithShadow(textRenderer, Text.translatable("gui.done"), this.width / 2, Math.round(MathHelper.lerp(0.5f, (float)this.bottom, (float)this.height - 8)), 16777215);
     }
 
