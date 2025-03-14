@@ -1,6 +1,5 @@
 package net.treset.vanillaconfig.screen;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
@@ -149,11 +148,9 @@ public class ConfigScreen extends Screen {
     public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {
         super.renderBackground(context, mouseX, mouseY, delta);
         if(this.isListBackground()) {
-            RenderSystem.enableBlend();
             context.drawTexture(RenderLayer::getGuiTextured, MENU_LIST_BACKGROUND, 0, this.top, (float)this.getRight(), (float)(this.getBottom() + (int)this.getScrollHeight()), this.width, this.bottom - this.top, 32, 32);
             context.drawTexture(RenderLayer::getGuiTextured, HEADER_SEPARATOR, 0, this.top - 2, 0.0F, 0.0F, this.width, 2, 32, 2);
             context.drawTexture(RenderLayer::getGuiTextured, FOOTER_SEPARATOR, 0, this.getBottom(), 0.0F, 0.0F, this.width, 2, 32, 2);
-            RenderSystem.disableBlend();
         }
         context.drawCenteredTextWithShadow(textRenderer, this.config.getName(), this.width / 2, Math.round(MathHelper.lerp(0.5f, 0f, (float)this.top - 9)), 16777215);
     }

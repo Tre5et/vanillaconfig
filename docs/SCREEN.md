@@ -8,7 +8,7 @@
 
 ### Display options for config screens:
  - The config screen can render two types of background:
-   - List background (like the vanilla Video Settings screen) or untextured (like the vanilla Controls screen):
+   - List background (like the vanilla Video Settings screen) or untextured (like the vanilla Options screen):
      - `boolean isListBackground()` returns `true` if the list background is rendered (default).
      - `boolean setListBackgroud(boolean textured)` sets whether  list background is rendered (this should only be changed to `false` if the page doesn't scroll, else it won't look good).
  - All config types have four parameters that can be set. These will affect their appearance on the config screen.
