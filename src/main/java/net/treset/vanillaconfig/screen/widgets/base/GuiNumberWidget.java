@@ -1,8 +1,8 @@
 package net.treset.vanillaconfig.screen.widgets.base;
 
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
@@ -12,9 +12,9 @@ import net.treset.vanillaconfig.tools.TextTools;
 import org.lwjgl.glfw.GLFW;
 
 public class GuiNumberWidget extends GuiTypableWidget {
-    public static Identifier SLIDER = Identifier.ofVanilla("textures/gui/sprites/widget/slider.png");
-    public static Identifier SLIDER_HANDLE = Identifier.ofVanilla("textures/gui/sprites/widget/slider_handle.png");
-    public static Identifier SLIDER_HANDLE_HIGHLIGHTED = Identifier.ofVanilla("textures/gui/sprites/widget/slider_handle_highlighted.png");
+    public static Identifier SLIDER = Identifier.ofVanilla("widget/slider");
+    public static Identifier SLIDER_HANDLE = Identifier.ofVanilla("widget/slider_handle");
+    public static Identifier SLIDER_HANDLE_HIGHLIGHTED = Identifier.ofVanilla("widget/slider_handle_highlighted");
 
     SlideableConfig slideConfig;
 
@@ -47,15 +47,11 @@ public class GuiNumberWidget extends GuiTypableWidget {
         if(!this.selected) return;
         if(key == GLFW.GLFW_KEY_RIGHT) {
             this.slideConfig.setDoubleValue(this.slideConfig.getDoubleValue() + 1);
-            if(MinecraftClient.getInstance().getNarratorManager().isActive()) {
-                MinecraftClient.getInstance().getNarratorManager().narrate(getChangeSliderNarration());
-            }
+            TextTools.narrateLiteral(this.getChangeSliderNarration());
             this.requestIoInterrupt();
         } else if(key == GLFW.GLFW_KEY_LEFT) {
             this.slideConfig.setDoubleValue(this.slideConfig.getDoubleValue() - 1);
-            if(MinecraftClient.getInstance().getNarratorManager().isActive()) {
-                MinecraftClient.getInstance().getNarratorManager().narrate(getChangeSliderNarration());
-            }
+            TextTools.narrateLiteral(this.getChangeSliderNarration());
             this.requestIoInterrupt();
         }
     }
@@ -122,7 +118,7 @@ public class GuiNumberWidget extends GuiTypableWidget {
 
             Identifier identifier = this.isHoveredOver(mouseX, mouseY) || this.selected ? SLIDER_HANDLE_HIGHLIGHTED : SLIDER_HANDLE;
 
-            ctx.drawTexture(RenderLayer::getGuiTextured, identifier, this.screenX + sliderPos, this.screenY, 0, 0, 8, 20, 8, 20);
+            ctx.drawGuiTexture(RenderPipelines.GUI_TEXTURED, identifier, this.screenX + sliderPos, this.screenY, 8, 20);
         } else isMouseDown = false;
 
         return success;

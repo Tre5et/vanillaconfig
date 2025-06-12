@@ -2,18 +2,18 @@ package net.treset.vanillaconfig.screen.widgets.base;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.ColorHelper;
 import net.treset.vanillaconfig.config.base.BaseConfig;
 import net.treset.vanillaconfig.screen.ConfigScreen;
 import net.treset.vanillaconfig.tools.TextTools;
 
 public class GuiClickableWidget extends GuiBaseWidget {
-    public static final Identifier BUTTON = Identifier.ofVanilla("textures/gui/sprites/widget/button.png");
-    public static final Identifier BUTTON_HIGHLIGHT = Identifier.ofVanilla("textures/gui/sprites/widget/button_highlighted.png");
-    public static final Identifier BUTTON_DISABLED = Identifier.ofVanilla("textures/gui/sprites/widget/button_disabled.png");
+    public static final Identifier BUTTON = Identifier.ofVanilla("widget/button");
+    public static final Identifier BUTTON_HIGHLIGHT = Identifier.ofVanilla("widget/button_highlighted");
+    public static final Identifier BUTTON_DISABLED = Identifier.ofVanilla("widget/button_disabled");
 
     ConfigScreen parentScreen;
 
@@ -62,9 +62,7 @@ public class GuiClickableWidget extends GuiBaseWidget {
     public boolean select(boolean select) {
         if(!this.getBaseConfig().isEditable()) return false;
         if(select) {
-            if (MinecraftClient.getInstance().getNarratorManager().isActive()) {
-                MinecraftClient.getInstance().getNarratorManager().narrate(this.getSelectNarration());
-            }
+            TextTools.narrateLiteral(this.getSelectNarration());
         }
         this.selected = select;
         return true;
@@ -73,9 +71,7 @@ public class GuiClickableWidget extends GuiBaseWidget {
     @Override
     public boolean activate() {
         this.onClickL();
-        if(MinecraftClient.getInstance().getNarratorManager().isActive()) {
-            MinecraftClient.getInstance().getNarratorManager().narrate(this.getActivateNarration());
-        }
+        TextTools.narrateLiteral(this.getActivateNarration());
         return true;
     }
 
@@ -111,9 +107,7 @@ public class GuiClickableWidget extends GuiBaseWidget {
             this.prevMouseOver = mouseOver;
         }
 
-        MinecraftClient cli = MinecraftClient.getInstance();
-        if (cli == null) return false;
-        TextRenderer t = cli.textRenderer;
+        TextRenderer t = this.parentScreen.getTextRenderer();
 
         return
                 this.renderTexture(ctx, mouseX, mouseY) &&
@@ -123,8 +117,8 @@ public class GuiClickableWidget extends GuiBaseWidget {
 
     public boolean renderTexture(DrawContext ctx, int mouseX, int mouseY) {
         Identifier texture = this.getTexture(mouseX, mouseY);
-        ctx.drawTexture(RenderLayer::getGuiTextured, texture, this.screenX, this.screenY, 0, 0, this.width / 2, this.getHeight(), 200, 20); // draw left half
-        ctx.drawTexture(RenderLayer::getGuiTextured, texture, this.screenX + this.width / 2, this.screenY, 200 - this.width / 2, 0, this.width / 2, this.getHeight(), 200, 20); //draw right half
+        ctx.drawGuiTexture(RenderPipelines.GUI_TEXTURED, texture, this.screenX, this.screenY, this.width, this.getHeight()); // draw left half
+        //ctx.drawGuiTexture(RenderPipelines.GUI_TEXTURED, texture, this.screenX + this.width / 2, this.screenY, 200 - this.width / 2, 0, this.width / 2, this.getHeight(), 200, 20); //draw right half
         return true;
     }
     public boolean renderText(DrawContext ctx, TextRenderer t) {
@@ -145,7 +139,9 @@ public class GuiClickableWidget extends GuiBaseWidget {
         return BUTTON;
     }
 
-    public int getTextColor() { return this.getBaseConfig().isEditable() ? Formatting.WHITE.getColorValue() : 10526880; }
+    public int getTextColor() {
+        return this.getBaseConfig().isEditable() ? ColorHelper.fromAbgr(0xFFFFFFFF) : ColorHelper.fromAbgr(0xFFA0A0A0);
+    }
     public boolean isHoveredOver(int mouseX, int mouseY) {
         return this.screenX < mouseX && mouseX < this.screenX + this.width && this.screenY < mouseY && mouseY < this.screenY + this.height;
     }
@@ -172,9 +168,7 @@ public class GuiClickableWidget extends GuiBaseWidget {
     public void onClickR() {}
     public void onClickM() {}
     public void onMouseEnter() {
-        if(MinecraftClient.getInstance().getNarratorManager().isActive()) {
-            MinecraftClient.getInstance().getNarratorManager().narrate(getSelectNarration());
-        }
+        TextTools.narrateLiteral(this.getSelectNarration());
     }
     public void onMouseLeave() {}
 

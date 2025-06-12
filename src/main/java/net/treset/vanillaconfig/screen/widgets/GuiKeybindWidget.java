@@ -2,7 +2,6 @@ package net.treset.vanillaconfig.screen.widgets;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.sound.PositionedSoundInstance;
-import net.minecraft.client.util.NarratorManager;
 import net.minecraft.sound.SoundEvents;
 import net.treset.vanillaconfig.config.KeybindConfig;
 import net.treset.vanillaconfig.screen.ConfigScreen;
@@ -91,23 +90,17 @@ public class GuiKeybindWidget extends GuiTypableWidget {
             MinecraftClient.getInstance().getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
             this.setFocused(false);
             this.save();
-            if(MinecraftClient.getInstance().getNarratorManager().isActive()) {
-                MinecraftClient.getInstance().getNarratorManager().narrate(getSaveNarration());
-            }
+            TextTools.narrateLiteral(this.getSaveNarration());
         } else if(key == GLFW.GLFW_KEY_ESCAPE) {
             MinecraftClient.getInstance().getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
             this.reset();
-            if(MinecraftClient.getInstance().getNarratorManager().isActive()) {
-                MinecraftClient.getInstance().getNarratorManager().narrate(getResetNarration());
-            }
+            TextTools.narrateLiteral(this.getResetNarration());
         } else {
             currentScancodes.add(scancode);
             String newKey = TextTools.getKeyFromScancode(scancode, true);
             if(newKey == null) return;
             this.setDisplayValue(TextTools.appendKeyToDisplayKeys(newKey, this.getValue()));
-            if(MinecraftClient.getInstance().getNarratorManager().isActive()) {
-                MinecraftClient.getInstance().getNarratorManager().narrate(getChangeNarration());
-            }
+            TextTools.narrateLiteral(this.getChangeNarration());
         }
     }
 

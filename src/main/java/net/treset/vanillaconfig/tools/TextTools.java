@@ -1,7 +1,9 @@
 package net.treset.vanillaconfig.tools;
 
 import com.google.common.collect.ImmutableList;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.InputUtil;
+import net.minecraft.text.Text;
 import net.minecraft.util.Language;
 import org.lwjgl.glfw.GLFW;
 
@@ -20,6 +22,19 @@ public class TextTools {
         out = lang.get(text);
 
         return out;
+    }
+
+    public static void narrate(Text text) {
+        if(text == null || text.getString().isEmpty() || !MinecraftClient.getInstance().getNarratorManager().isActive()) return;
+        MinecraftClient.getInstance().getNarratorManager().narrate(text);
+    }
+
+    public static void narrate(String text, Object... args) {
+        narrate(Text.translatable(text, args));
+    }
+
+    public static void narrateLiteral(String text) {
+        narrate(Text.literal(text));
     }
 
     public static String booleanToString(boolean bool) {
