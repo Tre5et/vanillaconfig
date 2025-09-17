@@ -136,7 +136,7 @@ public class TextTools {
 
         int key = getKeycodeFromScancode(scancode);
         if(allowNonText && (str == null || str.equals("") || str.equals("\t") || kpKeys.contains(key)))
-            str = translateOrDefault(InputUtil.fromKeyCode(key, -1).toString());
+            str = translateOrDefault(InputUtil.Type.SCANCODE.createFromCode(scancode).toString());
 
         if(str != null) str = str.substring(0, 1).toUpperCase() + (str.length() > 1 ? str.substring(1) : "");
 

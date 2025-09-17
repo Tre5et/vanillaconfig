@@ -2,8 +2,11 @@ package net.treset.vanillaconfig.screen;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.RenderPipelines;
+import net.minecraft.client.gui.Click;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.input.CharInput;
+import net.minecraft.client.input.KeyInput;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
@@ -272,50 +275,50 @@ public class ConfigScreen extends Screen {
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+    public boolean mouseClicked(Click click, boolean doubled) {
         this.ioInterruptRequest = false;
-        if(button == 0 && this.getScrollHeight() != 0 && mouseX >= this.scrollbarX && mouseX <= this.scrollbarX + 6) this.scrolling = true;
-        else if(button == 0 && this.isHoveredOverDone((int)mouseX, (int)mouseY)) {
+        if(click.button() == 0 && this.getScrollHeight() != 0 && click.x() >= this.scrollbarX && click.x() <= this.scrollbarX + 6) this.scrolling = true;
+        else if(click.button() == 0 && this.isHoveredOverDone((int)click.x(), (int)click.y())) {
             MinecraftClient.getInstance().getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
             this.close();
         }
         else {
             for (GuiBaseWidget e : this.getWidgets()) {
-                e.onMouseDown(button);
+                e.onMouseDown(click.button());
             }
         }
         if(ioInterruptRequest) {
             ioInterruptRequest = false;
             return true;
         }
-        return super.mouseClicked(mouseX, mouseY, button);
+        return super.mouseClicked(click, doubled);
     }
 
     @Override
-    public boolean mouseReleased(double mouseX, double mouseY, int button) {
+    public boolean mouseReleased(Click click) {
         this.ioInterruptRequest = false;
         if(this.scrolling) this.scrolling = false;
         else {
             for (GuiBaseWidget e : this.getWidgets()) {
-                e.onMouseUp(button);
+                e.onMouseUp(click.button());
             }
         }
         if(ioInterruptRequest) {
             ioInterruptRequest = false;
             return true;
         }
-        return super.mouseReleased(mouseX, mouseY, button);
+        return super.mouseReleased(click);
     }
 
     @Override
-    public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
-        if(super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)) return true;
-        else if(this.scrolling && button == 0 && this.getScrollHeight() != 0) {
-            if(mouseY < this.top) this.setScroll(0);
-            else if(mouseY > this.bottom) this.setScroll(this.getScrollHeight());
+    public boolean mouseDragged(Click click, double offsetX, double offsetY) {
+        if(super.mouseDragged(click, offsetX, offsetY)) return true;
+        else if(this.scrolling && click.button() == 0 && this.getScrollHeight() != 0) {
+            if(click.y() < this.top) this.setScroll(0);
+            else if(click.y() > this.bottom) this.setScroll(this.getScrollHeight());
             else {
                 double scrollPerScrollbarPixel = this.getScrollHeight() / (double)(this.getDisplayAreaHeight() - this.scrollbarHeight);
-                this.setScroll(this.getScrollOffset() + deltaY * scrollPerScrollbarPixel);
+                this.setScroll(this.getScrollOffset() + offsetY * scrollPerScrollbarPixel);
             }
         }
         return true;
@@ -328,25 +331,25 @@ public class ConfigScreen extends Screen {
     }
 
     @Override
-    public boolean keyPressed(int key, int scancode, int modifiers) {
+    public boolean keyPressed(KeyInput input) {
         this.ioInterruptRequest = false;
 
         for (GuiBaseWidget e : this.getWidgets()) {
-            e.onKeyDown(key, scancode);
+            e.onKeyDown(input.key(), input.scancode());
         }
         if(ioInterruptRequest) {
             ioInterruptRequest = false;
             return true;
         }
 
-        if(key == GLFW.GLFW_KEY_TAB) {
+        if(input.key() == GLFW.GLFW_KEY_TAB) {
             int step = (GLFW.glfwGetKey(MinecraftClient.getInstance().getWindow().getHandle(), GLFW.GLFW_KEY_LEFT_SHIFT) == GLFW.GLFW_PRESS
                     || GLFW.glfwGetKey(MinecraftClient.getInstance().getWindow().getHandle(), GLFW.GLFW_KEY_RIGHT_SHIFT) == GLFW.GLFW_PRESS) ?
                     -1 : 1;
             tabNavigate(step);
         }
 
-        if(key == GLFW.GLFW_KEY_ENTER) {
+        if(input.key() == GLFW.GLFW_KEY_ENTER) {
             if(this.currentSelected >= 0) {
                 this.getWidgets()[this.currentSelected].activate();
             }
@@ -356,36 +359,36 @@ public class ConfigScreen extends Screen {
             }
         }
 
-        this.scrollKey(key);
-        return super.keyPressed(key, scancode, modifiers);
+        this.scrollKey(input.key());
+        return super.keyPressed(input);
     }
 
     @Override
-    public boolean keyReleased(int key, int scancode, int modifiers) {
+    public boolean keyReleased(KeyInput input) {
         this.ioInterruptRequest = false;
         for (GuiBaseWidget e : this.getWidgets()) {
-            e.onKeyUp(key, scancode);
+            e.onKeyUp(input.key(), input.scancode());
         }
         if(ioInterruptRequest) {
             ioInterruptRequest = false;
             return true;
         }
-        return super.keyReleased(key, scancode, modifiers);
+        return super.keyReleased(input);
     }
 
     @Override
-    public boolean charTyped(char chr, int modifiers) {
+    public boolean charTyped(CharInput input) {
         this.ioInterruptRequest = false;
         if(this.isActive()) {
             for (GuiBaseWidget e : this.getWidgets()) {
-                e.onTextReceived(String.valueOf(chr));
+                e.onTextReceived(input.asString());
             }
         }
         if(ioInterruptRequest) {
             ioInterruptRequest = false;
             return true;
         }
-        return super.charTyped(chr, modifiers);
+        return super.charTyped(input);
     }
 
     public void requestIoInterrupt() {
