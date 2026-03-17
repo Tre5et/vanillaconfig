@@ -24,7 +24,10 @@
     ]
   },
   "mixins": [
-    "vanillaconfig.mixins.json"
+      {
+          "config": "vanillaconfig.client.mixins.json",
+          "environment": "client"
+      }
   ],
 
   "depends": {
