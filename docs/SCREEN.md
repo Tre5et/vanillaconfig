@@ -35,20 +35,22 @@
 To create a screen from the config in [Creating a Config](CONFIG.md), and open it, when `yourKeybind` is pressed, you could modify the code like so:
 ```java
 [...]
-static ConfigScreen yourScreen;
+static PageConfig yourPage;
 
 public static void init() {
 	[... yourPage.setPath("yourFolder"); ]
-
-	yourScreen = new ConfigScreen(yourPage, MinecraftClient.getInstance().currentScreen);
 	
 	yourKeybind.onPressed(ThisClass::onKeybindPressed);
 
 	[ SaveLoadManager.globalSaveConfig(yourPage); ...]
 }
 
+public static getConfigScreen() {
+    return new ConfigScreen(yourPage, MinecraftClient.getInstance().currentScreen);
+}
+
 public static void onKeybindPressed(String name) {
-	MinecraftClient.getInstance().setScreen(yourScreen);
+	MinecraftClient.getInstance().setScreen(getConfigScreen());
 }
 ```
 

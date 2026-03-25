@@ -24,14 +24,17 @@
     ]
   },
   "mixins": [
-    "vanillaconfig.mixins.json"
+      {
+          "config": "vanillaconfig.client.mixins.json",
+          "environment": "client"
+      }
   ],
 
   "depends": {
     "fabricloader": ">=0.14.20",
-    "fabric": "*",
-    "minecraft": ["~1.21.9"],
-    "java": ">=21"
+    "fabric-api": "*",
+    "minecraft": ["~26.1-"],
+    "java": ">=25"
   },
   "suggests": {
     "modmenu": "*"

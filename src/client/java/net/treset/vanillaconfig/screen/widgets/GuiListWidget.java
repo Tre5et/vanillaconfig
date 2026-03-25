@@ -1,0 +1,141 @@
+package net.treset.vanillaconfig.screen.widgets;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.resources.Identifier;
+import net.minecraft.sounds.SoundEvents;
+import net.treset.vanillaconfig.config.ListConfig;
+import net.treset.vanillaconfig.screen.ConfigScreen;
+import net.treset.vanillaconfig.screen.widgets.base.GuiClickableWidget;
+import net.treset.vanillaconfig.tools.TextTools;
+import org.lwjgl.glfw.GLFW;
+
+public class GuiListWidget extends GuiClickableWidget {
+    public static Identifier SLIDER = Identifier.fromNamespaceAndPath("minecraft", "widget/slider");
+    public static Identifier SLIDER_HANDLE = Identifier.fromNamespaceAndPath("minecraft", "widget/slider_handle");
+    public static Identifier SLIDER_HANDLE_HIGHLIGHTED = Identifier.fromNamespaceAndPath("minecraft", "widget/slider_handle_highlighted");
+
+    ListConfig config;
+
+    boolean isMouseDown = false;
+    boolean mouseWentDownOver = false;
+
+    public GuiListWidget(ListConfig config, ConfigScreen screen) {
+        super(config, screen);
+
+        this.config = config;
+    }
+
+    public String updateMessage(ListConfig config) {
+        if(config == null) return "ERROR";
+        this.setTitle(config.getKey());
+        this.setValue(config.getOption());
+        return this.getMessage();
+    }
+    public String updateMessage() {
+        return updateMessage(this.config);
+    }
+
+    @Override
+    public String getSelectNarration() { return this.config.getSelectNarration(); }
+    @Override
+    public String getActivateNarration() { return this.config.getActivateNarration(); }
+    public String getChangeSliderNarration() { return this.config.getChangeSliderNarration(); }
+
+
+    @Override
+    public Identifier getTexture(int mouseX, int mouseY) {
+        if(!this.config.isSlider()) return super.getTexture(mouseX, mouseY);
+        return SLIDER;
+    }
+
+    @Override
+    public boolean renderTexture(GuiGraphicsExtractor ctx, int mouseX, int mouseY) {
+        boolean success = super.renderTexture(ctx, mouseX, mouseY);
+
+        if(this.config.isSlider()) {
+
+            if(this.isMouseDown && this.mouseWentDownOver) {
+                double mousePercentage = Math.max(0D, Math.min(1D,
+                        (mouseX - this.screenX - 4) / (double)(this.getWidth() - 8)
+                ));
+
+                int mouseValue = (int)Math.rint(
+                        mousePercentage
+                        * (this.config.getMaxDoubleValue() - this.config.getMinDoubleValue())
+                        + this.config.getMinDoubleValue());
+
+                this.config.setOptionIndex(mouseValue);
+            }
+
+            double sliderPercentage = (this.config.getDoubleValue() - this.config.getMinDoubleValue())
+                    / (this.config.getMaxDoubleValue() - this.config.getMinDoubleValue());
+
+            int sliderPos = (int)Math.rint(sliderPercentage * (this.getWidth() - 8));
+
+            Identifier identifier = this.isHoveredOver(mouseX, mouseY) || this.selected ? SLIDER_HANDLE_HIGHLIGHTED : SLIDER_HANDLE;
+
+            ctx.blitSprite(RenderPipelines.GUI_TEXTURED, identifier, this.screenX + sliderPos, this.screenY, 8, 20);
+        } else isMouseDown = false;
+
+        return success;
+    }
+
+    @Override
+    public void onRender() {
+        updateMessage();
+        super.onRender();
+    }
+
+    @Override
+    public void onKeyDown(int key, int scancode) {
+        if(!this.config.isSlider()) super.onKeyDown(key, scancode);
+
+        if(!this.selected) return;
+        if(key == GLFW.GLFW_KEY_RIGHT) {
+            this.config.setOptionIndex((this.config.getOptionIndex() + 1) % this.config.getOptions().length);
+            TextTools.narrateLiteral(this.getChangeSliderNarration());
+            this.requestIoInterrupt();
+        } else if(key == GLFW.GLFW_KEY_LEFT) {
+            this.config.setOptionIndex((this.config.getOptions().length + this.config.getOptionIndex() - 1) % this.config.getOptions().length);
+            TextTools.narrateLiteral(this.getChangeSliderNarration());
+            this.requestIoInterrupt();
+        }
+    }
+
+    @Override
+    public void onClickL() {
+        if(!this.config.isSlider()) {
+            Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+            config.increment(true);
+        }
+        this.mouseWentDownOver = true;
+    }
+
+    @Override
+    public void onClickR() {
+        if(!this.config.isSlider()) {
+            Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+            config.increment(false);
+        }
+    }
+
+    @Override
+    public void onMouseDown(int button) {
+        super.onMouseDown(button);
+        if(this.config.isSlider() && button == 0) isMouseDown = true;
+    }
+    @Override
+    public void onMouseUp(int button) {
+        super.onMouseUp(button);
+        if(this.config.isSlider() && button == 0 && isMouseDown) {
+            isMouseDown = false;
+            if(mouseWentDownOver) {
+                Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+                mouseWentDownOver = false;
+            }
+        }
+    }
+}
