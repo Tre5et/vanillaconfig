@@ -401,7 +401,7 @@ public class ConfigScreen extends Screen {
         this.onCloseDep.run();
         this.onClose.accept(this.getConfig().getKey());
         this.active = false;
-        this.minecraft.setScreen(parent);
+        this.minecraft.setScreenAndShow(parent);
     }
 
     Runnable onOpenDep = () -> {};

@@ -34,8 +34,8 @@ public class GuiPageWidget extends GuiClickableWidget {
     public void onClickL() {
         this.config.click();
         Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
-        ConfigScreen screen = new ConfigScreen(this.config, Minecraft.getInstance().screen);
-        Minecraft.getInstance().setScreen(screen);
+        ConfigScreen screen = new ConfigScreen(this.config, Minecraft.getInstance().gui.screen());
+        Minecraft.getInstance().setScreenAndShow(screen);
     }
 
     @Override

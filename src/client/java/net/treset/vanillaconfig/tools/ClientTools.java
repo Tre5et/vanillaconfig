@@ -45,6 +45,6 @@ public class ClientTools {
     }
 
     public static boolean isInGame() {
-        return getWorldId() != null && Minecraft.getInstance().screen == null;
+        return getWorldId() != null && Minecraft.getInstance().gui.screen() == null;
     }
 }
