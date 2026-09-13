@@ -13,6 +13,6 @@ public class KeyboardHandlerMixin {
 
     @Inject(method = "keyPress(JILnet/minecraft/client/input/KeyEvent;)V", at = @At("HEAD"), cancellable = true)
     public void onKey(long handle, int action, KeyEvent input, CallbackInfo c) {
-        KeybindTools.onKeyEvent(handle, input.key(), input.scancode(), action, input.modifiers());
+        KeybindTools.onKeyEvent(handle, input, action, input.modifiers());
     }
 }

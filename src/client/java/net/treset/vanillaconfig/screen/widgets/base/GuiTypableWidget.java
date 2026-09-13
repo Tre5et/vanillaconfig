@@ -1,13 +1,15 @@
 package net.treset.vanillaconfig.screen.widgets.base;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.sounds.SoundEvents;
 import net.treset.vanillaconfig.config.base.BaseConfig;
 import net.treset.vanillaconfig.screen.ConfigScreen;
 import net.treset.vanillaconfig.tools.TextTools;
 import net.treset.vanillaconfig.tools.helpers.AllowedChars;
-import org.lwjgl.glfw.GLFW;
+import org.lwjgl.sdl.SDLKeyboard;
 
 import java.util.Arrays;
 
@@ -43,22 +45,22 @@ public class GuiTypableWidget extends GuiClickableWidget {
     public void updateMessage() {}
 
     @Override
-    public void onKeyDown(int key, int scancode) {
+    public void onKeyDown(KeyEvent input) {
         if(!this.isFocused()) return;
         this.requestIoInterrupt();
-        if(key == GLFW.GLFW_KEY_BACKSPACE && !this.getValue().isEmpty()) {
+        if(input.key() == InputConstants.KEY_BACKSPACE && !this.getValue().isEmpty()) {
             this.removeLastChar();
             TextTools.narrateLiteral(this.getChangeNarration());
-        } else if(key == GLFW.GLFW_KEY_ENTER) {
+        } else if(input.isConfirmation()) {
             this.confirmText();
-        } else if(key == GLFW.GLFW_KEY_ESCAPE) {
+        } else if(input.isEscape()) {
             Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
             this.setValue(this.getDefaultValue());
             TextTools.narrateLiteral(this.getResetNarration());
             this.setFocused(false);
             this.save();
         } else if(this.allowedChars.ignoreShift()) {
-            String keyName = GLFW.glfwGetKeyName(-1, scancode);
+            String keyName = SDLKeyboard.SDL_GetKeyName(input.keycode());
             if(keyName != null && !keyName.isEmpty() && Arrays.asList(this.allowedChars.getChars()).contains(keyName)) {
                 this.setDisplayValue(this.getValue() + keyName);
                 TextTools.narrateLiteral(this.getChangeNarration());

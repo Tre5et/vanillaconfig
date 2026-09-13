@@ -1,6 +1,7 @@
 package net.treset.vanillaconfig.screen.widgets.base;
 
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.input.KeyEvent;
 import net.treset.vanillaconfig.config.base.BaseConfig;
 
 public class GuiBaseWidget {
@@ -46,8 +47,8 @@ public class GuiBaseWidget {
 
     public void onMouseDown(int key) {}
     public void onMouseUp(int button) {}
-    public void onKeyDown(int key, int scancode) {}
-    public void onKeyUp(int key, int scancode) {}
+    public void onKeyDown(KeyEvent key) {}
+    public void onKeyUp(KeyEvent key) {}
     public void onTextReceived(String text) {}
 
 }

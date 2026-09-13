@@ -1,8 +1,9 @@
 package net.treset.vanillaconfig.tools;
 
+import com.mojang.blaze3d.platform.InputConstants;
+import net.minecraft.client.input.KeyEvent;
 import net.treset.vanillaconfig.tools.helpers.Keybind;
 import net.treset.vanillaconfig.tools.helpers.KeybindContext;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +45,7 @@ public class KeybindTools {
                     break;
                 }
             }
-             if(!containsNew) continue;
+            if(!containsNew) continue;
 
             boolean containsAll = true;
             for (int j : e.getKeys()) {
@@ -60,16 +61,16 @@ public class KeybindTools {
         newKeys.clear();
     }
 
-    public static void onKeyEvent(long window, int key, int scancode, int action, int mods) {
-        if(action == GLFW.GLFW_PRESS) onKeyDown(scancode);
-        else if(action == GLFW.GLFW_RELEASE) onKeyUp(scancode);
+    public static void onKeyEvent(long window, KeyEvent input, int action, int mods) {
+        if(action == InputConstants.PRESS) onKeyDown(input);
+        else if(action == InputConstants.RELEASE) onKeyUp(input);
     }
-    public static void onKeyDown(int scancode) {
-        pressedKeys.add(scancode);
-        newKeys.add(scancode);
+    public static void onKeyDown(KeyEvent input) {
+        pressedKeys.add(input.key());
+        newKeys.add(input.key());
     }
-    public static void onKeyUp(int scancode) {
-        pressedKeys.remove((Integer)scancode);
-        newKeys.remove((Integer)scancode);
+    public static void onKeyUp(KeyEvent input) {
+        pressedKeys.remove((Integer)input.key());
+        newKeys.remove((Integer)input.key());
     }
 }

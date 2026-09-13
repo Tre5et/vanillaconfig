@@ -1,6 +1,8 @@
 package net.treset.vanillaconfig.screen.widgets;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.sounds.SoundEvents;
 import net.treset.vanillaconfig.config.KeybindConfig;
@@ -8,7 +10,6 @@ import net.treset.vanillaconfig.screen.ConfigScreen;
 import net.treset.vanillaconfig.screen.widgets.base.GuiTypableWidget;
 import net.treset.vanillaconfig.tools.TextTools;
 import net.treset.vanillaconfig.tools.helpers.AllowedChars;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,14 +32,14 @@ public class GuiKeybindWidget extends GuiTypableWidget {
     public String initMessage() {
         if(config == null) return "ERROR";
         this.setTitle(config.getKey());
-        this.setValue(TextTools.scancodesAsDisplayKeys(config.getKeys()));
+        this.setValue(TextTools.keysAsDisplay(config.getKeys()));
         this.setDefaultValue(this.getValue());
-        this.currentScancodes.clear();
-        Collections.addAll(this.currentScancodes, Arrays.stream(this.config.getKeys()).boxed().toArray(Integer[]::new));
+        this.currentKeys.clear();
+        Collections.addAll(this.currentKeys, Arrays.stream(this.config.getKeys()).boxed().toArray(Integer[]::new));
         return this.getMessage();
     }
 
-    List<Integer> currentScancodes = new ArrayList<>();
+    List<Integer> currentKeys = new ArrayList<>();
 
     //i really need to come up with a better way to use live values
     @Override
@@ -76,29 +77,29 @@ public class GuiKeybindWidget extends GuiTypableWidget {
     public void updateMessage() {
         if(this.isFocused()) return;
 
-        this.currentScancodes.clear();
-        Collections.addAll(this.currentScancodes, Arrays.stream(this.config.getKeys()).boxed().toArray(Integer[]::new));
+        this.currentKeys.clear();
+        Collections.addAll(this.currentKeys, Arrays.stream(this.config.getKeys()).boxed().toArray(Integer[]::new));
     }
 
     @Override
-    public void onKeyDown(int key, int scancode) {
+    public void onKeyDown(KeyEvent input) {
         if(!this.isFocused()) return;
         this.requestIoInterrupt();
-        if(key == GLFW.GLFW_KEY_BACKSPACE) {
+        if(input.key() == InputConstants.KEY_BACKSPACE) {
             this.removeLastChar();
-        } else if(key == GLFW.GLFW_KEY_ENTER) {
+        } else if(input.isConfirmation()) {
             Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
             this.setFocused(false);
             this.save();
             TextTools.narrateLiteral(this.getSaveNarration());
-        } else if(key == GLFW.GLFW_KEY_ESCAPE) {
+        } else if(input.isEscape()) {
             Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
             this.reset();
             TextTools.narrateLiteral(this.getResetNarration());
         } else {
-            currentScancodes.add(scancode);
-            String newKey = TextTools.getKeyFromScancode(scancode, true);
-            if(newKey == null) return;
+            InputConstants.Key key = InputConstants.getKey(input);
+            currentKeys.add(key.getValue());
+            String newKey = key.getDisplayName().getString();
             this.setDisplayValue(TextTools.appendKeyToDisplayKeys(newKey, this.getValue()));
             TextTools.narrateLiteral(this.getChangeNarration());
         }
@@ -110,35 +111,35 @@ public class GuiKeybindWidget extends GuiTypableWidget {
 
     @Override
     public void setDisplayValue(String value) {
-        this.setValue(value, this.config.isKeysValid(this.currentScancodes.stream().mapToInt(i->i).toArray()));
+        this.setValue(value, this.config.isKeysValid(this.currentKeys.stream().mapToInt(i->i).toArray()));
     }
 
     @Override
     public void removeLastChar() {
         this.setValue("", true);
-        this.currentScancodes.clear();
+        this.currentKeys.clear();
     }
 
     @Override
     public void onClickL() {
         if(!this.isFocused()) {
             this.setValue("", true);
-            this.currentScancodes.clear();
+            this.currentKeys.clear();
         }
         super.onClickL();
     }
 
     @Override
     public void reset() {
-        this.setValue(TextTools.scancodesAsDisplayKeys(this.config.getKeys()), true);
+        this.setValue(TextTools.keysAsDisplay(this.config.getKeys()), true);
         this.setFocused(false);
     }
 
     @Override
     public void save() {
-        this.config.setKeys(this.currentScancodes.stream().mapToInt(i->i).toArray());
-        this.currentScancodes.clear();
-        Collections.addAll(this.currentScancodes, Arrays.stream(this.config.getKeys()).boxed().toArray(Integer[]::new));
-        this.setValue(TextTools.scancodesAsDisplayKeys(this.config.getKeys()), true);
+        this.config.setKeys(this.currentKeys.stream().mapToInt(i->i).toArray());
+        this.currentKeys.clear();
+        Collections.addAll(this.currentKeys, Arrays.stream(this.config.getKeys()).boxed().toArray(Integer[]::new));
+        this.setValue(TextTools.keysAsDisplay(this.config.getKeys()), true);
     }
 }
