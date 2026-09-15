@@ -28,4 +28,4 @@ jobs:
           curseforge-id: 615185
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
 
-#          github-token: ${{ secrets.RELEASE_TOKEN }}
+          github-token: ${{ secrets.RELEASE_TOKEN }}
