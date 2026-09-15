@@ -1,7 +1,9 @@
 package net.treset.vanillaconfig.screen.widgets;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.resources.Identifier;
@@ -10,7 +12,6 @@ import net.treset.vanillaconfig.config.ListConfig;
 import net.treset.vanillaconfig.screen.ConfigScreen;
 import net.treset.vanillaconfig.screen.widgets.base.GuiClickableWidget;
 import net.treset.vanillaconfig.tools.TextTools;
-import org.lwjgl.glfw.GLFW;
 
 public class GuiListWidget extends GuiClickableWidget {
     public static Identifier SLIDER = Identifier.fromNamespaceAndPath("minecraft", "widget/slider");
@@ -90,15 +91,15 @@ public class GuiListWidget extends GuiClickableWidget {
     }
 
     @Override
-    public void onKeyDown(int key, int scancode) {
-        if(!this.config.isSlider()) super.onKeyDown(key, scancode);
+    public void onKeyDown(KeyEvent input) {
+        if(!this.config.isSlider()) super.onKeyDown(input);
 
         if(!this.selected) return;
-        if(key == GLFW.GLFW_KEY_RIGHT) {
+        if(input.key() == InputConstants.KEY_RIGHT) {
             this.config.setOptionIndex((this.config.getOptionIndex() + 1) % this.config.getOptions().length);
             TextTools.narrateLiteral(this.getChangeSliderNarration());
             this.requestIoInterrupt();
-        } else if(key == GLFW.GLFW_KEY_LEFT) {
+        } else if(input.key() == InputConstants.KEY_LEFT) {
             this.config.setOptionIndex((this.config.getOptions().length + this.config.getOptionIndex() - 1) % this.config.getOptions().length);
             TextTools.narrateLiteral(this.getChangeSliderNarration());
             this.requestIoInterrupt();
@@ -125,12 +126,12 @@ public class GuiListWidget extends GuiClickableWidget {
     @Override
     public void onMouseDown(int button) {
         super.onMouseDown(button);
-        if(this.config.isSlider() && button == 0) isMouseDown = true;
+        if(this.config.isSlider() && button == InputConstants.MOUSE_BUTTON_LEFT) isMouseDown = true;
     }
     @Override
     public void onMouseUp(int button) {
         super.onMouseUp(button);
-        if(this.config.isSlider() && button == 0 && isMouseDown) {
+        if(this.config.isSlider() && button == InputConstants.MOUSE_BUTTON_LEFT && isMouseDown) {
             isMouseDown = false;
             if(mouseWentDownOver) {
                 Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));

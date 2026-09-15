@@ -1,11 +1,9 @@
 package net.treset.vanillaconfig.tools;
 
-import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
-import org.lwjgl.glfw.GLFW;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -102,51 +100,12 @@ public class TextTools {
         }
     }
 
-    public static int getKeycodeFromScancode(int scancode) {
-        int i = 32;
-        while(i < 1000) {
-            if(GLFW.glfwGetKeyScancode(i) == scancode) return i;
-            i++;
-        }
-        return 0;
-    }
-    static ImmutableList<Integer> kpKeys = ImmutableList.of(
-            GLFW.GLFW_KEY_KP_0,
-            GLFW.GLFW_KEY_KP_1,
-            GLFW.GLFW_KEY_KP_2,
-            GLFW.GLFW_KEY_KP_3,
-            GLFW.GLFW_KEY_KP_4,
-            GLFW.GLFW_KEY_KP_5,
-            GLFW.GLFW_KEY_KP_6,
-            GLFW.GLFW_KEY_KP_7,
-            GLFW.GLFW_KEY_KP_8,
-            GLFW.GLFW_KEY_KP_9,
-            GLFW.GLFW_KEY_KP_DIVIDE,
-            GLFW.GLFW_KEY_KP_MULTIPLY,
-            GLFW.GLFW_KEY_KP_SUBTRACT,
-            GLFW.GLFW_KEY_KP_ADD,
-            GLFW.GLFW_KEY_KP_DECIMAL
-    );
-
-    public static String getKeyFromScancode(int scancode, boolean allowNonText) {
-        String str = GLFW.glfwGetKeyName(-1, scancode);
-
-        int key = getKeycodeFromScancode(scancode);
-        if(allowNonText && (str == null || str.isEmpty() || str.equals("\t") || kpKeys.contains(key)))
-            str = translateOrDefault(InputConstants.Type.SCANCODE.getOrCreate(scancode).toString());
-
-        if(str != null) str = str.substring(0, 1).toUpperCase() + (str.length() > 1 ? str.substring(1) : "");
-
-        return str;
-    }
-    public static String scancodesAsDisplayKeys(int[] sc) {
+    public static String keysAsDisplay(int[] keys) {
         StringBuilder str = new StringBuilder();
-        for (int i = 0; i < sc.length; i++) {
-            String key = TextTools.getKeyFromScancode(sc[i], true);
-            if(key != null) {
-                str.append(key);
-                if(i != sc.length - 1) str.append(" + ");
-            }
+        for (int i = 0; i < keys.length; i++) {
+            String key = InputConstants.Type.KEYBOARD.getOrCreate(keys[i]).getDisplayName().getString();
+            str.append(key);
+            if(i != keys.length - 1) str.append(" + ");
         }
         return str.toString();
     }
@@ -161,13 +120,5 @@ public class TextTools {
             newArr[i][0] = array[i];
         }
         return newArr;
-    }
-
-    public static int getKeyCodeFromKey(String key) {
-        for (int i = 0; i < 97; i++) {
-            if (key.equalsIgnoreCase(GLFW.glfwGetKeyName(-1, i)))
-                return i;
-        }
-        return -1;
     }
 }

@@ -1,5 +1,6 @@
 package net.treset.vanillaconfig.screen.widgets.base;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -151,9 +152,9 @@ public class GuiClickableWidget extends GuiBaseWidget {
     private void handleMouseClick(int mouseX, int mouseY) {
         if(this.clicked != -1 && this.isHoveredOver(mouseX, mouseY)) {
             switch (this.clicked) {
-                case 0 -> this.onClickL();
-                case 1 -> this.onClickR();
-                case 3 -> this.onClickM();
+                case InputConstants.MOUSE_BUTTON_LEFT -> this.onClickL();
+                case InputConstants.MOUSE_BUTTON_RIGHT -> this.onClickR();
+                case InputConstants.MOUSE_BUTTON_MIDDLE -> this.onClickM();
             }
 
             this.getParentScreen().requestUnfocus(this.getBaseConfig().getKey());

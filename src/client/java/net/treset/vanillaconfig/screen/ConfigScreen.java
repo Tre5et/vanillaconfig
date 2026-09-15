@@ -1,5 +1,6 @@
 package net.treset.vanillaconfig.screen;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
@@ -20,7 +21,6 @@ import net.treset.vanillaconfig.screen.widgets.base.GuiBaseWidget;
 import net.treset.vanillaconfig.screen.widgets.base.GuiTypableWidget;
 import net.treset.vanillaconfig.tools.TextTools;
 import org.jspecify.annotations.NonNull;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -222,10 +222,10 @@ public class ConfigScreen extends Screen {
     }
 
     private void scrollKey(int key) {
-        if(key == GLFW.GLFW_KEY_DOWN) scroll(this.getAverageWidgetHeight() * 1.5);
-        else if(key == GLFW.GLFW_KEY_UP) scroll(-this.getAverageWidgetHeight() * 1.5);
-        else if(key == GLFW.GLFW_KEY_PAGE_DOWN) scroll(this.bottom - this.top - this.getAverageWidgetHeight());
-        else if(key == GLFW.GLFW_KEY_PAGE_UP) scroll(-this.bottom + this.top + this.getAverageWidgetHeight());
+        if(key == InputConstants.KEY_DOWN) scroll(this.getAverageWidgetHeight() * 1.5);
+        else if(key == InputConstants.KEY_UP) scroll(-this.getAverageWidgetHeight() * 1.5);
+        else if(key == InputConstants.KEY_PAGEDOWN) scroll(this.bottom - this.top - this.getAverageWidgetHeight());
+        else if(key == InputConstants.KEY_PAGEUP) scroll(-this.bottom + this.top + this.getAverageWidgetHeight());
     }
     private void scroll(double amount) {
         if(this.getOptionsHeight() + this.top <= this.bottom) return;
@@ -275,8 +275,8 @@ public class ConfigScreen extends Screen {
     @Override
     public boolean mouseClicked(MouseButtonEvent click, boolean doubled) {
         this.ioInterruptRequest = false;
-        if(click.button() == 0 && this.getScrollHeight() != 0 && click.x() >= this.scrollbarX && click.x() <= this.scrollbarX + 6) this.scrolling = true;
-        else if(click.button() == 0 && this.isHoveredOverDone((int)click.x(), (int)click.y())) {
+        if(click.button() == InputConstants.MOUSE_BUTTON_LEFT && this.getScrollHeight() != 0 && click.x() >= this.scrollbarX && click.x() <= this.scrollbarX + 6) this.scrolling = true;
+        else if(click.button() == InputConstants.MOUSE_BUTTON_LEFT && this.isHoveredOverDone((int)click.x(), (int)click.y())) {
             Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
             this.onClose();
         }
@@ -333,21 +333,20 @@ public class ConfigScreen extends Screen {
         this.ioInterruptRequest = false;
 
         for (GuiBaseWidget e : this.getWidgets()) {
-            e.onKeyDown(input.key(), input.scancode());
+            e.onKeyDown(input);
         }
         if(ioInterruptRequest) {
             ioInterruptRequest = false;
             return true;
         }
 
-        if(input.key() == GLFW.GLFW_KEY_TAB) {
-            int step = (GLFW.glfwGetKey(Minecraft.getInstance().getWindow().handle(), GLFW.GLFW_KEY_LEFT_SHIFT) == GLFW.GLFW_PRESS
-                    || GLFW.glfwGetKey(Minecraft.getInstance().getWindow().handle(), GLFW.GLFW_KEY_RIGHT_SHIFT) == GLFW.GLFW_PRESS) ?
+        if(input.key() == InputConstants.KEY_TAB) {
+            int step = (input.hasShiftDown()) ?
                     -1 : 1;
             tabNavigate(step);
         }
 
-        if(input.key() == GLFW.GLFW_KEY_ENTER) {
+        if(input.isConfirmation()) {
             if(this.currentSelected >= 0) {
                 this.getWidgets()[this.currentSelected].activate();
             }
@@ -365,7 +364,7 @@ public class ConfigScreen extends Screen {
     public boolean keyReleased(@NonNull KeyEvent input) {
         this.ioInterruptRequest = false;
         for (GuiBaseWidget e : this.getWidgets()) {
-            e.onKeyUp(input.key(), input.scancode());
+            e.onKeyUp(input);
         }
         if(ioInterruptRequest) {
             ioInterruptRequest = false;
