@@ -32,7 +32,3 @@ jobs:
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
 
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          
-          changelog-file: CHANGELOG.md
-          
-          files-secondary: none
